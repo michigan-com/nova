@@ -1,18 +1,18 @@
 'use strict';
 
-import mongoose from 'mongoose';
+//import mongoose from 'mongoose';
 import debug from 'debug';
 var logger = debug('app:status');
 
 import app from './app';
-import { connect, disconnect } from './db';
+//import { connect, disconnect } from './db';
 
-mongoose.connection.on('error', logger);
+//mongoose.connection.on('error', logger);
 
-connect(process.env.MAPI_DB).then(function() {
+/*connect(process.env.MAPI_DB).then(function() {
 }).catch(function(err) {
   throw new Error(err);
-});
+});*/
 
 var port = normalizePort(process.env.NODE_PORT || '3000');
 app.set('port', port);
@@ -28,7 +28,7 @@ export default server;
 
 server.on('close', function() {
   logger("Closed nodejs application ...");
-  disconnect();
+  //disconnect();
 });
 
 function normalizePort(val) {
