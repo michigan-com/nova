@@ -1,0 +1,49 @@
+@import 'bourbon';
+@import 'neat';
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+// http://www.colorcombos.com/color-scheme-6657.html
+$primary-color: #2E4372; // blue
+$info-color: #226666; // aquaish
+$warning-color: #AA6C39; // brown
+$success-color: #2D882D; // greenish
+$danger-color: #AA3939; // red
+
+$facebook-blue: #3B5998;
+$twitter-blue: #00aced;
+
+// Stole from bootstrap until we decide what we wanna do
+$screen-md: 992px;
+$screen-sm: 768px;
+$notdesktop: new-breakpoint(max-width 991px 12);
+$desktop: new-breakpoint(min-width 992px 12);
+$mobile: new-breakpoint(max-width 768px 12);
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.container {
+  margin: 0 10%;
+}
+
+.hidden {
+  display: none !important;
+}
