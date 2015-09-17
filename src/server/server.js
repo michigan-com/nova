@@ -1,18 +1,9 @@
 'use strict';
 
-//import mongoose from 'mongoose';
 import debug from 'debug';
 var logger = debug('app:status');
 
 import app from './app';
-//import { connect, disconnect } from './db';
-
-//mongoose.connection.on('error', logger);
-
-/*connect(process.env.MAPI_DB).then(function() {
-}).catch(function(err) {
-  throw new Error(err);
-});*/
 
 var port = normalizePort(process.env.NODE_PORT || '3000');
 app.set('port', port);
@@ -25,11 +16,6 @@ var server = app.listen(port, '0.0.0.0', function(err) {
   logger(`Started on ${host.address}:${host.port}`);
 });
 export default server;
-
-server.on('close', function() {
-  logger("Closed nodejs application ...");
-  //disconnect();
-});
 
 function normalizePort(val) {
   var port = parseInt(val, 10);

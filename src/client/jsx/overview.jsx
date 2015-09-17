@@ -13,8 +13,8 @@ async function getData(id) {
   }
 
   return {
-    title: data.headline,
-    subtitle: data.subheadline,
+    headline: data.headline,
+    subheadline: data.subheadline,
     photo: data.photo.thumbnail,
     url: data.url,
     section: data.section,
@@ -48,7 +48,7 @@ class Overview extends React.Component {
     return (
       <div className={ rootClass } style={ {left: this.props.left} }>
         <div className='articleClose' onClick={ this.props.close }><i className="fa fa-times-circle"></i></div>
-        <a className='articleTitle' href={ this.props.data.url } target='_blank'>{ this.props.data.title }</a>
+        <a className='articleTitle' href={ this.props.data.url } target='_blank'>{ this.props.data.headline }</a>
 
         <img className='articlePhoto' src={ this.props.data.photo.url } />
 

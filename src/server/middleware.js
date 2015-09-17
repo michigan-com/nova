@@ -8,7 +8,6 @@ import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
 import cookieParser from 'cookie-parser';
 
-
 var BASE_DIR = path.dirname(__dirname);
 
 export default function configureMiddleware(app) {

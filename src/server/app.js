@@ -1,7 +1,7 @@
 'use strict';
 
 import path from 'path';
-import express from 'express.io';
+import express from 'express';
 
 import configureMiddleware from './middleware';
 import routes from './routes';
@@ -9,7 +9,6 @@ import routes from './routes';
 var BASE_DIR = path.dirname(__dirname);
 
 var app = express();
-app.http().io();
 export default app;
 
 configureViewEngine(app);
