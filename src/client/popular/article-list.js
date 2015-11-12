@@ -1,9 +1,8 @@
 'use strict';
 
 import React from 'react';
-//import addons from 'react/addons';
-//const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-import { getData, Overview } from './overview.jsx';
+
+import { getData, Overview } from './overview';
 import Screen from '../lib/screen';
 
 var mobileBp = 768;
@@ -18,25 +17,16 @@ var sourceMap = {
   "battlecreekenquirer.com": imgLoc + "battlecreekenquirer.png"
 };
 
-export default function renderList(data, el) {
-  return React.render(
-    <ArticleList data={data} />,
-    el
-  );
-}
-
-class ArticleList extends React.Component {
+export default class ArticleList extends React.Component {
   state = {
     freeze: false,
-    data: []
   };
 
   render() {
-
     // we must preserve the original order in which the articles
     // are generated in the DOM or else react will destroy/recreate those
     // elements and lose its previous state
-    var sortedCopy = this.state.data.slice().sort(function(a, b) {
+    var sortedCopy = this.props.data.slice().sort(function(a, b) {
       return a.url.localeCompare(b.url);
     });
 
@@ -49,7 +39,7 @@ class ArticleList extends React.Component {
         sections = article.sections.join(", ");
       }
 
-      let pos = this.state.data.indexOf(article);
+      let pos = this.props.data.indexOf(article);
 
       let art = <Article key={ article.article_id }
         id={ article.article_id }
@@ -131,10 +121,11 @@ class Article extends React.Component {
   };
 
   // article position in list
-  getTopPosition(screen, factor=60) {
+  getTopPosition(screen, factor=55) {
     if (screen.width < mobileBp) {
       factor = 40;
     }
+
     return this.props.position * factor;
   };
 

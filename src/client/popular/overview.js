@@ -40,9 +40,12 @@ class Overview extends React.Component {
       );
     }
 
-    let summary = this.props.data.summary;;
-    if (this.props.data.summary && this.props.data.summary.length > 0 && typeof this.props.data.summary != "string") {
-      summary = this.props.data.summary.join("  ");
+    let summaryList = [];
+    if (this.props.data.summary && this.props.data.summary.length > 0) {
+      let summary = this.props.data.summary;
+      for (let i = 0; i < summary.length; i++) {
+        summaryList.push(<li>{ summary[i] }</li>);
+      }
     }
 
     return (
@@ -58,7 +61,7 @@ class Overview extends React.Component {
         </div>
 
         <div className='articleSummary'>
-          <p>{ summary }</p>
+          <ul>{ summaryList }</ul>
           <a href={ this.props.data.url } target='_blank'>Read more ...</a>
         </div>
       </div>

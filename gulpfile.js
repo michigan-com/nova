@@ -14,7 +14,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var neat = require('node-neat');
 
 var babelify = require("babelify");
-var reactify = require('reactify');
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var pkgify = require('pkgify');
@@ -95,15 +94,7 @@ function bundleJs(file, bcb) {
 
   gutil.log('Browserify is compiling ' + file.path);
   var b = browserify(file.path, { debug: true })
-    .transform(babelify.configure({ stage: 0, optional: ['runtime'] }))
-    .transform(pkgify, {
-      packages: {
-        publicLib: './src/client/lib',
-        jsx: './src/client/jsx',
-      },
-      relative: __dirname
-    })
-    .transform(reactify)
+    .transform(babelify.configure({ stage: 0, optional: ['runtime'] }));
 
   // Do the necessary thing for tap/plumber
   var stream = b.bundle();
