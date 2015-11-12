@@ -46,7 +46,7 @@ class Overview extends React.Component {
     if (this.props.data.summary && this.props.data.summary.length > 0) {
       let summary = this.props.data.summary;
       for (let i = 0; i < summary.length; i++) {
-        summaryList.push(<li>{ summary[i] }</li>);
+        summaryList.push(<li key={i}>{ summary[i] }</li>);
       }
     }
 
