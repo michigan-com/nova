@@ -31,3 +31,5 @@ Run
 ```
 DEBUG=app:* npm start
 ```
+
+Point browser to: http://localhost:3000
