@@ -31,6 +31,8 @@ class Overview extends React.Component {
     left: "100%"
   };
 
+  constructor(props) { super(props); };
+
   render() {
     let rootClass = 'overview';
 

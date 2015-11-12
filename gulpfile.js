@@ -7,7 +7,6 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var gutil = require('gulp-util');
 var babel = require('gulp-babel');
-var uglify = require('gulp-uglify');
 var plumber = require('gulp-plumber');
 var tap = require('gulp-tap');
 var sourcemaps = require('gulp-sourcemaps');
@@ -16,9 +15,7 @@ var neat = require('node-neat');
 var babelify = require("babelify");
 var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
-var pkgify = require('pkgify');
 var source = require('vinyl-source-stream');
-//var browserifyShim = require('browserify-shim');
 
 var jsSrc = './src/client/';
 var jsDist = './public/js/';
@@ -106,7 +103,6 @@ function bundleJs(file, bcb) {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
       .on('error', gutil.log)
-    //  .pipe(uglify())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(jsDist));
 }

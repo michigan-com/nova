@@ -26,7 +26,6 @@
     "morgan": "~1.5.1",
     "node-neat": "^1.7.1-beta1",
     "node-sass": "^3.1.2",
-    "pkgify": "^1.0.3",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "request": "^2.55.0",

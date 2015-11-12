@@ -6,21 +6,13 @@ import { getData, Overview } from './overview';
 import Screen from '../lib/screen';
 
 var mobileBp = 768;
-var imgLoc = "/img/hostimages/";
-var sourceMap = {
-  "detroitnews.com": imgLoc + "detroitnews.png",
-  "freep.com": imgLoc + "freep.png",
-  "hometownlife.com": imgLoc + "hometownlife.png",
-  "lansingstatejournal.com": imgLoc + "lansingstatejournal.png",
-  "thetimesherald.com": imgLoc + "thetimesherald.png",
-  "livingstondaily.com": imgLoc + "livingstondaily.png",
-  "battlecreekenquirer.com": imgLoc + "battlecreekenquirer.png"
-};
 
 export default class ArticleList extends React.Component {
   state = {
     freeze: false,
   };
+
+  constructor(props) { super(props); };
 
   render() {
     // we must preserve the original order in which the articles
@@ -50,7 +42,6 @@ export default class ArticleList extends React.Component {
         position={ pos } />;
 
       articles.push(art);
-      //source={ article.host }
     }
 
     return (
@@ -72,32 +63,20 @@ export default class ArticleList extends React.Component {
   };
 };
 
-/*
-<ReactCSSTransitionGroup transitionName="animateArticle" transitionAppear={true}>
-    {articles}
-</ReactCSSTransitionGroup>
-*/
-
 class Article extends React.Component {
-  constructor(props) {
-    super(props);
-  };
-
   state = {
     data: {},
     hasData: false,
     open: false
   };
 
+  constructor(props) { super(props); };
+
   handleClick = async () => {
     if (!this.state.hasData) {
-      try {
-        let data = await getData(this.props.id);
-        this.setState({ hasData: true, open: true, data });
-        return;
-      } catch (err) {
-        throw err;
-      }
+      let data = await getData(this.props.id);
+      this.setState({ hasData: true, open: true, data });
+      return;
     }
 
     this.setState({ open: !this.state.open });
@@ -122,23 +101,14 @@ class Article extends React.Component {
 
   // article position in list
   getTopPosition(screen, factor=55) {
-    if (screen.width < mobileBp) {
-      factor = 40;
-    }
-
+    if (screen.width < mobileBp) factor = 40;
     return this.props.position * factor;
   };
 
   // overview position
   getLeftPosition(screen, factor=52) {
-    if (!this.state.open) {
-      return 100;
-    }
-
-    if (screen.width < mobileBp) {
-      factor = 10;
-    }
-
+    if (!this.state.open) return 100;
+    if (screen.width < mobileBp) factor = 10;
     return factor;
   };
 
@@ -146,7 +116,6 @@ class Article extends React.Component {
     let screen = Screen(window, document);
     let left = this.getLeftPosition(screen) + "%";
 
-    //<img className='source' src={ sourceMap[this.props.source] } />
     return (
       <li className='article' style={ {top: this.getTopPosition(screen)+'px'} }>
         <div className='readers'>{ this.props.visits }</div>
