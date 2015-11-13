@@ -24,7 +24,7 @@ class NowDashboard extends React.Component {
 
     let greeting = 'Hello';
     let hour = now.getHours();
-    if (hour > 0 && hour < 12) greeing = 'Good Morning';
+    if (hour > 0 && hour < 12) greeting = 'Good Morning';
     else if (hour >= 12 && hour < 6) greeting = 'Good Afternoon';
     else if (hour >= 6) greeting = 'Good Evening';
 
