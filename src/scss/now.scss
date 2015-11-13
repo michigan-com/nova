@@ -94,7 +94,7 @@ body {
   height: $article-height;
   position: absolute;
   width: 90%;
-  padding: 10px 5%;
+  margin: 0 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -221,7 +221,7 @@ body {
       background-size: cover;
     }
 
-    .summary-container {
+    .article-content {
       height: 65%;
       width: 90%;
       margin: 5%;
@@ -232,25 +232,22 @@ body {
       .title {
         font-weight: bold;
         font-size: 30px;
-        flex-grow: 1;
       }
 
-      .readers {
-        flex-grow: 1;
-      }
+      .summary-container {
+        .summary-sentence {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
 
-      .summary-sentence {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+          .summary-index {
+            width: 10%;
+          }
 
-        .summary-index {
-          width: 10%;
-        }
-
-        .sentence {
-          width: 90%;
-          padding: 10px 20px;
+          .sentence {
+            width: 90%;
+            padding: 10px 20px;
+          }
         }
       }
     }

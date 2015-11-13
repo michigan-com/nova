@@ -1,4 +1,4 @@
-'use strict;';
+'use strict';
 
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
@@ -6,7 +6,7 @@ import xr from 'xr';
 
 import Dispatcher from '../dispatcher';
 
-let ARTICLE_CHANGE = 'article-change';
+var ARTICLE_CHANGE = 'article-change';
 
 function getArticleActions() {
   return {
@@ -32,11 +32,11 @@ function defaultArticleStore() {
   }
 }
 
-let store =  defaultArticleStore();
-let articleCache = {};
-let ArticleActions = getArticleActions()
+var store =  defaultArticleStore();
+var articleCache = {};
+var ArticleActions = getArticleActions()
 
-let Store = assign({}, EventEmitter.prototype, {
+var Store = assign({}, EventEmitter.prototype, {
   /** Register stuff */
   addChangeListener(callback) { this.on(ARTICLE_CHANGE, callback); },
   removeChangeListener(callback) { this.off(ARTICLE_CHANGE, callback); },
@@ -69,7 +69,7 @@ let Store = assign({}, EventEmitter.prototype, {
       }
     }
 
-    store.topArticles = topArticles;
+    store.topArticles = topArticles.slice(0, 25);
     this.emitChange();
   },
 

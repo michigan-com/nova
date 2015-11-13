@@ -5,9 +5,25 @@ import Dispatcher from '../dispatcher';
 import { ArticleActions } from '../store/article-store';
 
 class ActiveArticle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { photoLoaded: false }
+  }
+
+  componentWillMount() { this.loadPhoto(); }
+
+  loadPhoto() {
+    let article = this.props.article;
+    if (!article.photo) return;
+
+    let i = new Image();
+
+    i.onload = () => { this.setState({ photoLoaded: true }) }
+    i.src = article.photo.full.url;
+  }
 
   closeActiveArticle(e) {
-    if (/\s+close-article|active-article-container\s+/.test(e.target.className)) return;
+    if (!(/^(close-article|active-article-container)$/.test(e.target.className))) return;
     Dispatcher.dispatch({
       type: ArticleActions.closeActiveArticle
     });
@@ -15,7 +31,7 @@ class ActiveArticle extends React.Component {
 
   renderImage() {
     let article = this.props.article;
-    if (!article.photo) return null;
+    if (!article.photo || !this.state.photoLoaded) return null;
 
     let style = {
       backgroundImage: `url(${article.photo.full.url})`
@@ -44,7 +60,7 @@ class ActiveArticle extends React.Component {
           <div className='close-article'>X</div>
           <div className='summary-header'>Summary</div>
           { this.renderImage() }
-          <div className='summary-container'>
+          <div className='article-content'>
             <div className='title'>{ article.headline }</div>
             <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
             <div className='summary-container'>
