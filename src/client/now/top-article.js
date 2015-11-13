@@ -15,7 +15,8 @@ class TopArticle extends React.Component {
   setActiveArticle() {
     Dispatcher.dispatch({
       type: ArticleActions.articleSelected,
-      article_id: this.props.article.article_id
+      article_id: this.props.article.article_id,
+      readers: this.props.article.readers
     });
   }
 

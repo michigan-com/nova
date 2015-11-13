@@ -46,7 +46,7 @@ class NowDashboard extends React.Component {
   renderArticles() {
     if (!this.props.topArticles || !this.props.topArticles.length) {
       return (
-        <div id='top-articles' className='loading'>
+        <div className='loading'>
           Loading ...
         </div>
       )
@@ -68,7 +68,7 @@ class NowDashboard extends React.Component {
     topArticles.sort((a,b) => { return b.props.article.article_id - a.props.article.article_id });
 
     return (
-      <div id='top-articles'>
+      <div>
         { topArticles }
       </div>
     )

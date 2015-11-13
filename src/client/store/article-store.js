@@ -83,9 +83,11 @@ var Store = assign({}, EventEmitter.prototype, {
    this.emitChange();
   },
 
-  updateActiveArticle(articleId) {
+  updateActiveArticle(articleId, readers) {
     // Dont update an active article if we're on an active article
     if (store.activeArticle != null || store.articleLoading) return;
+
+    store.activeArticleReaders = readers;
 
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
@@ -111,14 +113,19 @@ var Store = assign({}, EventEmitter.prototype, {
 
   /** Mapi interactions */
   fetchActiveArticle(articleId) {
-    xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
-      .then((data) => {
-        document.body.className = document.body.className += ' article-open';
-        articleCache[articleId] = data;
-        store.activeArticle = data;
-        store.articleLoading = false;
-        this.emitChange();
-      });
+    try {
+      xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
+        .then((data) => {
+          document.body.className = document.body.className += ' article-open';
+          articleCache[articleId] = data;
+          store.activeArticle = data;
+          store.articleLoading = false;
+          this.emitChange();
+        });
+    } catch(e) {
+      console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);
+      console.log(e);
+    }
   }
 
 });
@@ -132,7 +139,7 @@ Dispatcher.register(function(action) {
       Store.updateQuickstats(action.quickstats);
       break;
     case ArticleActions.articleSelected:
-      Store.updateActiveArticle(action.article_id);
+      Store.updateActiveArticle(action.article_id, action.readers);
       break;
     case ArticleActions.closeActiveArticle:
       Store.closeActiveArticle();

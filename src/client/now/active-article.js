@@ -63,6 +63,7 @@ class ActiveArticle extends React.Component {
           <div className='article-content'>
             <div className='title'>{ article.headline }</div>
             <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
+            <hr/>
             <div className='summary-container'>
               { article.summary.map(this.renderSummarySentence) }
             </div>
