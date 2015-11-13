@@ -4,6 +4,7 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
 
+import ajax from '../lib/ajax';
 import Dispatcher from '../dispatcher';
 
 var ARTICLE_CHANGE = 'article-change';
@@ -113,19 +114,17 @@ var Store = assign({}, EventEmitter.prototype, {
 
   /** Mapi interactions */
   fetchActiveArticle(articleId) {
-    try {
-      xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
-        .then((data) => {
-          document.body.className = document.body.className += ' article-open';
-          articleCache[articleId] = data;
-          store.activeArticle = data;
-          store.articleLoading = false;
-          this.emitChange();
-        });
-    } catch(e) {
+    ajax(`https://api.michigan.com/v1/article/${articleId}/`)
+      .then((data) => {
+        document.body.className = document.body.className += ' article-open';
+        articleCache[articleId] = data;
+        store.activeArticle = data;
+        store.articleLoading = false;
+        this.emitChange();
+      }, (e) => {
       console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);
-      console.log(e);
-    }
+      this.closeActiveArticle();
+    });
   }
 
 });

@@ -12,7 +12,9 @@ class TopArticle extends React.Component {
   // TODO make this responsive? Move this functionality into CSS?
   // height: 100px, padding 10px
   static defaultStyle = { height: 100, margin: 10 }
-  setActiveArticle() {
+  setActiveArticle(e) {
+    e.preventDefault();
+    e.stopPropagation();
     Dispatcher.dispatch({
       type: ArticleActions.articleSelected,
       article_id: this.props.article.article_id,
