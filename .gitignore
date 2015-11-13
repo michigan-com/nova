@@ -35,3 +35,4 @@ dist/
 out.txt
 *.swp
 *.DS_STORE
+supervisor.conf
