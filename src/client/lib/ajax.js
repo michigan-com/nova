@@ -1,6 +1,6 @@
 'use strict';
 
-export default function ajax(url) {
+export default function ajax(url, method="GET") {
   return new Promise(function(resolve, reject) {
     console.log(`Grabbing: ${url}`);
 
@@ -15,7 +15,7 @@ export default function ajax(url) {
       resolve(JSON.parse(ajax.responseText));
     };
 
-    ajax.open('GET', url, true);
+    ajax.open(method.toUpperCase(), url, true);
     ajax.send();
   });
 }

@@ -7,7 +7,9 @@ var logger = debug('app:routes');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.render('popular');
+  res.render('now', {
+    title: 'Detroit Now'
+  });
 });
 
 module.exports = router;

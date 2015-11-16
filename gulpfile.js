@@ -19,7 +19,7 @@ var source = require('vinyl-source-stream');
 
 var jsSrc = './src/client/';
 var jsDist = './public/js/';
-var jsBundle = ['popular.js'];
+var jsBundle = ['now.js'];
 
 gulp.task('sass', function() {
   return bundleSass();

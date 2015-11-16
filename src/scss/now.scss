@@ -1,0 +1,318 @@
+@import 'base';
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+$article-height: 100px;
+
+$active-article-z-index: 100;
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.4em;
+  color: $grey;
+  overflow-x: hidden;
+  background-color: white;
+
+  &.article-open {
+    overflow: hidden;
+  }
+}
+
+#now {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  .dashboard-container {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+    .header-container {
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: row;
+      -webkit-flex-direction: row;
+      position: relative;
+    }
+
+    .top-articles-container {
+      overflow-y: auto;
+      flex-grow: 9;
+      -webkit-flex-grow: 9;
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: row;
+      -webkit-flex-direction: row;
+      position: relative;
+      align-items: center;
+      -webkit-align-items: center;
+
+      .loading {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+#header {
+  background-color: $yellow;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  align-items: center;
+  -webkit-align-items: center;
+  align-self: stretch;
+  -webkit-align-slf: stretch;
+  width: 100%;
+}
+
+#page-title {
+  text-transform: uppercase;
+  color: $grey;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 50px;
+}
+
+#greeting, #date{
+  text-transform: capitalize;
+  color: $grey;
+  font-size: 30px;
+  line-height: 35px;
+  text-align: center;
+}
+
+#readers {
+  color: $blue;
+  font-size: 15px;
+  line-height: 20px;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  padding: 20px;
+  align-items: center;
+  -webkit-align-items: center;
+
+  #glasses {
+    flex-grow: 1;
+    -webkit-flex-grow: 1;
+  }
+
+  #readers {
+    flex-grow: 5;
+    -webkit-flex-grow: 5;
+  }
+}
+
+.top-article-container {
+  height: $article-height;
+  position: absolute;
+  width: 90%;
+  margin: 0 5%;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  align-items: center;
+  -webkit-align-items: center;
+  top: 100%;
+
+  transition: top 500ms linear;
+  -o-transition: top 500ms linear;
+  -ie-transition: top 500ms linear;
+  -moz-transition: top 500ms linear;
+  -webkit-transition: top 500ms linear;
+
+  // Desktop, etc
+  @media (min-width: $screen-md) {
+    width: 70%;
+    margin: 0 15%;
+  }
+
+}
+
+.top-article {
+  width: 100%;
+  position: relative;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  align-items: center;
+  -webkit-align-items: center;
+  border: 1px solid #eee;
+  box-shadow: 0 0 .3em #eee;
+  cursor: pointer;
+
+  transition: box-shadow 250ms linear;
+  -o-transition: box-shadow 250ms linear;
+  -ie-transition: box-shadow 250ms linear;
+  -moz-transition: box-shadow 250ms linear;
+  -webkit-transition: box-shadow 250ms linear;
+
+  &:hover {
+    box-shadow: 0 0 10px .5em #eee;
+  }
+
+  .readers {
+    font-size: $article-height * .15;
+    color: $blue;
+    height: 100%;
+    position: relative;
+    border-right: 1px solid #eee;
+    padding: 0 20px;
+    text-align: center;
+    width: 10%;
+
+    @media (min-width: $screen-md) {
+      font-size: $article-height * .5;
+      width: 20%;
+    }
+  }
+
+  .headline {
+    font-size: $article-height * .13;
+    height: $article-height * .5;
+    color: $grey;
+    font-weight: bold;
+    padding: 20px;
+    width: 80%;
+
+    @media (min-width: $screen-md) {
+      font-size: $article-height * .25;
+    }
+  }
+
+  &.clicked {
+    .headline {
+      font-weight: normal;
+    }
+  }
+}
+
+.active-article-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, .5);
+  z-index: $active-article-z-index;
+
+  .active-article {
+    width: 90%;
+    height: 90%;
+    position: relative;
+    margin: 5% 5%;
+    background-color: white;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    align-items: center;
+    -webkit-align-items: center;
+
+    @media (min-width: $screen-md) {
+      width: 80%;
+      margin: 5% 10%;
+    }
+
+    .close-article {
+      position: absolute;
+      font-size: 20px;
+      line-height: 30px;
+      height: 5%;
+      right: 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .summary-header {
+      height: 5%;
+      width: 100%;
+      text-align: center;
+      font-size: 20px;
+      line-height: 30px;
+      background-color: $grey;
+      color: white;
+    }
+
+    .image-container {
+      width: 100%;
+      height: 30%;
+      overflow: hidden;
+      box-shadow: 0 0 5px black inset;
+      bacgkround-position: 50% 50%;
+      background-size: cover;
+      background-color: $grey;
+    }
+
+    .article-content {
+      height: 65%;
+      width: 90%;
+      margin: 5%;
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: column;
+      -webkit-flex-direction: column;
+      overflow-y: auto;
+
+      @media (min-width: $screen-md) {
+        margin: 2% 5%;
+      }
+
+      .title {
+        font-weight: bold;
+        font-size: 20px;
+        margin: 10px 0px;
+
+        // fix for now
+        height: 100px;
+
+        @media (min-width: $screen-md) {
+          font-size: 30px;
+          height: 50px;
+        }
+      }
+
+      .readers {
+        flex-grow: 1;
+        width: 100%;
+        margin: 10px 0px;
+      }
+
+      hr {
+        width: 30%;
+        margin: 20px 0;
+      }
+
+      .summary-container {
+        .summary-sentence {
+          display: flex;
+          display: -webkit-flex;
+          flex-direction: row;
+          -webkit-flex-direction: row;
+          align-items: center;
+          -webkit-align-items: center;
+          margin-bottom: 15px;
+
+          .summary-index {
+            width: 10%;
+          }
+
+          .sentence {
+            width: 90%;
+            padding: 10px 20px;
+          }
+        }
+      }
+    }
+  }
+}
