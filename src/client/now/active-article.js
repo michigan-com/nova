@@ -57,7 +57,6 @@ class ActiveArticle extends React.Component {
     return (
       <div className='active-article-container' onClick={ this.closeActiveArticle.bind(this) }>
         <div className='active-article'>
-          <div className='summary-header'>Summary</div>
           { this.renderImage() }
           <div className='article-content'>
             <div className='title'>{ article.headline }</div>
