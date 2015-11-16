@@ -23,7 +23,7 @@ class ActiveArticle extends React.Component {
   }
 
   closeActiveArticle(e) {
-    if (!(/^(close-article|active-article-container)$/.test(e.target.className))) return;
+    if (!(/(close-article|active-article-container)/.test(e.target.className))) return;
     Dispatcher.dispatch({
       type: ArticleActions.closeActiveArticle
     });
@@ -57,7 +57,6 @@ class ActiveArticle extends React.Component {
     return (
       <div className='active-article-container' onClick={ this.closeActiveArticle.bind(this) }>
         <div className='active-article'>
-          <div className='close-article'>X</div>
           <div className='summary-header'>Summary</div>
           { this.renderImage() }
           <div className='article-content'>
@@ -67,6 +66,10 @@ class ActiveArticle extends React.Component {
             <div className='summary-container'>
               { article.summary.map(this.renderSummarySentence) }
             </div>
+          </div>
+          <div className='article-controls'>
+            <div className='control start-speed-reader inactive'>Speed Read</div>
+            <div className='control close-article'>Close</div>
           </div>
         </div>
       </div>

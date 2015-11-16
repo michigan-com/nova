@@ -1,143 +1,67 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-
 var gulp = require('gulp');
-var sass = require('gulp-sass');
-var gutil = require('gulp-util');
-var babel = require('gulp-babel');
-var plumber = require('gulp-plumber');
-var tap = require('gulp-tap');
-var sourcemaps = require('gulp-sourcemaps');
-var neat = require('node-neat');
+var ClientTask = require('./tasks/client');
+var ServerTask = require('./tasks/server');
+var SassTask = require('./tasks/css');
 
-var babelify = require("babelify");
-var buffer = require('vinyl-buffer');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
+gulp.task('default', ['client:prod', 'server', 'css:prod']);
+gulp.task('dev', ['client', 'server', 'css']);
+gulp.task('watch', ['client:watch', 'server:watch', 'css:watch']);
 
-var jsSrc = './src/client/';
-var jsDist = './public/js/';
-var jsBundle = ['now.js'];
+/**
+ * Client-side tasks
+ */
 
-gulp.task('sass', function() {
-  return bundleSass();
+gulp.task('client', function(done) {
+  ClientTask.bundleFiles(done);
 });
 
-gulp.task('browserify', function(cb) {
-  var bcb = (function() {
-    var counter = 0;
-    return function() {
-      counter++;
-      if (counter == jsBundle.length) return cb();
-    };
-  })();
+gulp.task('client:watch', function(done) {
+  var opts = ClientTask.opts();
+  opts.watch = true;
 
-  for (var i = 0; i < jsBundle.length; i++) {
-    var fname = jsBundle[i];
-    var filePath = jsSrc + fname;
-    gulp.src(filePath)
-        .pipe(plumber(gutil.log))
-        .pipe(tap(bundleJs))
-        .pipe(gulp.dest(jsDist))
-        .on('end', function() {
-          gutil.log('Browserify finished creating: ' + filePath);
-          // if (typeof bcb === 'function') bcb();
-        });
-  }
+  ClientTask.bundleFiles(done, opts);
 });
 
-// This gulp task now restarts after each JS error yaaaaay
-gulp.task('watch', function() {
-  // https://gist.github.com/RnbWd/2456ef5ce71a106addee
-  for (var i = 0; i < jsBundle.length; i++) {
-    var fname = jsBundle[i];
-    gutil.log('Watching ' + fname + ' ...');
-    var filePath = jsSrc + fname;
-    gulp.watch(filePath, function() {
-      return gulp.src(filePath)
-        .pipe(plumber(gutil.log))
-        .pipe(tap(bundleJs))
-        .pipe(gulp.dest(jsDist))
-        .on('end', function() {
-          gutil.log('Browserify finished creating: ' + filePath);
-          // if (typeof bcb === 'function') bcb();
-        });
-    });
-  }
+gulp.task('client:prod', function(done) {
+  var opts = ClientTask.opts();
+  opts.prod = true;
 
-  gutil.log('Watching node modules ...');
-  gulp.watch('./src/server/**/*.js', ['babel']);
-
-  gutil.log('Watching scss files ...');
-  gulp.watch('./src/scss/**/*.scss', function() {
-    return bundleSass();
-  });
+  ClientTask.bundleFiles(done, opts);
 });
 
-gulp.task('babel', function(done) {
-  babelBundle(done);
+/**
+ * Server tasks
+ */
+
+gulp.task('server', function(done) {
+  var opts = ServerTask.opts();
+  opts.babel = ClientTask.opts().babel;
+
+  ServerTask.bundleFiles(done, opts);
 });
 
-gulp.task('default', ['sass', 'babel', 'browserify']);
+gulp.task('server:watch', function(done) {
+  gulp.watch(ServerTask.opts().src, ['server']);
+});
 
-// https://gist.github.com/RnbWd/2456ef5ce71a106addee
-function bundleJs(file, bcb) {
-  if (!fs.existsSync(file.path)) {
-    gutil.log('Could not find ' + file.path + ', ignoring')
-    return;
-  }
+/**
+ * Sass tasks
+ */
 
-  gutil.log('Browserify is compiling ' + file.path);
-  var b = browserify(file.path, { debug: true })
-    .transform(babelify.configure({ stage: 0, optional: ['runtime'] }));
+gulp.task('css', function(done) {
+  SassTask.bundleFiles(done);
+});
 
-  // Do the necessary thing for tap/plumber
-  var stream = b.bundle();
-  file.contents = stream;
+gulp.task('css:watch', function() {
+  gulp.watch(SassTask.opts().src, ['css']);
+});
 
-  // Source map
-  stream
-    .pipe(source(file.path))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-      .on('error', gutil.log)
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(jsDist));
-}
+gulp.task('css:prod', function(done) {
+  var opts = SassTask.opts();
+  opts.prod = true;
 
-function babelBundle(cb) {
-  var src = './src/server/**/*.js';
-  var dist = './dist';
+  SassTask.bundleFiles(done, opts);
+});
 
-  gutil.log('Babel is generating ' + src + ' files to ' + dist + ' ...');
-
-  return gulp.src(src)
-    .pipe(plumber(gutil.log))
-    .pipe(babel({ stage: 0, optional: ['runtime'] }))
-    .pipe(gulp.dest(dist))
-    .on('end', function() {
-      gutil.log('Done babelifying');
-      cb();
-    });
-}
-
-function bundleSass() {
-  var cssSrc = './src/scss/';
-  var cssDist = './public/css/';
-  var cssFiles = cssSrc + '**/*.scss';
-
-  gutil.log('Compiling SASS files ...');
-
-  var paths = ['./node_modules/'];
-  paths = paths.concat(neat.includePaths);
-
-  return gulp.src(cssFiles)
-    .pipe(plumber(gutil.log))
-    .pipe(sass({ includePaths: paths }))
-    .pipe(gulp.dest(cssDist))
-    .on('end', function() {
-      gutil.log('Done compiling SASS files');
-    });
-}

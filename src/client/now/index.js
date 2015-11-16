@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import moment from 'moment';
 
 import { Store, defaultArticleStore } from '../store/article-store';
 import TopArticle from './top-article';
@@ -14,9 +13,11 @@ function formatNumber(num) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 }
 
+var months = [ "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" ];
+
 class NowDashboard extends React.Component {
   static defaultProps = defaultArticleStore();
-
   renderHeader() {
     // TODO figure out if we want to normalize this time to detroit
     // or if we want it to be the client's computer
@@ -34,10 +35,11 @@ class NowDashboard extends React.Component {
     return(
       <div id='header'>
         <div id='page-header'>Detroit Now</div>
-        <div id='greeting'>{ `${greeting}, Michigan` }</div>
+        <div id='greeting'>{ `${greeting}, Detroit` }</div>
+        <div id='today'>{ `${months[now.getMonth()]}, ${now.getDay()}` }</div>
         <div id='readers'>
           <div id='glasses'><img src='/img/glasses.svg'/></div>
-          <div id='readers'>{ readers }</div>
+          <div id='numbers'>{ readers }</div>
         </div>
       </div>
     )
