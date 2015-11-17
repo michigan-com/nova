@@ -36,7 +36,7 @@ class NowDashboard extends React.Component {
       <div id='header'>
         <div id='page-header'>Detroit Now</div>
         <div id='greeting'>{ `${greeting}, Detroit` }</div>
-        <div id='today'>{ `${months[now.getMonth()]}, ${now.getDay()}` }</div>
+        <div id='today'>{ `${months[now.getMonth()]} ${now.getDate()}` }</div>
         <div id='readers'>
           <div id='glasses'><img src='/img/glasses.svg'/></div>
           <div id='numbers'>{ readers }</div>
