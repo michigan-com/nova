@@ -222,8 +222,8 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, .5);
   z-index: $active-article-z-index;
 
@@ -237,11 +237,6 @@ body {
     flex-direction: column;
     align-items: center;
     box-shadow: 0 0 .3em black;
-
-    @media (min-width: $screen-md) {
-      width: 80%;
-      margin: 5% 10%;
-    }
 
     .image-container {
       width: 100%;
