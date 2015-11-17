@@ -25,6 +25,7 @@ function bundleOpts() {
     dest: './public/js/',
     babel: {
       stage: 0,
+      optional: ['runtime']
     },
     browserify: browserifyOpts
   };
