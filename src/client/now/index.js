@@ -85,18 +85,23 @@ class NowDashboard extends React.Component {
   }
 
   render() {
-    return (
-      <div className='dashboard-container'>
-        <div className='header-container'>
-          { this.renderHeader() }
+    if (this.props.activeArticle && !this.props.articleLoading) {
+      return this.renderActiveArticle();
+    } else {
+      return (
+        <div className='dashboard-container'>
+          <div className='header-container'>
+            { this.renderHeader() }
+          </div>
+          <div className='top-articles-container'>
+            { this.renderArticles() }
+          </div>
+          <div className={ `article-loading${this.props.articleLoading ? ' show' : ''}`}>
+            Loading article ...
+          </div>
         </div>
-        <div className='top-articles-container'>
-          { this.renderArticles() }
-        </div>
-        <div className={ `article-loading-overlay${this.props.articleLoading ? 'show' : ''}` }></div>
-        { this.renderActiveArticle() }
-      </div>
-    )
+      )
+    }
   }
 }
 
