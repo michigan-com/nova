@@ -349,6 +349,15 @@ body {
   font-size: 15px;
 }
 
+.michspeed {
+  height: 100%;
+  overflow-y: auto;
+
+  footer {
+    margin-bottom: 50px;
+  }
+}
+
 .article-loading {
   display: none;
   position: fixed;
