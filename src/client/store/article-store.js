@@ -1,5 +1,6 @@
 'use strict';
 
+import url from 'url';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
@@ -36,6 +37,7 @@ function defaultArticleStore() {
 var store =  defaultArticleStore();
 var articleCache = {};
 var ArticleActions = getArticleActions()
+
 
 var Store = assign({}, EventEmitter.prototype, {
   /** Register stuff */
@@ -145,5 +147,11 @@ Dispatcher.register(function(action) {
       break;
   }
 });
+//
+// See if we have an ?articleId= url param
+let parsed = url.parse(window.location.href, true);
+if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId)) {
+    Store.updateActiveArticle(parseInt(parsed.query.articleId));
+}
 
 module.exports = { Store, ArticleActions, defaultArticleStore }

@@ -15,10 +15,6 @@ body {
   color: $grey;
   overflow-x: hidden;
   background-color: white;
-
-  &.article-open {
-    overflow: hidden;
-  }
 }
 
 #now {
@@ -39,6 +35,13 @@ body {
 
       @media (max-width: $screen-sm) {
         /*margin-top: $header-height-sm;*/
+      }
+
+      .loading {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding-top: 20%;
       }
     }
   }
@@ -250,6 +253,7 @@ body {
 
     .article-content {
       width: 90%;
+      height: 65%;
       padding: 5%;
       display: flex;
       display: -webkit-flex;
@@ -363,5 +367,4 @@ body {
   &.show {
     display: flex;
   }
-
 }
