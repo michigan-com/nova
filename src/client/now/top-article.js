@@ -12,20 +12,28 @@ class TopArticle extends React.Component {
   // TODO make this responsive? Move this functionality into CSS?
   // height: 100px, padding 10px
   static defaultStyle = { height: 100, margin: 10 }
+  constructor(props) {
+    super(props);
+
+  }
+
   setActiveArticle(e) {
     e.preventDefault();
     e.stopPropagation();
     Dispatcher.dispatch({
       type: ArticleActions.articleSelected,
       article_id: this.props.article.article_id,
-      readers: this.props.article.readers
+      readers: this.props.article.visits
     });
   }
 
-
   getStyle = () => {
+    let height = TopArticle.defaultStyle.height;
+    let margin = TopArticle.defaultStyle.margin;
+    if (window.innerWidth <= 768) height /= 2;
+
     return {
-      top: `${(this.props.rank * TopArticle.defaultStyle.height) + TopArticle.defaultStyle.margin}px`
+      top: `${(this.props.rank * (height + margin)) + margin}px`
     }
   }
 

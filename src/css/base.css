@@ -11,7 +11,6 @@ body {
   letter-spacing: 0;
   font-weight: 300;
   font-style: normal;
-  font-size: 18px;
   text-transform: none;
   color: rgba(0,0,0,0.9);
 }
@@ -19,9 +18,9 @@ body {
 
 $yellow: rgb(247, 218, 21);
 $grey: rgb(34, 47, 62);
-$blue: #0081C9;
+$blue: rgb(89, 136, 176);
 
-// Stole from bootstrap until we decide what we wanna do
+/* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;
 $screen-sm: 768px;
 $notdesktop: new-breakpoint(max-width 991px 12);

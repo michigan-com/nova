@@ -1,6 +1,8 @@
 'use strict';
 
 import React from 'react';
+import { ReadingPopupController } from 'reeeeeader';
+
 import Dispatcher from '../dispatcher';
 import { ArticleActions } from '../store/article-store';
 
@@ -22,12 +24,27 @@ class ActiveArticle extends React.Component {
     i.src = article.photo.full.url;
   }
 
-  closeActiveArticle(e) {
-    if (!(/^(close-article|active-article-container)$/.test(e.target.className))) return;
-    Dispatcher.dispatch({
-      type: ArticleActions.closeActiveArticle
+  loadSpeedReader() {
+    let controller = new ReadingPopupController();
+    controller.setArticle({
+      headline: this.props.article.headline,
+      body: this.props.article.body
     });
   }
+
+  closeActiveArticle(e) {
+    if (/start-speed-reader/.test(e.target.className)) {
+      this.loadSpeedReader();
+      return;
+    } else if (!(/(close-article|active-article-container)/.test(e.target.className))) {
+      return;
+    } else {
+      Dispatcher.dispatch({
+        type: ArticleActions.closeActiveArticle
+      });
+    }
+  }
+
 
   renderImage() {
     let article = this.props.article;
@@ -52,13 +69,17 @@ class ActiveArticle extends React.Component {
   }
 
   render() {
+    if (!this.state.photoLoaded) {
+      return (
+        <div className='article-loading show'>Loading article...</div>
+      )
+    }
+
     let article = this.props.article;
 
     return (
       <div className='active-article-container' onClick={ this.closeActiveArticle.bind(this) }>
         <div className='active-article'>
-          <div className='close-article'>X</div>
-          <div className='summary-header'>Summary</div>
           { this.renderImage() }
           <div className='article-content'>
             <div className='title'>{ article.headline }</div>
@@ -67,6 +88,10 @@ class ActiveArticle extends React.Component {
             <div className='summary-container'>
               { article.summary.map(this.renderSummarySentence) }
             </div>
+          </div>
+          <div className='article-controls'>
+            <div className='control start-speed-reader'>Speed Read</div>
+            <div className='control close-article'>Close</div>
           </div>
         </div>
       </div>

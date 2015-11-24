@@ -2,11 +2,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import moment from 'moment';
 
-import { Store, defaultArticleStore } from '../store/article-store';
+import { Store, defaultArticleStore, getSections } from '../store/article-store';
 import TopArticle from './top-article';
 import ActiveArticle from './active-article';
+import SectionFilter from './section-filter';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -14,9 +14,11 @@ function formatNumber(num) {
       return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
 }
 
+var months = [ "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December" ];
+
 class NowDashboard extends React.Component {
   static defaultProps = defaultArticleStore();
-
   renderHeader() {
     // TODO figure out if we want to normalize this time to detroit
     // or if we want it to be the client's computer
@@ -34,10 +36,31 @@ class NowDashboard extends React.Component {
     return(
       <div id='header'>
         <div id='page-header'>Detroit Now</div>
-        <div id='greeting'>{ `${greeting}, Michigan` }</div>
         <div id='readers'>
           <div id='glasses'><img src='/img/glasses.svg'/></div>
-          <div id='readers'>{ readers }</div>
+          <div id='numbers'>{ readers }</div>
+        </div>
+        { this.renderSectionOptions() }
+      </div>
+    )
+  }
+
+  renderSectionOptions() {
+    let sections = getSections();
+    let activeSection = this.props.activeSectionIndex;
+
+    return (
+      <div className='filters-container'>
+        <div className='filters'>
+          {
+            sections.map(function(section, index) {
+              return (
+                <SectionFilter name={ section }
+                            active={ index === activeSection }
+                            key={ `section-${section}` }/>
+              )
+            })
+          }
         </div>
       </div>
     )
@@ -83,6 +106,9 @@ class NowDashboard extends React.Component {
   }
 
   render() {
+    if (this.props.activeArticle && !this.props.articleLoading) return this.renderActiveArticle();
+
+
     return (
       <div className='dashboard-container'>
         <div className='header-container'>
@@ -91,10 +117,11 @@ class NowDashboard extends React.Component {
         <div className='top-articles-container'>
           { this.renderArticles() }
         </div>
-        <div className={ `article-loading-overlay${this.props.articleLoading ? 'show' : ''}` }></div>
-        { this.renderActiveArticle() }
+        <div className={ `article-loading${this.props.articleLoading ? ' show' : ''}`}>
+          Loading article ...
+        </div>
       </div>
-    )
+      )
   }
 }
 
@@ -109,20 +136,22 @@ function initDashboard() {
                   store.articleLoading,
                   store.activeArticle,
                   store.clickedArticles,
-                  store.activeArticleReaders);
+                  store.activeArticleReaders,
+                  store.activeSectionIndex);
   });
 }
 
 function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
                         activeArticle=null, clickedArticles=new Map(),
-                        activeArticleReaders=0) {
+                        activeArticleReaders=0, activeSectionIndex=0) {
   ReactDOM.render(
     <NowDashboard topArticles={ topArticles }
       readers={ readers }
       clickedArticles={ clickedArticles }
       activeArticle={ activeArticle }
       activeArticleReaders={ activeArticleReaders }
-      articleLoading={ articleLoading }/>,
+      articleLoading={ articleLoading }
+      activeSectionIndex={ activeSectionIndex }/>,
     document.getElementById('now')
   )
 }

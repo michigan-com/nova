@@ -1,5 +1,6 @@
 'use strict';
 
+import url from 'url';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
@@ -7,19 +8,32 @@ import xr from 'xr';
 import ajax from '../lib/ajax';
 import Dispatcher from '../dispatcher';
 
+/** Browser history stuff */
+require('historyjs/scripts/bundled/html4+html5/native.history.js');
+window.onpopstate = (e) => {
+  Store.historyChange(e);
+}
+
 var ARTICLE_CHANGE = 'article-change';
+
 
 function getArticleActions() {
   return {
     gotArticles: 'got-topArticles',
     gotQuickstats: 'got-quickstats',
     articleSelected: 'article-selected',
+    sectionSelect: 'section-select'
   }
+}
+
+function getSections() {
+  return ['all', 'business', 'sports'];
 }
 
 function defaultArticleStore() {
   return {
     // Article list
+    allArticles: [],
     topArticles: [],
     readers: -1,
 
@@ -30,6 +44,9 @@ function defaultArticleStore() {
 
     // State management, might want this somewhere else
     articleLoading: false,
+
+    // Sections
+    activeSectionIndex: 0
   }
 }
 
@@ -59,6 +76,8 @@ var Store = assign({}, EventEmitter.prototype, {
       return visitsB - visitsA;
     });
 
+
+    // Iterate over articles
     let filteredArticles = [];
     for (let article of topArticles) {
       // Update the active article if we have one
@@ -68,9 +87,27 @@ var Store = assign({}, EventEmitter.prototype, {
           break;
         }
       }
+
+      // Look at the sections, see if we want to filter it out
+      let addArticle = true;
+      if (store.activeSectionIndex !== 0) {
+        addArticle = false;
+        let activeSection = getSections()[store.activeSectionIndex];
+        for (let section of article.sections) {
+          if (section.toLowerCase() === activeSection.toLowerCase()) {
+            addArticle = true;
+            break;
+          }
+        }
+      }
+
+      if (addArticle) filteredArticles.push(article);
     }
 
-    store.topArticles = topArticles.slice(0, 25);
+    // Now store stuff
+    store.topArticles = filteredArticles.slice(0, 25);
+    store.allArticles = topArticles;
+
     this.emitChange();
   },
 
@@ -84,7 +121,7 @@ var Store = assign({}, EventEmitter.prototype, {
    this.emitChange();
   },
 
-  updateActiveArticle(articleId, readers) {
+  updateActiveArticle(articleId, readers=0) {
     // Dont update an active article if we're on an active article
     if (store.activeArticle != null || store.articleLoading) return;
 
@@ -92,6 +129,7 @@ var Store = assign({}, EventEmitter.prototype, {
 
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
+      History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
       document.body.className = document.body.className += ' article-open';
       store.activeArticle = articleCache[articleId];
       this.emitChange();
@@ -109,7 +147,29 @@ var Store = assign({}, EventEmitter.prototype, {
     document.body.className = document.body.className.replace('article-open', '');
     store.activeArticle = null;
     store.articleLoading = false;
+    History.pushState({}, 'Top Articles', '/');
     this.emitChange();
+  },
+
+  sectionSelect(sectionName) {
+    let index = getSections().indexOf(sectionName);
+    if (index < 0) return;
+
+    store.activeSectionIndex = index;
+    this.updateArticles(store.allArticles);
+  },
+
+  historyChange(e) {
+    let state = History.getState();
+    console.log(state);
+    let stateTitle = state.title;
+
+    let articleIdMatch = /Article\s+(\d+)/.exec(stateTitle);
+
+    // We were on a page and now we're going back
+    if (articleIdMatch) {
+      this.closeActiveArticle();
+    }
   },
 
   /** Mapi interactions */
@@ -120,6 +180,9 @@ var Store = assign({}, EventEmitter.prototype, {
         articleCache[articleId] = data;
         store.activeArticle = data;
         store.articleLoading = false;
+
+        History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
+
         this.emitChange();
       }, (e) => {
       console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);
@@ -143,7 +206,16 @@ Dispatcher.register(function(action) {
     case ArticleActions.closeActiveArticle:
       Store.closeActiveArticle();
       break;
+    case ArticleActions.sectionSelect:
+      Store.sectionSelect(action.sectionName);
+      break;
   }
 });
+//
+// See if we have an ?articleId= url param
+let parsed = url.parse(window.location.href, true);
+if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId)) {
+    Store.updateActiveArticle(parseInt(parsed.query.articleId));
+}
 
-module.exports = { Store, ArticleActions, defaultArticleStore }
+module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions, getSections }
