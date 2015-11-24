@@ -3,9 +3,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Store, defaultArticleStore } from '../store/article-store';
+import { Store, defaultArticleStore, getFilterOrder } from '../store/article-store';
 import TopArticle from './top-article';
 import ActiveArticle from './active-article';
+import SectionFilter from './section-filter';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -35,11 +36,41 @@ class NowDashboard extends React.Component {
     return(
       <div id='header'>
         <div id='page-header'>Detroit Now</div>
-        <div id='greeting'>{ `${greeting}, Detroit` }</div>
-        <div id='today'>{ `${months[now.getMonth()]} ${now.getDate()}` }</div>
         <div id='readers'>
           <div id='glasses'><img src='/img/glasses.svg'/></div>
           <div id='numbers'>{ readers }</div>
+        </div>
+        { this.renderFilters() }
+      </div>
+    )
+  }
+
+  renderFilters() {
+    let filterOrder = getFilterOrder();
+    let filters = [];
+    for (let filter in this.props.sectionFilters) {
+      let filterInfo = this.props.sectionFilters[filter];
+      filters.push({
+        name: filter,
+        displayName: filterInfo.displayName || filter,
+        active: filterInfo.showArticles
+      });
+    }
+    filters = filters.sort(function(a,b) { filterOrder.indexOf(b.name) > filterOrder.indexOf(a.name); });
+
+    return (
+      <div className='filters-container'>
+        <div className='filters'>
+          {
+            filters.map(function(filter, index) {
+              return (
+                <SectionFilter name={ filter.name }
+                            displayName={ filter.displayName }
+                            active={ filter.active }
+                            key={ `section-filter-${filter.name}` }/>
+              )
+            })
+          }
         </div>
       </div>
     )
@@ -85,23 +116,22 @@ class NowDashboard extends React.Component {
   }
 
   render() {
-    if (this.props.activeArticle && !this.props.articleLoading) {
-      return this.renderActiveArticle();
-    } else {
-      return (
-        <div className='dashboard-container'>
-          <div className='header-container'>
-            { this.renderHeader() }
-          </div>
-          <div className='top-articles-container'>
-            { this.renderArticles() }
-          </div>
-          <div className={ `article-loading${this.props.articleLoading ? ' show' : ''}`}>
-            Loading article ...
-          </div>
+    if (this.props.activeArticle && !this.props.articleLoading) return this.renderActiveArticle();
+
+
+    return (
+      <div className='dashboard-container'>
+        <div className='header-container'>
+          { this.renderHeader() }
         </div>
+        <div className='top-articles-container'>
+          { this.renderArticles() }
+        </div>
+        <div className={ `article-loading${this.props.articleLoading ? ' show' : ''}`}>
+          Loading article ...
+        </div>
+      </div>
       )
-    }
   }
 }
 
@@ -116,20 +146,22 @@ function initDashboard() {
                   store.articleLoading,
                   store.activeArticle,
                   store.clickedArticles,
-                  store.activeArticleReaders);
+                  store.activeArticleReaders,
+                  store.sectionFilters);
   });
 }
 
 function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
                         activeArticle=null, clickedArticles=new Map(),
-                        activeArticleReaders=0) {
+                        activeArticleReaders=0, sectionFilters={}) {
   ReactDOM.render(
     <NowDashboard topArticles={ topArticles }
       readers={ readers }
       clickedArticles={ clickedArticles }
       activeArticle={ activeArticle }
       activeArticleReaders={ activeArticleReaders }
-      articleLoading={ articleLoading }/>,
+      articleLoading={ articleLoading }
+      sectionFilters={ sectionFilters }/>,
     document.getElementById('now')
   )
 }
