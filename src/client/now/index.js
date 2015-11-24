@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Store, defaultArticleStore, getFilterOrder } from '../store/article-store';
+import { Store, defaultArticleStore, getSections } from '../store/article-store';
 import TopArticle from './top-article';
 import ActiveArticle from './active-article';
 import SectionFilter from './section-filter';
@@ -40,34 +40,24 @@ class NowDashboard extends React.Component {
           <div id='glasses'><img src='/img/glasses.svg'/></div>
           <div id='numbers'>{ readers }</div>
         </div>
-        { this.renderFilters() }
+        { this.renderSectionOptions() }
       </div>
     )
   }
 
-  renderFilters() {
-    let filterOrder = getFilterOrder();
-    let filters = [];
-    for (let filter in this.props.sectionFilters) {
-      let filterInfo = this.props.sectionFilters[filter];
-      filters.push({
-        name: filter,
-        displayName: filterInfo.displayName || filter,
-        active: filterInfo.showArticles
-      });
-    }
-    filters = filters.sort(function(a,b) { filterOrder.indexOf(b.name) > filterOrder.indexOf(a.name); });
+  renderSectionOptions() {
+    let sections = getSections();
+    let activeSection = this.props.activeSectionIndex;
 
     return (
       <div className='filters-container'>
         <div className='filters'>
           {
-            filters.map(function(filter, index) {
+            sections.map(function(section, index) {
               return (
-                <SectionFilter name={ filter.name }
-                            displayName={ filter.displayName }
-                            active={ filter.active }
-                            key={ `section-filter-${filter.name}` }/>
+                <SectionFilter name={ section }
+                            active={ index === activeSection }
+                            key={ `section-${section}` }/>
               )
             })
           }
@@ -147,13 +137,13 @@ function initDashboard() {
                   store.activeArticle,
                   store.clickedArticles,
                   store.activeArticleReaders,
-                  store.sectionFilters);
+                  store.activeSectionIndex);
   });
 }
 
 function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
                         activeArticle=null, clickedArticles=new Map(),
-                        activeArticleReaders=0, sectionFilters={}) {
+                        activeArticleReaders=0, activeSectionIndex=0) {
   ReactDOM.render(
     <NowDashboard topArticles={ topArticles }
       readers={ readers }
@@ -161,7 +151,7 @@ function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
       activeArticle={ activeArticle }
       activeArticleReaders={ activeArticleReaders }
       articleLoading={ articleLoading }
-      sectionFilters={ sectionFilters }/>,
+      activeSectionIndex={ activeSectionIndex }/>,
     document.getElementById('now')
   )
 }

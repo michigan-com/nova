@@ -16,17 +16,18 @@ window.onpopstate = (e) => {
 
 var ARTICLE_CHANGE = 'article-change';
 
+
 function getArticleActions() {
   return {
     gotArticles: 'got-topArticles',
     gotQuickstats: 'got-quickstats',
     articleSelected: 'article-selected',
-    filterToggle: 'filter-toggle'
+    sectionSelect: 'section-select'
   }
 }
 
-function getFilterOrder() {
-  return ['home', 'sports', 'news', 'local'];
+function getSections() {
+  return ['all', 'business', 'sports'];
 }
 
 function defaultArticleStore() {
@@ -44,33 +45,8 @@ function defaultArticleStore() {
     // State management, might want this somewhere else
     articleLoading: false,
 
-    // Section filtering
-    sectionFilters: {
-      home: {
-        showArticles: true,
-        displayName: 'Home Page',
-        section: 'home',
-        count: 0,
-      },
-      news: {
-        showArticles: true,
-        displayName: 'Local',
-        section: 'news',
-        count: 0
-      },
-      life: {
-        showArticles: true,
-        displayName: 'Life',
-        section: 'life',
-        count: 0
-      },
-      sports: {
-        showArticles: true,
-        displayName: 'Sports',
-        section: 'sports',
-        count: 0
-      }
-    }
+    // Sections
+    activeSectionIndex: 0
   }
 }
 
@@ -100,13 +76,6 @@ var Store = assign({}, EventEmitter.prototype, {
       return visitsB - visitsA;
     });
 
-    let sectionFilters = assign({}, store.sectionFilters);
-    let sectionCounts = {};
-    let sectionState = {};
-    for (let section in sectionFilters) {
-      sectionCounts[section] = 0;
-      sectionState[section] = sectionFilters[section].showArticles;
-    }
 
     // Iterate over articles
     let filteredArticles = [];
@@ -121,9 +90,15 @@ var Store = assign({}, EventEmitter.prototype, {
 
       // Look at the sections, see if we want to filter it out
       let addArticle = true;
-      for (let section of article.sections) {
-        if (section in sectionCounts) sectionCounts[section] += 1;
-        if (section in sectionState && !sectionState[section]) addArticle = false;
+      if (store.activeSectionIndex !== 0) {
+        addArticle = false;
+        let activeSection = getSections()[store.activeSectionIndex];
+        for (let section of article.sections) {
+          if (section.toLowerCase() === activeSection.toLowerCase()) {
+            addArticle = true;
+            break;
+          }
+        }
       }
 
       if (addArticle) filteredArticles.push(article);
@@ -132,9 +107,6 @@ var Store = assign({}, EventEmitter.prototype, {
     // Now store stuff
     store.topArticles = filteredArticles.slice(0, 25);
     store.allArticles = topArticles;
-    for (let section in sectionCounts) {
-      store.sectionFilters[section].count = sectionCounts[section];
-    }
 
     this.emitChange();
   },
@@ -179,11 +151,11 @@ var Store = assign({}, EventEmitter.prototype, {
     this.emitChange();
   },
 
-  filterToggle(filterName) {
-    if (!(filterName in store.sectionFilters)) return;
+  sectionSelect(sectionName) {
+    let index = getSections().indexOf(sectionName);
+    if (index < 0) return;
 
-    let currentState = store.sectionFilters[filterName].showArticles;
-    store.sectionFilters[filterName].showArticles = !currentState;
+    store.activeSectionIndex = index;
     this.updateArticles(store.allArticles);
   },
 
@@ -234,8 +206,8 @@ Dispatcher.register(function(action) {
     case ArticleActions.closeActiveArticle:
       Store.closeActiveArticle();
       break;
-    case ArticleActions.filterToggle:
-      Store.filterToggle(action.filterName);
+    case ArticleActions.sectionSelect:
+      Store.sectionSelect(action.sectionName);
       break;
   }
 });
@@ -246,4 +218,4 @@ if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId
     Store.updateActiveArticle(parseInt(parsed.query.articleId));
 }
 
-module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions, getFilterOrder }
+module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions, getSections }
