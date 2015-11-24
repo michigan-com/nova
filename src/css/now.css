@@ -7,7 +7,7 @@ $article-height: 50px;
 $active-article-z-index: 100;
 
 /* container info */
-$header-height-sm: 75px;
+$header-height-sm: 30px;
 $header-z-index: calc($active-article-z-index / 2);
 
 $filter-height: 65px;
@@ -28,7 +28,7 @@ body {
     .header-container {
 
       @media (max-width: $screen-sm) {
-        height: $header-height-sm;
+        height: calc($header-height-sm + $filter-height);
       }
     }
 
@@ -39,6 +39,10 @@ body {
       flex-direction: row;
       align-items: center;
       background-color: $grey;
+
+      @media (max-width: $screen-sm) {
+        height: $filter-height;
+      }
 
       .filters {
         height: $filter-height;
@@ -61,7 +65,7 @@ body {
       width: 100%;
 
       @media (max-width: $screen-sm) {
-        /*margin-top: $header-height-sm;*/
+
       }
 
       .loading {
@@ -183,6 +187,7 @@ body {
     background-color: $grey;
     transition: all 150ms linear;
     box-shadow: 0;
+    cursor: pointer;
 
     @media (max-width: $screen-sm) {
       height: calc($filter-toggle-height * .75);
