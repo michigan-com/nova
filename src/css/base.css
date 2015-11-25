@@ -16,9 +16,9 @@ body {
 }
 
 
-$yellow: rgb(247, 218, 21);
-$grey: rgb(34, 47, 62);
-$blue: rgb(89, 136, 176);
+$yellow: rgb(248,201,41);
+$grey: rgb(76,77,79);
+$blue: rgb(93,123,251);
 
 /* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;
