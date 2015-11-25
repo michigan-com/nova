@@ -7,6 +7,7 @@ import { Store, defaultArticleStore, getSections } from '../store/article-store'
 import TopArticle from './top-article';
 import ActiveArticle from './active-article';
 import SectionFilter from './section-filter';
+import LoadingImage from './loading-image';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -19,6 +20,20 @@ var months = [ "January", "February", "March", "April", "May", "June",
 
 class NowDashboard extends React.Component {
   static defaultProps = defaultArticleStore();
+
+  state = {
+    articlesLoading: true
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.topArticles.length && nextProps.topArticles.length) {
+      this.setState({ fadeOutLoading: true });
+      setTimeout(() => {
+        this.setState({ articlesLoading: false });
+      }, 1000);
+    }
+  }
+
   renderHeader() {
     // TODO figure out if we want to normalize this time to detroit
     // or if we want it to be the client's computer
@@ -67,10 +82,12 @@ class NowDashboard extends React.Component {
   }
 
   renderArticles() {
-    if (!this.props.topArticles || !this.props.topArticles.length) {
+    if (this.state.articlesLoading || !this.props.topArticles.length) {
+      let className = 'loading-image-container';
+      if (this.state.fadeOutLoading) className += ' fade-out';
       return (
-        <div className='loading'>
-          Loading ...
+        <div className={ className }>
+          <LoadingImage blurbs={ ['Loading the news...'] } key='articles-loading'/>
         </div>
       )
     }
@@ -106,8 +123,6 @@ class NowDashboard extends React.Component {
   }
 
   render() {
-    if (this.props.activeArticle && !this.props.articleLoading) return this.renderActiveArticle();
-
 
     return (
       <div className='dashboard-container'>
@@ -117,9 +132,7 @@ class NowDashboard extends React.Component {
         <div className='top-articles-container'>
           { this.renderArticles() }
         </div>
-        <div className={ `article-loading${this.props.articleLoading ? ' show' : ''}`}>
-          Loading article ...
-        </div>
+        { this.renderActiveArticle() }
       </div>
       )
   }
@@ -151,7 +164,8 @@ function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
       activeArticle={ activeArticle }
       activeArticleReaders={ activeArticleReaders }
       articleLoading={ articleLoading }
-      activeSectionIndex={ activeSectionIndex }/>,
+      activeSectionIndex={ activeSectionIndex }
+      key='now-dashboard'/>,
     document.getElementById('now')
   )
 }

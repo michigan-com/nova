@@ -5,6 +5,7 @@ import { ReadingPopupController } from 'reeeeeader';
 
 import Dispatcher from '../dispatcher';
 import { ArticleActions } from '../store/article-store';
+import LoadingImage from './loading-image';
 
 class ActiveArticle extends React.Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class ActiveArticle extends React.Component {
   render() {
     if (!this.state.photoLoaded) {
       return (
-        <div className='article-loading show'>Loading article...</div>
+        <LoadingImage blurbs={ ['Loading article...'] }/>
       )
     }
 

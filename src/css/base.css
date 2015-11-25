@@ -1,4 +1,5 @@
 @import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
+@import './animations/pulse';
 
 html {
   height: 100%;
@@ -16,9 +17,8 @@ body {
 }
 
 
-$yellow: rgb(247, 218, 21);
-$grey: rgb(34, 47, 62);
-$blue: rgb(89, 136, 176);
+$yellow: #f8c929;
+$blue: #5677fc;
 
 /* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;
