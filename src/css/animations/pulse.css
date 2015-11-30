@@ -1,11 +1,11 @@
-.pulse {
-  -webkit-animation: pulse 750ms linear infinite both;
-  animation: pulse 750ms linear infinite both;
+@define-placeholder pulse {
+  -webkit-animation: pulse-animation 750ms linear infinite both;
+  animation: pulse-animation 750ms linear infinite both;
 }
 
 /* Generated with Bounce.js. Edit at http://goo.gl/i9BXIU */
 
-@-webkit-keyframes pulse {
+@-webkit-keyframes pulse-animation {
   0% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
   3.44% { -webkit-transform: matrix3d(1.123, 0, 0, 0, 0, 1.038, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.123, 0, 0, 0, 0, 1.038, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
   6.83% { -webkit-transform: matrix3d(1.199, 0, 0, 0, 0, 1.062, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.199, 0, 0, 0, 0, 1.062, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
@@ -27,7 +27,7 @@
   100% { -webkit-transform: matrix3d(1.109, 0, 0, 0, 0, 1.045, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.109, 0, 0, 0, 0, 1.045, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
 }
 
-@keyframes pulse {
+@keyframes pulse-animation {
   0% { -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
   3.44% { -webkit-transform: matrix3d(1.123, 0, 0, 0, 0, 1.038, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.123, 0, 0, 0, 0, 1.038, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }
   6.83% { -webkit-transform: matrix3d(1.199, 0, 0, 0, 0, 1.062, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform: matrix3d(1.199, 0, 0, 0, 0, 1.062, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); }

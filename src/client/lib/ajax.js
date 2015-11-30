@@ -2,8 +2,6 @@
 
 export default function ajax(url, method="GET") {
   return new Promise(function(resolve, reject) {
-    console.log(`Grabbing: ${url}`);
-
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
       if (ajax.readyState != XMLHttpRequest.DONE) return;

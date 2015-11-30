@@ -3,8 +3,8 @@
 import React from 'react';
 import { ReadingPopupController } from 'reeeeeader';
 
-import Dispatcher from '../dispatcher';
-import { ArticleActions } from '../store/article-store';
+import Dispatcher from '../../dispatcher';
+import { ArticleActions } from '../../store/article-store';
 import LoadingImage from './loading-image';
 
 class ActiveArticle extends React.Component {
@@ -72,7 +72,9 @@ class ActiveArticle extends React.Component {
   render() {
     if (!this.state.photoLoaded) {
       return (
-        <LoadingImage blurbs={ ['Loading article...'] }/>
+        <div className='active-article-container'>
+          <LoadingImage blurbs={ ['Loading article...'] }/>
+        </div>
       )
     }
 

@@ -5,7 +5,6 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
 
-import ajax from '../lib/ajax';
 import Dispatcher from '../dispatcher';
 
 /** Browser history stuff */
@@ -174,7 +173,7 @@ var Store = assign({}, EventEmitter.prototype, {
 
   /** Mapi interactions */
   fetchActiveArticle(articleId) {
-    ajax(`https://api.michigan.com/v1/article/${articleId}/`)
+    xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
       .then((data) => {
         document.body.className = document.body.className += ' article-open';
         articleCache[articleId] = data;

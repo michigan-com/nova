@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import Dispatcher from '../dispatcher';
-import { ArticleActions } from '../store/article-store';
+import Dispatcher from '../../dispatcher';
+import { ArticleActions } from '../../store/article-store';
 
 // React Component representing article in the articles array from Chartbeat
 // toppages snapshot
@@ -12,10 +12,6 @@ class TopArticle extends React.Component {
   // TODO make this responsive? Move this functionality into CSS?
   // height: 100px, padding 10px
   static defaultStyle = { height: 100, margin: 10 }
-  constructor(props) {
-    super(props);
-
-  }
 
   setActiveArticle(e) {
     e.preventDefault();
@@ -28,13 +24,13 @@ class TopArticle extends React.Component {
   }
 
   getStyle = () => {
+    let style = {}
     let height = TopArticle.defaultStyle.height;
     let margin = TopArticle.defaultStyle.margin;
     if (window.innerWidth <= 768) height /= 2;
-
-    return {
-      top: `${(this.props.rank * (height + margin)) + margin}px`
-    }
+    style.top = `${(this.props.rank * (height + margin)) + margin}px`;
+    style.animationDelay = `${this.props.rank * 100}ms`;
+    return style;
   }
 
   render() {

@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import Dispatcher from '../dispatcher';
-import { getArticleActions } from '../store/article-store';
+import Dispatcher from '../../dispatcher';
+import { getArticleActions } from '../../store/article-store';
 
 let actions = getArticleActions();
 

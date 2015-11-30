@@ -1,5 +1,7 @@
 @import 'base';
 @import '../../node_modules/reeeeeader/dist/styles.css';
+@import './animations/pulse';
+@import './animations/smack';
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
@@ -210,8 +212,8 @@ body {
   flex-direction: row;
   align-items: center;
   top: 100%;
-
   transition: top 500ms linear;
+  @extend smack;
 
   /* Desktop, etc */
   @media (min-width: $screen-md) {
@@ -480,6 +482,10 @@ body {
       min-width: 100px;
       border-radius: 5px;
       margin-bottom: 10px;
+
+      &.pulse {
+        @extend pulse;
+      }
     }
   }
 }

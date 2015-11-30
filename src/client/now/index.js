@@ -4,10 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Store, defaultArticleStore, getSections } from '../store/article-store';
-import TopArticle from './top-article';
-import ActiveArticle from './active-article';
-import SectionFilter from './section-filter';
-import LoadingImage from './loading-image';
+import TopArticle from './components/top-article';
+import ActiveArticle from './components/active-article';
+import SectionFilter from './components/section-filter';
+import LoadingImage from './components/loading-image';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -20,6 +20,11 @@ var months = [ "January", "February", "March", "April", "May", "June",
 
 class NowDashboard extends React.Component {
   static defaultProps = defaultArticleStore();
+  constructor(props) {
+    super(props);
+
+    this.drawnArticles = new Set();
+  }
 
   state = {
     articlesLoading: true
@@ -31,6 +36,19 @@ class NowDashboard extends React.Component {
       setTimeout(() => {
         this.setState({ articlesLoading: false });
       }, 1000);
+    }
+
+    if (this.props.activeSectionIndex !== nextProps.activeSectionIndex) {
+      this.drawnArticles.clear();
+    }
+  }
+
+  // Save what articles are currently drawn
+  componentDidUpdate() {
+    this.drawnArticles.clear()
+
+    for (let article in this.props.topArticle) {
+      this.drawnArticles.add(article.article_id);
     }
   }
 
@@ -92,6 +110,7 @@ class NowDashboard extends React.Component {
       )
     }
 
+    let currentSection = getSections()[this.props.activeSectionIndex];
     let topArticles = [];
     for (let index = 0; index < this.props.topArticles.length; index++) {
       let article = this.props.topArticles[index];
@@ -99,7 +118,7 @@ class NowDashboard extends React.Component {
         <TopArticle article={ article }
             rank={ index }
             clicked={ this.props.clickedArticles.has(article.article_id) }
-            key={ `article-${article.url}` }/>
+            key={ `article-${currentSection}-${article.url}` }/>
       )
     }
 
