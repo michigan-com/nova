@@ -83,7 +83,6 @@ var Store = assign({}, EventEmitter.prototype, {
       if (!store.articleLoading && store.activeArticle && store.activeArticle.article_id) {
         if (article.article_id === store.activeArticle.article_id) {
           store.activeArticleReaders = article.visits;
-          break;
         }
       }
 
@@ -106,7 +105,6 @@ var Store = assign({}, EventEmitter.prototype, {
     // Now store stuff
     store.topArticles = filteredArticles.slice(0, 25);
     store.allArticles = topArticles;
-
     this.emitChange();
   },
 
@@ -160,7 +158,6 @@ var Store = assign({}, EventEmitter.prototype, {
 
   historyChange(e) {
     let state = History.getState();
-    console.log(state);
     let stateTitle = state.title;
 
     let articleIdMatch = /Article\s+(\d+)/.exec(stateTitle);
@@ -210,7 +207,7 @@ Dispatcher.register(function(action) {
       break;
   }
 });
-//
+
 // See if we have an ?articleId= url param
 let parsed = url.parse(window.location.href, true);
 if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId)) {

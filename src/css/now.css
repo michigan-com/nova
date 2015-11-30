@@ -19,6 +19,10 @@ body {
   font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
   background-color: white;
+
+  &.article-open {
+    overflow: hidden;
+  }
 }
 
 #now {
@@ -287,6 +291,14 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, .5);
   z-index: $active-article-z-index;
+  display: flex;
+  flex-direction: column;
+
+  &.loading {
+    color: white;
+    flex-direction: row;
+    align-items: center;
+  }
 
   .active-article {
     width: 100%;
@@ -317,6 +329,7 @@ body {
       display: -webkit-flex;
       flex-direction: column;
       overflow: auto;
+      flex-grow: 1;
 
       @media (min-width: $screen-md) {
         margin: 2% 5%;
@@ -329,7 +342,7 @@ body {
         display: flex;
         flex-direction: row;
         align-items: center;
-        color: $blue;
+        color: black;
 
         @media (min-width: $screen-md) {
           font-size: 30px;
@@ -340,7 +353,7 @@ body {
         font-size: 16px;
         width: 100%;
         margin: 10px 0px;
-        color: blue;
+        color: black;
 
         @media (min-width: $screen-md) {
           font-size: 20px;

@@ -17,7 +17,10 @@ class ActiveArticle extends React.Component {
 
   loadPhoto() {
     let article = this.props.article;
-    if (!article.photo) return;
+    if (!article.photo) {
+      this.setState({ photoLoaded: true });
+      return;
+    }
 
     let i = new Image();
 
@@ -72,7 +75,7 @@ class ActiveArticle extends React.Component {
   render() {
     if (!this.state.photoLoaded) {
       return (
-        <div className='active-article-container'>
+        <div className='active-article-container loading'>
           <LoadingImage blurbs={ ['Loading article...'] }/>
         </div>
       )
