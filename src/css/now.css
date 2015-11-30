@@ -217,7 +217,6 @@ body {
   align-items: center;
   top: 100%;
   transition: top 500ms linear;
-  @extend smack;
 
   /* Desktop, etc */
   @media (min-width: $screen-md) {
@@ -239,6 +238,7 @@ body {
   box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.23);
   cursor: pointer;
   transition: box-shadow 250ms linear;
+  @extend smack;
 
   .readers {
     font-size: calc($article-height * .3);

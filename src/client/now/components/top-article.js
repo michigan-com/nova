@@ -29,7 +29,6 @@ class TopArticle extends React.Component {
     let margin = TopArticle.defaultStyle.margin;
     if (window.innerWidth <= 768) height /= 2;
     style.top = `${(this.props.rank * (height + margin)) + margin}px`;
-    style.animationDelay = `${this.props.rank * 100}ms`;
     return style;
   }
 
@@ -39,9 +38,12 @@ class TopArticle extends React.Component {
     let readers = article.visits;
     let headline = article.headline;
 
+    let style = {};
+    style.animationDelay = `${this.props.rank * 100}ms`;
+
     return (
       <div className='top-article-container' style={ this.getStyle() }>
-        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.setActiveArticle.bind(this) }>
+        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.setActiveArticle.bind(this) } style={ style }>
           <div className='readers'>{ readers }</div>
           <div className='headline'>{ headline }</div>
         </div>
