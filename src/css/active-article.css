@@ -2,8 +2,11 @@
 
 $active-article-z-index: 100;
 $active-image-z-index: 1;
+$article-content-padding: 15px;
 
 $summary-font-size: 20px;
+
+$start-speed-reader-height: 50px;
 
 .active-article-container {
   position: fixed;
@@ -85,18 +88,36 @@ $summary-font-size: 20px;
   .article-content {
     display: flex;
     flex-direction: column;
-    padding: 0px 15px;
+    padding: 0px $article-content-padding;
 
     .title {
       font-size: 30px;
       margin: 10px 0px;
     }
 
+    .subtitle-container {
+      display: flex;
+      flex-direction: row;
+
+      .start-speed-reader-container {
+        height: 0;
+
+        .start-speed-reader {
+          position: absolute;
+          left: 40%;
+          top: calc($start-speed-reader-height / -2);
+        }
+      }
+    }
+
     .readers {
       color: grey;
-      font-size: 15px;
+      font-size: 12px;
       margin: 10px 0px;
+      width: 50%;
+      align-self: left;
     }
+
 
     .summary-container {
       .summary-sentence {
@@ -118,34 +139,68 @@ $summary-font-size: 20px;
       height: 50px;
       width: 100%;
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
 
       @media (min-width $screen-md) {
         width: 50%;
         margin: 0 auto;
       }
 
-      .control {
-        width: 50%;
-        display: inline-block;
-        float: left;
+      .start-speed-reader-container {
+        min-height: calc($start-speed-reader-height * 1.5);
+      }
+
+      .close-article {
+        background-color: $blue;
+        width: 100%;
         color: white;
-        font-size: 20px;
-        line-height: 50px;
         text-align: center;
-        cursor: pointer;
-
-        &.start-speed-reader {
-          background-color: $yellow;
-        }
-
-        &.close-article {
-          background-color: $blue;
-        }
+        font-size: 30px;
+        line-height: 40px;
+        margin-bottom: 20px;
       }
     }
   }
 }
 
+.start-speed-reader-container {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 50%;
+
+  .start-speed-reader {
+    border-radius: 50%;
+    width: $start-speed-reader-height;
+    height: $start-speed-reader-height;
+    font-size: calc($start-speed-reader-height / 5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    background-color: $yellow;
+    color: white;
+    opacity: 1;
+    cursor: pointer;
+    box-shadow: 0 0 .3em black;
+    transition: all 400ms linear;
+
+    &:hover {
+      box-shadow: 0 0 1em black;
+    }
+
+    &.shrink {
+      width: 0px;
+      height: 0px;
+      top: 0px;
+      left: 50%;
+      font-size: 0px;
+    }
+  }
+}
 
 /** Speed reader stuffs */
 .michspeed  .michspeed-backdrop, .michspeed-container {

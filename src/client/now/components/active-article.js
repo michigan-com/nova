@@ -14,7 +14,8 @@ class ActiveArticle extends React.Component {
     super(props);
     this.state = {
       photoLoaded: false,
-      fadeImageOut: false
+      fadeImageOut: false,
+      speedReaderBottom: false
     }
 
     this.scrollHooks = [new ScrollHook({
@@ -22,6 +23,11 @@ class ActiveArticle extends React.Component {
       scrollTopThreshold: '10%',
       scrollDownHook: () => { this.setState({ fadeImageOut: true }) }.bind(this),
       scrollUpHook: () => { this.setState({ fadeImageOut: false }) }.bind(this),
+    }), new ScrollHook({
+      ref: 'article-content',
+      scrollTopThreshold: '90%',
+      scrollDownHook: () => { this.setState({ speedReaderBottom: true }) }.bind(this),
+      scrollUpHook: () => { this.setState({ speedReaderBottom: false }) }.bind(this)
     })];
   }
 
@@ -34,7 +40,7 @@ class ActiveArticle extends React.Component {
     let currentTop = articleNode.scrollTop;
     for (let hook of this.scrollHooks) {
       hook.storeClientTop(currentTop);
-      if (hook.shouldTriggerHook()) {
+      if (hook.shouldTriggerHook(articleNode)) {
         hook.triggerHook();
       }
     }
@@ -61,8 +67,8 @@ class ActiveArticle extends React.Component {
     });
   }
 
-  closeActiveArticle(e) {
-    if (/start-speed-reader/.test(e.target.className)) {
+  clickActiveArticle(e) {
+    if (/start-speed-reader|fa-forward/.test(e.target.className)) {
       this.loadSpeedReader();
       return;
     } else if (!(/(close-article|active-article-container)/.test(e.target.className))) {
@@ -84,6 +90,30 @@ class ActiveArticle extends React.Component {
     return style;
   }
 
+  // Speed reader button changes locations based on scroll height
+  renderSpeedReaderStart(location) {
+    let startSpeedReaderClass = 'start-speed-reader';
+    let startSpeedReaderContainerClass = 'start-speed-reader-container';
+
+    switch (location) {
+      case 'subtitle':
+        if (this.state.fadeImageOut) {
+          startSpeedReaderClass += ' shrink';
+        }
+        break;
+      case 'bottom':
+        startSpeedReaderClass += ' shrink';
+        if (this.state.speedReaderBottom) {
+          startSpeedReaderClass = 'start-speed-reader';
+        }
+        break;
+    }
+    return (
+      <div className={ startSpeedReaderContainerClass }>
+          <div className={ startSpeedReaderClass }>Speed Read</div>
+      </div>
+    )
+  }
   renderSummarySentence = (sentence, index) => {
     return (
       <div className='summary-sentence' key={ `summary-${index}` }>
@@ -111,18 +141,21 @@ class ActiveArticle extends React.Component {
     }
 
     return (
-      <div className='active-article-container' onClick={ this.closeActiveArticle.bind(this) }>
+      <div className='active-article-container' onClick={ this.clickActiveArticle.bind(this) }>
         <div className={ activeArticleClass } style={ this.getStyle() } ref={ (ref) => { if (ref) ref.onscroll = this.checkScroll.bind(this, ref); } }>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
               <div className='title'>{ article.headline }</div>
-              <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
+              <div className='subtitle-container'>
+                <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
+                { this.renderSpeedReaderStart('subtitle') }
+              </div>
               <div className='summary-container'>
                 { article.summary.map(this.renderSummarySentence) }
               </div>
               <div className='article-controls'>
-                <div className='control start-speed-reader'>Speed Read</div>
-                <div className='control close-article'>Close</div>
+                { this.renderSpeedReaderStart('bottom') }
+                <div className='close-article'>Close</div>
               </div>
             </div>
           </div>

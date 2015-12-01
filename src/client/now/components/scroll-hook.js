@@ -18,10 +18,10 @@ export default class ScrollHook {
     this.scrollTop = null;
   }
 
-  shouldTriggerHook() {
+  shouldTriggerHook(scrollNode) {
     if (this.lastScrollTop === null || this.scrollTop === null) return false;
 
-    let threshold = this.getThreshold();
+    let threshold = this.getThreshold(scrollNode);
     if (threshold === null) return false;
 
     if (this.scrollTop >= threshold) {
@@ -45,7 +45,7 @@ export default class ScrollHook {
     }
   }
 
-  getThreshold() {
+  getThreshold(scrollNode) {
     let pxMatch = /^(\d+)px$/.exec(this.opts.scrollTopThreshold);
     if (pxMatch) {
       return pxMatch(1);
@@ -53,9 +53,7 @@ export default class ScrollHook {
 
     let percentMatch = /^(\d+)%$/.exec(this.opts.scrollTopThreshold);
     if (percentMatch) {
-      let windowHeight = window.innerHeight;
-
-      return windowHeight * percentMatch[1] / 100;
+      return (scrollNode.scrollHeight - scrollNode.clientHeight) * (percentMatch[1]) / 100
     }
 
     return null;

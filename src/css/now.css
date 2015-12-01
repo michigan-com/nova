@@ -261,7 +261,7 @@ body {
   }
 
   .headline {
-    font-size: calc($article-height * .25);
+    font-size: calc($article-height * .2);
     height: $article-height;
     color: black;
     font-weight: bold;
@@ -273,7 +273,7 @@ body {
 
     @media (min-width: $screen-md) {
       padding: 20px;
-      font-size: calc($article-height * .5);
+      font-size: calc($article-height * .4);
     }
   }
 
