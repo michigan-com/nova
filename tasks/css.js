@@ -13,9 +13,9 @@ var calc = require('postcss-calc');
 var extend = require('postcss-extend');
 
 var processors = [
+  cssImport,
   autoprefixer({ browsers: ['last 2 versions']}),
   nested,
-  cssImport,
   vars,
   calc,
   extend

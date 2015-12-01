@@ -6,14 +6,39 @@ import { ReadingPopupController } from 'reeeeeader';
 import Dispatcher from '../../dispatcher';
 import { ArticleActions } from '../../store/article-store';
 import LoadingImage from './loading-image';
+import ScrollHook from './scroll-hook';
+import { toggleClass } from '../../lib/dom';
 
 class ActiveArticle extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { photoLoaded: false }
+    this.state = {
+      photoLoaded: false,
+      fadeImageOut: false
+    }
+
+    this.scrollHooks = [new ScrollHook({
+      ref: 'article-content',
+      scrollTopThreshold: '10%',
+      scrollDownHook: () => { this.setState({ fadeImageOut: true }) }.bind(this),
+      scrollUpHook: () => { this.setState({ fadeImageOut: false }) }.bind(this),
+    })];
   }
 
   componentWillMount() { this.loadPhoto(); }
+
+  /**
+   * Used to check the scroll at intervals in order to ease animations
+   */
+  checkScroll = (articleNode) => {
+    let currentTop = articleNode.scrollTop;
+    for (let hook of this.scrollHooks) {
+      hook.storeClientTop(currentTop);
+      if (hook.shouldTriggerHook()) {
+        hook.triggerHook();
+      }
+    }
+  }
 
   loadPhoto() {
     let article = this.props.article;
@@ -50,17 +75,13 @@ class ActiveArticle extends React.Component {
   }
 
 
-  renderImage() {
+  getStyle() {
     let article = this.props.article;
-    if (!article.photo || !this.state.photoLoaded) return null;
+    let style = {}
+    if (!article.photo || !this.state.photoLoaded) return style;
 
-    let style = {
-      backgroundImage: `url(${article.photo.full.url})`
-    }
-
-    return (
-      <div className='image-container' style={ style }></div>
-    )
+    style.backgroundImage = `url(${article.photo.full.url})`;
+    return style;
   }
 
   renderSummarySentence = (sentence, index) => {
@@ -82,28 +103,33 @@ class ActiveArticle extends React.Component {
     }
 
     let article = this.props.article;
+    let activeArticleClass = 'active-article';
+    let articleContentClass = 'article-content';
+    if (this.state.fadeImageOut) {
+      activeArticleClass += ' fade-out';
+      articleContentClass += ' fade-in';
+    }
 
     return (
       <div className='active-article-container' onClick={ this.closeActiveArticle.bind(this) }>
-        <div className='active-article'>
-          { this.renderImage() }
-          <div className='article-content'>
-            <div className='title'>{ article.headline }</div>
-            <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
-            <hr/>
-            <div className='summary-container'>
-              { article.summary.map(this.renderSummarySentence) }
+        <div className={ activeArticleClass } style={ this.getStyle() } ref={ (ref) => { if (ref) ref.onscroll = this.checkScroll.bind(this, ref); } }>
+          <div className='article-content-container' ref='article-content-container'>
+            <div className={ articleContentClass } ref='article-content'>
+              <div className='title'>{ article.headline }</div>
+              <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
+              <div className='summary-container'>
+                { article.summary.map(this.renderSummarySentence) }
+              </div>
+              <div className='article-controls'>
+                <div className='control start-speed-reader'>Speed Read</div>
+                <div className='control close-article'>Close</div>
+              </div>
             </div>
-          </div>
-          <div className='article-controls'>
-            <div className='control start-speed-reader'>Speed Read</div>
-            <div className='control close-article'>Close</div>
           </div>
         </div>
       </div>
     )
   }
-
 }
 
 module.exports = ActiveArticle

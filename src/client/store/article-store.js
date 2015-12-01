@@ -81,7 +81,7 @@ var Store = assign({}, EventEmitter.prototype, {
     for (let article of topArticles) {
       // Update the active article if we have one
       if (!store.articleLoading && store.activeArticle && store.activeArticle.article_id) {
-        if (article.article_id === store.activeArticle.article_id) {
+        if (article.url === store.activeArticle.url) {
           store.activeArticleReaders = article.visits;
         }
       }
@@ -106,6 +106,7 @@ var Store = assign({}, EventEmitter.prototype, {
     store.topArticles = filteredArticles.slice(0, 25);
     store.allArticles = topArticles;
     this.emitChange();
+    console.log('DONE');
   },
 
   updateQuickstats(quickstats) {
