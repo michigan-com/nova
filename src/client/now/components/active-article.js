@@ -48,16 +48,22 @@ class ActiveArticle extends React.Component {
     }
   }
 
+  photoLoaded = () => {
+    setTimeout(() => {
+      this.setState({ photoLoaded: true });
+    }, 500);
+  }
+
   loadPhoto() {
     let article = this.props.article;
     if (!article.photo) {
-      this.setState({ photoLoaded: true });
+      this.photoLoaded();
       return;
     }
 
     let i = new Image();
 
-    i.onload = () => { this.setState({ photoLoaded: true }) }
+    i.onload = () => { this.photoLoaded(); }
     i.src = article.photo.full.url;
   }
 
@@ -129,7 +135,7 @@ class ActiveArticle extends React.Component {
 
   render() {
     let activeArticleContainerClass = 'active-article-container';
-    if (!this.state.photoLoaded) activeArticleContainerClass += ' loading';
+    if (this.state.photoLoaded) activeArticleContainerClass += ' loaded';
 
     let article = this.props.article;
     let activeArticleClass = 'active-article';
@@ -141,8 +147,8 @@ class ActiveArticle extends React.Component {
 
     return (
       <div className={ activeArticleContainerClass } onClick={ this.clickActiveArticle.bind(this) }>
-        <div className='articleImage' style={ this.getBackgroundStyle() }></div>
         <div className={ activeArticleClass } ref='active-article'>
+          <div className='article-image' style={ this.getBackgroundStyle() }></div>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
               <div className='title'>{ article.headline }</div>

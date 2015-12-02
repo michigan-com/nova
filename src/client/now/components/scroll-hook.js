@@ -22,7 +22,6 @@ export default class ScrollHook {
     if (this.lastScrollTop === null || this.scrollTop === null) return false;
 
     let threshold = this.getThreshold(scrollNode);
-    console.log(`scrollY: ${window.scrollY}, window height: ${window.innerHeight}, threshold ${threshold}`)
     if (threshold === null) return false;
 
     if (this.scrollTop >= threshold) {
