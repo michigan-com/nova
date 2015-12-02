@@ -9,11 +9,7 @@ $summary-font-size: 20px;
 $start-speed-reader-height: 50px;
 
 .active-article-container {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
   background-color: rgba(0, 0, 0, .5);
   z-index: $active-article-z-index;
   display: flex;
@@ -24,14 +20,23 @@ $start-speed-reader-height: 50px;
     flex-direction: row;
     align-items: center;
   }
+
+  .articleImage {
+    background-position: top;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: $active-image-z-index;
+  }
 }
+
 
 .active-article {
   width: 100%;
-  height: 100%;
-  background-position: top;
-  background-size: auto 100%;
-  background-repeat: no-repeat;
   padding-top: 80%;
   overflow-y: auto;
   position: relative;

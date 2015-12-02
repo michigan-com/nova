@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 import React from 'react';
 import Dispatcher from '../../dispatcher';
@@ -12,15 +12,29 @@ class TopArticle extends React.Component {
   // TODO make this responsive? Move this functionality into CSS?
   // height: 100px, padding 10px
   static defaultStyle = { height: 100, margin: 10 }
+  constructor(props) {
+    super(props);
 
-  setActiveArticle(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    this.state = {
+      articleClicked: false,
+    }
+  }
+
+  setSelfAsActive = () => {
     Dispatcher.dispatch({
       type: ArticleActions.articleSelected,
       article_id: this.props.article.article_id,
       readers: this.props.article.visits
     });
+  }
+
+  articleClicked = (e) => {
+    this.setState({ articleClicked: true });
+
+    // TODO figure out a good way to set this in css and JS at the same time...
+    setTimeout(() => {
+      this.setSelfAsActive();
+    }.bind(this), 750)
   }
 
   getStyle = () => {
@@ -39,11 +53,16 @@ class TopArticle extends React.Component {
     let headline = article.headline;
 
     let style = {};
-    style.animationDelay = `${this.props.rank * 100}ms`;
+    style.animationDelay = `${this.props.rank * 50}ms`;
+
+    let topArticleContainerClass = 'top-article-container';
+    if (this.state.articleClicked) {
+      topArticleContainerClass += ' clicked';
+    }
 
     return (
-      <div className='top-article-container' style={ this.getStyle() }>
-        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.setActiveArticle.bind(this) } style={ style }>
+      <div className={ topArticleContainerClass } style={ this.getStyle() }>
+        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.articleClicked.bind(this) } style={ style }>
           <div className='readers'>{ readers }</div>
           <div className='headline'>{ headline }</div>
         </div>

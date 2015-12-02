@@ -106,7 +106,6 @@ var Store = assign({}, EventEmitter.prototype, {
     store.topArticles = filteredArticles.slice(0, 25);
     store.allArticles = topArticles;
     this.emitChange();
-    console.log('DONE');
   },
 
   updateQuickstats(quickstats) {
@@ -128,7 +127,6 @@ var Store = assign({}, EventEmitter.prototype, {
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
       History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
-      document.body.className = document.body.className += ' article-open';
       store.activeArticle = articleCache[articleId];
       this.emitChange();
       return;
@@ -142,7 +140,6 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   closeActiveArticle() {
-    document.body.className = document.body.className.replace('article-open', '');
     store.activeArticle = null;
     store.articleLoading = false;
     History.pushState({}, 'Top Articles', '/');
@@ -173,13 +170,11 @@ var Store = assign({}, EventEmitter.prototype, {
   fetchActiveArticle(articleId) {
     xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
       .then((data) => {
-        document.body.className = document.body.className += ' article-open';
         articleCache[articleId] = data;
         store.activeArticle = data;
         store.articleLoading = false;
 
         History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
-
         this.emitChange();
       }, (e) => {
       console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);

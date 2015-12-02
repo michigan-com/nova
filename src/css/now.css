@@ -15,15 +15,12 @@ $header-z-index: calc($active-article-z-index / 2);
 $filter-height: 40px;
 $filter-name-height: calc($filter-height * .8);
 
+$top-article-z-index: $active-article-z-index;
 
 body {
   font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
   background-color: white;
-
-  &.article-open {
-    overflow: hidden;
-  }
 }
 
 #now {
@@ -183,10 +180,11 @@ body {
     display: block;
     position: absolute;
     width: 100%;
-    top: 98%;
+    top: 100%;
+    height: 0%;
     left: 0;
     background-color: white;
-    transition: height 250ms linear;
+    transition: height 250ms ease-in, top 250ms ease-in;
   }
 
   &.active{
@@ -194,6 +192,7 @@ body {
 
     &:after {
       height: 7%;
+      top: 93%;
     }
   }
 
@@ -217,7 +216,38 @@ body {
   flex-direction: row;
   align-items: center;
   top: 100%;
-  transition: top 500ms linear;
+  transition: all 500ms linear;
+  z-index: 1;
+
+  &.clicked {
+    width: 100%;
+    margin: 0%;
+    z-index: $top-article-z-index;
+
+    &, & * {
+      z-index: calc($top-article-z-index + 2);
+    }
+
+    &:before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .8);
+    }
+
+    .top-article {
+      height: 200vh;
+      top: -100vh;
+
+      * {
+        opacity: 0;
+      }
+    }
+  }
+
 
   /* Desktop, etc */
   @media (min-width: $screen-md) {
@@ -228,8 +258,12 @@ body {
 }
 
 .top-article {
+  @extend smack;
   width: 100%;
-  position: relative;
+  top: 0%;
+  left: 0%;
+  height: 100%;
+  position: absolute;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -237,8 +271,26 @@ body {
   background: #fefefe;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
   cursor: pointer;
-  transition: box-shadow 250ms linear;
-  @extend smack;
+  transition: height 250ms linear, top 250ms linear;
+  transition-delay: 500ms;
+
+  * {
+    opacity: 1;
+    transition: opacity 200ms linear;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    opacity: 0;
+    transition: opacity 250ms linear, height 250ms linear, width 250ms linear;
+    transition-delay: 250ms;
+  }
 
   .readers {
     font-size: calc($article-height * .3);

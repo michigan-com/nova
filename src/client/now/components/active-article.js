@@ -32,15 +32,17 @@ class ActiveArticle extends React.Component {
   }
 
   componentWillMount() { this.loadPhoto(); }
+  componentDidMount() { window.addEventListener('scroll',  this.checkScroll); }
+  componentWillUnmount() { window.removeEventListener('scroll', this.checkScroll); }
 
   /**
    * Used to check the scroll at intervals in order to ease animations
    */
-  checkScroll = (articleNode) => {
-    let currentTop = articleNode.scrollTop;
+  checkScroll = () => {
+    let currentTop = window.scrollY;
     for (let hook of this.scrollHooks) {
       hook.storeClientTop(currentTop);
-      if (hook.shouldTriggerHook(articleNode)) {
+      if (hook.shouldTriggerHook()) {
         hook.triggerHook();
       }
     }
@@ -81,12 +83,13 @@ class ActiveArticle extends React.Component {
   }
 
 
-  getStyle() {
+  getBackgroundStyle() {
     let article = this.props.article;
     let style = {}
-    if (!article.photo || !this.state.photoLoaded) return style;
 
-    style.backgroundImage = `url(${article.photo.full.url})`;
+    if (this.state.photoLoaded && !!article.photo) {
+      style.backgroundImage = `url(${article.photo.full.url})`;
+    }
     return style;
   }
 
@@ -114,6 +117,7 @@ class ActiveArticle extends React.Component {
       </div>
     )
   }
+
   renderSummarySentence = (sentence, index) => {
     return (
       <div className='summary-sentence' key={ `summary-${index}` }>
@@ -124,13 +128,8 @@ class ActiveArticle extends React.Component {
   }
 
   render() {
-    if (!this.state.photoLoaded) {
-      return (
-        <div className='active-article-container loading'>
-          <LoadingImage blurbs={ ['Loading article...'] }/>
-        </div>
-      )
-    }
+    let activeArticleContainerClass = 'active-article-container';
+    if (!this.state.photoLoaded) activeArticleContainerClass += ' loading';
 
     let article = this.props.article;
     let activeArticleClass = 'active-article';
@@ -141,8 +140,9 @@ class ActiveArticle extends React.Component {
     }
 
     return (
-      <div className='active-article-container' onClick={ this.clickActiveArticle.bind(this) }>
-        <div className={ activeArticleClass } style={ this.getStyle() } ref={ (ref) => { if (ref) ref.onscroll = this.checkScroll.bind(this, ref); } }>
+      <div className={ activeArticleContainerClass } onClick={ this.clickActiveArticle.bind(this) }>
+        <div className='articleImage' style={ this.getBackgroundStyle() }></div>
+        <div className={ activeArticleClass } ref='active-article'>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
               <div className='title'>{ article.headline }</div>

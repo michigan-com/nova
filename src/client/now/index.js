@@ -133,27 +133,34 @@ class NowDashboard extends React.Component {
     )
   }
 
-  renderActiveArticle() {
-    if (!this.props.activeArticle || this.props.articleLoading) return null;
-
-    return (
-      <ActiveArticle article={ this.props.activeArticle } readers={ this.props.activeArticleReaders }/>
-    )
-  }
-
   render() {
-
-    return (
-      <div className='dashboard-container'>
-        <div className='header-container'>
-          { this.renderHeader() }
+    let dashboardContents = null;
+    if (this.props.articleLoading) {
+      dashboardContents = (
+        <div className='dashboard-container'>
+          <LoadingImage blurbs={ ['Loading article summary...'] }/>
         </div>
-        <div className='top-articles-container'>
-          { this.renderArticles() }
-        </div>
-        { this.renderActiveArticle() }
-      </div>
       )
+    } else if (this.props.activeArticle != null) {
+        dashboardContents = (
+          <div className='dashboard-container'>
+            <ActiveArticle article={ this.props.activeArticle } readers={ this.props.activeArticleReaders }/>
+          </div>
+        )
+    } else {
+      dashboardContents = (
+        <div className='dashboard-container'>
+          <div className='header-container'>
+            { this.renderHeader() }
+          </div>
+          <div className='top-articles-container'>
+            { this.renderArticles() }
+          </div>
+        </div>
+      )
+    }
+
+    return dashboardContents;
   }
 }
 
