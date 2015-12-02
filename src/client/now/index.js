@@ -138,7 +138,6 @@ class NowDashboard extends React.Component {
     if (this.props.articleLoading) {
       dashboardContents = (
         <div className='dashboard-container'>
-          <LoadingImage blurbs={ ['Loading article summary...'] }/>
         </div>
       )
     } else if (this.props.activeArticle != null) {

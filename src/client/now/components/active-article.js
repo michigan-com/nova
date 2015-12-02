@@ -15,7 +15,8 @@ class ActiveArticle extends React.Component {
     this.state = {
       photoLoaded: false,
       fadeImageOut: false,
-      speedReaderBottom: false
+      speedReaderBottom: false,
+      fadeInContent: false
     }
 
     this.scrollHooks = [new ScrollHook({
@@ -52,6 +53,10 @@ class ActiveArticle extends React.Component {
     setTimeout(() => {
       this.setState({ photoLoaded: true });
     }, 500);
+
+    setTimeout(() => {
+      this.setState({ fadeInContent: true });
+    }, 1000);
   }
 
   loadPhoto() {
@@ -135,13 +140,16 @@ class ActiveArticle extends React.Component {
 
   render() {
     let activeArticleContainerClass = 'active-article-container';
-    if (this.state.photoLoaded) activeArticleContainerClass += ' loaded';
+    if (this.state.photoLoaded) activeArticleContainerClass += ' photo-loaded';
 
     let article = this.props.article;
     let activeArticleClass = 'active-article';
     let articleContentClass = 'article-content';
     if (this.state.fadeImageOut) {
       activeArticleClass += ' fade-out';
+      articleContentClass += ' fade-in';
+    }
+    if (this.state.fadeInContent) {
       articleContentClass += ' fade-in';
     }
 

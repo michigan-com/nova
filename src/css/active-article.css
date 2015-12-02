@@ -17,15 +17,15 @@ $start-speed-reader-height: 50px;
   display: flex;
   flex-direction: column;
 
-  &.loaded {
-
-    .summary-container {
-      opacity: 1 !important;
-    }
+  &.photo-loaded {
 
     .article-image {
       background-size: auto 100%;
       opacity: 1;
+    }
+
+    .article-content-container {
+      opacity: 1 !important;
     }
   }
 
@@ -38,7 +38,7 @@ $start-speed-reader-height: 50px;
     height: 50%;
     width: 100%;
     z-index: $active-image-z-index;
-    transition: all 250ms linear;
+    transition: all 500ms linear;
     background-size: auto 75%;
     opacity: 0;
   }
@@ -54,7 +54,6 @@ $start-speed-reader-height: 50px;
   transition: background-size 400ms linear;
 
   &.fade-out {
-    /*background-size: auto 175%;*/
 
     &:before {
       background-color: white;
@@ -106,11 +105,19 @@ $start-speed-reader-height: 50px;
   position: relative;
   background-color: transparent;
   z-index: calc($active-image-z-index * 2);
+  opacity: 0;
+  transition: opacity 250ms linear;
 
   .article-content {
     display: flex;
     flex-direction: column;
     padding: 0px $article-content-padding;
+
+    &.fade-in {
+      .summary-container {
+        opacity: 1;
+      }
+    }
 
     .title {
       font-size: 30px;
