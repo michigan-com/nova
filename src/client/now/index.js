@@ -70,8 +70,8 @@ class NowDashboard extends React.Component {
 
   checkScroll = () => {
     let scrollY = window.scrollY;
+    if (scrollY < 0) scrollY = 0;
     let scrollDelta = scrollY - this.lastScrollY;
-
 
     // scrolling down
     if (scrollDelta > 0) {
