@@ -29,10 +29,7 @@ body {
     width: 100%;
 
     .header-container {
-
-      @media (max-width: $screen-sm) {
-        height: calc($header-height-sm + $filter-height);
-      }
+      height: calc($header-height-sm + $filter-height);
     }
 
     .filters-container {
@@ -42,19 +39,16 @@ body {
       flex-direction: row;
       align-items: stretch;
       overflow: hidden;
+      height: $filter-height;
 
       &, & * {
         z-index: calc($header-z-index - 1);
       }
 
-      @media (max-width: $screen-sm) {
-        height: $filter-height;
-      }
-
       .filters {
         display: flex;
         flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
         width: 100%;
         padding: 0;
         height: 100%;
@@ -62,10 +56,9 @@ body {
         top: 0;
         left: 0;
         transition: top 250ms linear;
-
-        @media (min-width: $screen-md) {
-          margin: 0 12.5%;
-        }
+        background: white;
+        border-bottom: 1px solid blue;
+        padding: 10px 0px;
       }
     }
 
@@ -93,15 +86,13 @@ body {
   text-align: center;
   width: 100%;
   z-index: 2;
+  top: 0;
+  left: 0;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-
-  @media (max-width: $screen-sm) {
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    #today {
-      width: 100%;
-    }
+  #today {
+    width: 100%;
   }
 
   .header-info {
@@ -188,9 +179,6 @@ body {
   cursor: pointer;
   transition: all 150ms linear;
   color: $blue;
-  border-bottom: 1px solid $blue;
-  background: white;
-  padding: 7px 0px;
 
   .section-circle {
     height: $filter-circle-height;
