@@ -12,8 +12,9 @@ $article-height: 50px;
 $header-height-sm: 30px;
 $header-z-index: calc($active-article-z-index / 2);
 
-$filter-height: 40px;
-$filter-name-height: calc($filter-height * .8);
+$filter-height: 65px;
+$filter-circle-height: calc($filter-height * .5);
+$filter-name-height: calc($filter-height * .3);
 
 $top-article-z-index: $active-article-z-index;
 
@@ -36,7 +37,6 @@ body {
 
     .filters-container {
       width: 100%;
-      height: calc($filter-height * 1.25);
       position: relative;
       display: flex;
       flex-direction: row;
@@ -54,15 +54,13 @@ body {
       .filters {
         display: flex;
         flex-direction: row;
-        align-items: stretch;
+        align-items: flex-start;
         width: 100%;
         padding: 0;
         height: 100%;
         position: absolute;
         top: 0;
         left: 0;
-        background-color: $blue;
-        box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.20);
         transition: top 250ms linear;
 
         @media (min-width: $screen-md) {
@@ -113,6 +111,7 @@ body {
     flex-direction: row;
     align-items: center;
     z-index: $header-z-index;
+    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.20);
   }
 
   #page-header {
@@ -180,35 +179,57 @@ body {
 }
 
 .section-filter {
-  width: calc($filter-height * 2);
+  width: calc($filter-height);
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   flex-grow: 1;
   cursor: pointer;
   transition: all 150ms linear;
-  opacity: .5;
-  color: white;
+  color: $blue;
+  border-bottom: 1px solid $blue;
+  background: white;
+  padding: 7px 0px;
 
-  &:after{
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    top: 100%;
-    height: 0%;
-    left: 0;
-    background-color: white;
-    transition: height 250ms ease-in, top 250ms ease-in;
-  }
+  .section-circle {
+    height: $filter-circle-height;
+    width: $filter-circle-height;
+    position: relative;
 
-  &.active{
-    opacity: 1;
+    .icon, .active-icon {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      border-radius: 50%;
+      top: 0;
+      left: 0;
+      transition: opacity 250ms linear;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
-    &:after {
-      height: 7%;
-      top: 93%;
+      .fa {
+        width: 100%;
+        font-size: calc($filter-circle-height * .5);
+      }
+    }
+
+    .icon {
+      background: white;
+      color: $blue;
+      opacity: .5;
+      border: 1px solid blue;
+    }
+
+    .active-icon {
+      background: $blue;
+      color: white;
+      opacity: 0;
+
+      &.active {
+        opacity: 1;
+      }
     }
   }
 
@@ -218,7 +239,7 @@ body {
     margin: 0 auto;
 
     @media (max-width: $screen-sm) {
-      font-size: calc($filter-name-height * .4)
+      font-size: calc($filter-name-height * .5)
     }
   }
 }
@@ -308,15 +329,14 @@ body {
     transition-delay: 250ms;
   }
 
-  .readers {
+  .readers-container {
     font-size: calc($article-height * .3);
     color: $blue;
-    height: 100%;
+    height: 75%;
     position: relative;
     border-right: 1px solid #eee;
-    padding: 0 20px;
     text-align: center;
-    width: 10%;
+    width: 20%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -324,6 +344,13 @@ body {
     @media (min-width: $screen-md) {
       font-size: calc($article-height);
       width: 20%;
+    }
+
+    .readers {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
   }
 

@@ -25,10 +25,6 @@ function getArticleActions() {
   }
 }
 
-function getSections() {
-  return ['all', 'business', 'sports'];
-}
-
 function defaultArticleStore() {
   return {
     // Article list
@@ -45,7 +41,16 @@ function defaultArticleStore() {
     articleLoading: false,
 
     // Sections
-    activeSectionIndex: 0
+    sections: [{
+      name: 'sports',
+      showArticles: true
+    }, {
+      name: 'business',
+      showArticles: true
+    }, {
+      name: 'local',
+      showArticles: true
+    }]
   }
 }
 
@@ -63,6 +68,11 @@ var Store = assign({}, EventEmitter.prototype, {
 
   /** Update functions */
   updateArticles(topArticles) {
+
+    let sectionState = {};
+    for (let section of store.sections) {
+      sectionState[section.name] = section.showArticles;
+    }
 
     // sort by visits desc then sort by title asc
     topArticles.sort(function(a, b) {
@@ -88,14 +98,10 @@ var Store = assign({}, EventEmitter.prototype, {
 
       // Look at the sections, see if we want to filter it out
       let addArticle = true;
-      if (store.activeSectionIndex !== 0) {
-        addArticle = false;
-        let activeSection = getSections()[store.activeSectionIndex];
-        for (let section of article.sections) {
-          if (section.toLowerCase() === activeSection.toLowerCase()) {
-            addArticle = true;
-            break;
-          }
+      for (let section of article.sections) {
+        if (section in sectionState && ! sectionState[section]) {
+          addArticle = false;
+          break;
         }
       }
 
@@ -147,10 +153,11 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   sectionSelect(sectionName) {
-    let index = getSections().indexOf(sectionName);
-    if (index < 0) return;
+    for (let section of store.sections) {
+      if (section.name != sectionName) continue;
+      section.showArticles = !section.showArticles;
+    }
 
-    store.activeSectionIndex = index;
     this.updateArticles(store.allArticles);
   },
 
@@ -210,4 +217,4 @@ if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId
     Store.updateActiveArticle(parseInt(parsed.query.articleId));
 }
 
-module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions, getSections }
+module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions }

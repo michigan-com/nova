@@ -18,10 +18,15 @@ export default class SectionFilter extends React.Component {
   }
 
   render() {
-    let filterClass = `section-filter ${this.props.name} ${this.props.active ? 'active' : 'inactive'}`;
+    let activeIconClass = 'active-icon';
+    if (this.props.active) activeIconClass += ' active';
 
     return (
-      <div className={ filterClass } onClick={ this.toggleFilter }>
+      <div className={ `section-filter ${this.props.name}` }>
+        <div className='section-circle' onClick={ this.toggleFilter }>
+          <div className='icon'><i className='fa fa-times'></i></div>
+          <div className={ activeIconClass }><i className='fa fa-check'></i></div>
+        </div>
         <div className='section-filter-name'>{ this.props.name }</div>
       </div>
     )
