@@ -105,30 +105,6 @@ class ActiveArticle extends React.Component {
   }
 
   // Speed reader button changes locations based on scroll height
-  renderSpeedReaderStart(location) {
-    let startSpeedReaderClass = 'start-speed-reader';
-    let startSpeedReaderContainerClass = 'start-speed-reader-container';
-
-    switch (location) {
-      case 'subtitle':
-        if (this.state.fadeImageOut) {
-          startSpeedReaderClass += ' shrink';
-        }
-        break;
-      case 'bottom':
-        startSpeedReaderClass += ' shrink';
-        if (this.state.speedReaderBottom) {
-          startSpeedReaderClass = 'start-speed-reader';
-        }
-        break;
-    }
-    return (
-      <div className={ startSpeedReaderContainerClass }>
-          <div className={ startSpeedReaderClass }>Speed Read</div>
-      </div>
-    )
-  }
-
   renderSummarySentence = (sentence, index) => {
     return (
       <div className='summary-sentence' key={ `summary-${index}` }>
@@ -162,14 +138,13 @@ class ActiveArticle extends React.Component {
               <div className='title'>{ article.headline }</div>
               <div className='subtitle-container'>
                 <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
-                { this.renderSpeedReaderStart('subtitle') }
               </div>
               <div className='summary-container'>
                 { article.summary.map(this.renderSummarySentence) }
               </div>
               <div className='article-controls'>
-                { this.renderSpeedReaderStart('bottom') }
-                <div className='close-article'>Close</div>
+                <div className='control start-speed-reader'>Speed Read</div>
+                <div className='control close-article'>Close</div>
               </div>
             </div>
           </div>

@@ -146,6 +146,7 @@ $start-speed-reader-height: 50px;
     .summary-container {
       opacity: 0;
       transition: opacity 250ms linear;
+      margin-bottom: 50px;
 
       .summary-sentence {
         margin-bottom: 15px;
@@ -164,29 +165,34 @@ $start-speed-reader-height: 50px;
 
     .article-controls {
       width: 100%;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
 
       @media (min-width $screen-md) {
         width: 50%;
         margin: 0 auto;
       }
 
-      .start-speed-reader-container {
-        min-height: calc($start-speed-reader-height * 1.5);
+      .control {
+        width: 50%;
+        display: inline-block;
+        text-align: center;
+        font-size: 20px;
+        line-height: 40px;
+        cursor: pointer;
+
+        &.close-article {
+          background-color: $blue;
+          color: white;
+        }
+        &.start-speed-reader {
+          background-color: $yellow;
+          color: white;
+        }
       }
 
-      .close-article {
-        background-color: $blue;
-        width: 100%;
-        color: white;
-        text-align: center;
-        font-size: 30px;
-        line-height: 40px;
-        margin-bottom: 20px;
-        cursor: pointer;
-      }
     }
   }
 }
