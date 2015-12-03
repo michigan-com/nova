@@ -47,7 +47,7 @@ $start-speed-reader-height: 50px;
 
 .active-article {
   width: 100%;
-  padding-top: 50%;
+  padding-top: 30vh;
   overflow-y: auto;
   position: relative;
   background-color: transparent;
@@ -92,11 +92,6 @@ $start-speed-reader-height: 50px;
 
   @media (min-width: $screen-md) {
     margin: 0 auto;
-    padding-top: 20%;
-
-    &:after {
-      box-shadow: 0 0 200px 70vh white;
-    }
   }
 }
 
