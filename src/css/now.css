@@ -37,10 +37,15 @@ body {
     .filters-container {
       width: 100%;
       height: calc($filter-height * 1.25);
+      position: relative;
       display: flex;
       flex-direction: row;
       align-items: stretch;
-      background-color: $blue;
+      overflow: hidden;
+
+      &, & * {
+        z-index: calc($header-z-index - 1);
+      }
 
       @media (max-width: $screen-sm) {
         height: $filter-height;
@@ -50,12 +55,18 @@ body {
         display: flex;
         flex-direction: row;
         align-items: stretch;
-        width: 75%;
-        margin: 0 auto;
+        width: 100%;
+        padding: 0;
         height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: $blue;
+        box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.20);
+        transition: top 250ms linear;
 
-        @media (max-width: $screen-sm) {
-          width: 100%;
+        @media (min-width: $screen-md) {
+          margin: 0 12.5%;
         }
       }
     }
@@ -80,23 +91,28 @@ body {
 }
 
 #header {
-  background-color: $yellow;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: fixed;
   text-align: center;
   width: 100%;
-  z-index: $header-z-index;
-  box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.20);
+  z-index: 2;
+
 
   @media (max-width: $screen-sm) {
     flex-direction: row;
     flex-wrap: wrap;
-    position: fixed;
 
     #today {
       width: 100%;
     }
+  }
+
+  .header-info {
+    background-color: $yellow;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    z-index: $header-z-index;
   }
 
   #page-header {

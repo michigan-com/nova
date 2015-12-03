@@ -24,10 +24,16 @@ class NowDashboard extends React.Component {
     super(props);
 
     this.drawnArticles = new Set();
+    this.scrollMagnitude = 0;
+    this.lastScrollY = 0;
+
+    this.maxFilterTop = 0;
+    this.minFilterTop = -100;
   }
 
   state = {
-    articlesLoading: true
+    articlesLoading: true,
+    filterTop: 0,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,6 +47,16 @@ class NowDashboard extends React.Component {
     if (this.props.activeSectionIndex !== nextProps.activeSectionIndex) {
       this.drawnArticles.clear();
     }
+
+    if (nextProps.articleLoading || !!nextProps.activeArticle) {
+      window.removeEventListener('scroll', this.checkScroll);
+    } else if ((!nextProps.activeArticle && !!this.props.activeArticle)) {
+      window.addEventListener('scroll', this.checkScroll);
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.checkScroll);
   }
 
   // Save what articles are currently drawn
@@ -50,6 +66,62 @@ class NowDashboard extends React.Component {
     for (let article in this.props.topArticle) {
       this.drawnArticles.add(article.article_id);
     }
+  }
+
+  checkScroll = () => {
+    let scrollY = window.scrollY;
+    let scrollDelta = scrollY - this.lastScrollY;
+
+
+    // scrolling down
+    if (scrollDelta > 0) {
+      scrollDelta /= 10; // scale it down a bit
+      if (this.scrollMagnitude < 0) this.scrollMagnitude = 0;
+      else this.scrollMagnitude += scrollDelta;
+    }
+
+    // scrolling up
+    else if (scrollDelta < 0) {
+      if (this.scrollMagnitude > 0) this.scrollMagnitude = 0;
+      else  this.scrollMagnitude += scrollDelta;
+
+    }
+
+    let newFilterTop = this.state.filterTop + (this.scrollMagnitude * -1);
+    if (scrollDelta < 0 && this.scrollMangnitude < 5) {
+      newFilterTop = 0;
+    } else if (newFilterTop > this.maxFilterTop) {
+      newFilterTop = this.maxFilterTop;
+    } else if (newFilterTop < this.minFilterTop) {
+      newFilterTop = this.minFilterTop;
+    }
+
+    this.lastScrollY = scrollY;
+    this.setState({ filterTop: newFilterTop });
+  }
+
+  renderSectionOptions() {
+    let sections = getSections();
+    let activeSection = this.props.activeSectionIndex;
+
+    let filtersStyle = {};
+    filtersStyle.top = `${this.state.filterTop}%`;
+
+    return (
+      <div className='filters-container'>
+        <div className='filters' style={ filtersStyle }>
+          {
+            sections.map(function(section, index) {
+              return (
+                <SectionFilter name={ section }
+                            active={ index === activeSection }
+                            key={ `section-${section}` }/>
+              )
+            })
+          }
+        </div>
+      </div>
+    )
   }
 
   renderHeader() {
@@ -68,33 +140,14 @@ class NowDashboard extends React.Component {
 
     return(
       <div id='header'>
-        <div id='page-header'>Detroit Now</div>
-        <div id='readers'>
-          <div id='glasses'><img src='/img/glasses.svg'/></div>
-          <div id='numbers'>{ readers }</div>
+        <div className='header-info'>
+          <div id='page-header'>Detroit Now</div>
+          <div id='readers'>
+            <div id='glasses'><img src='/img/glasses.svg'/></div>
+            <div id='numbers'>{ readers }</div>
+          </div>
         </div>
         { this.renderSectionOptions() }
-      </div>
-    )
-  }
-
-  renderSectionOptions() {
-    let sections = getSections();
-    let activeSection = this.props.activeSectionIndex;
-
-    return (
-      <div className='filters-container'>
-        <div className='filters'>
-          {
-            sections.map(function(section, index) {
-              return (
-                <SectionFilter name={ section }
-                            active={ index === activeSection }
-                            key={ `section-${section}` }/>
-              )
-            })
-          }
-        </div>
       </div>
     )
   }
