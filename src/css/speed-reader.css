@@ -16,7 +16,7 @@ $speed-reader-font-size: 30px;
   }
 
   .context {
-    height: 40vh;
+    height: 30vh;
     width: 100%;
     opacity: 0;
     display: flex;
@@ -27,7 +27,7 @@ $speed-reader-font-size: 30px;
     .current-context {
       width: 75%;
       margin: 0 auto;
-      font-size: 15px;
+      font-size: 12px;
       color: grey;
 
       .context-element {
