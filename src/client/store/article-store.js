@@ -21,7 +21,9 @@ function getArticleActions() {
     gotArticles: 'got-topArticles',
     gotQuickstats: 'got-quickstats',
     articleSelected: 'article-selected',
-    sectionSelect: 'section-select'
+    sectionSelect: 'section-select',
+    startSpeedReading: 'start-speed-reading',
+    stopSpeedReading: 'stop-speed-reading'
   }
 }
 
@@ -36,6 +38,7 @@ function defaultArticleStore() {
     activeArticle: null,
     activeArticleReaders: 0,
     clickedArticles: new Map(),
+    speedReading: false,
 
     // State management, might want this somewhere else
     articleLoading: false,
@@ -148,7 +151,13 @@ var Store = assign({}, EventEmitter.prototype, {
   closeActiveArticle() {
     store.activeArticle = null;
     store.articleLoading = false;
+    store.speedReading = false;
     History.pushState({}, 'Top Articles', '/');
+    this.emitChange();
+  },
+
+  setSpeedReading(state) {
+    store.speedReading = state;
     this.emitChange();
   },
 
@@ -207,6 +216,12 @@ Dispatcher.register(function(action) {
       break;
     case ArticleActions.sectionSelect:
       Store.sectionSelect(action.sectionName);
+      break;
+    case ArticleActions.startSpeedReading:
+      Store.setSpeedReading(true);
+      break;
+    case ArticleActions.stopSpeedReading:
+      Store.setSpeedReading(false);
       break;
   }
 });

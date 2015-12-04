@@ -1,12 +1,12 @@
 'use strict';
 
 import React from 'react';
-import { ReadingPopupController } from 'reeeeeader';
 
 import Dispatcher from '../../dispatcher';
 import { ArticleActions } from '../../store/article-store';
 import LoadingImage from './loading-image';
 import ScrollHook from './scroll-hook';
+import SpeedReader from './speed-reader';
 import { toggleClass } from '../../lib/dom';
 
 class ActiveArticle extends React.Component {
@@ -15,7 +15,6 @@ class ActiveArticle extends React.Component {
     this.state = {
       photoLoaded: false,
       fadeImageOut: false,
-      speedReaderBottom: false,
       fadeInContent: false
     }
 
@@ -24,11 +23,6 @@ class ActiveArticle extends React.Component {
       scrollTopThreshold: '10%',
       scrollDownHook: () => { this.setState({ fadeImageOut: true }) }.bind(this),
       scrollUpHook: () => { this.setState({ fadeImageOut: false }) }.bind(this),
-    }), new ScrollHook({
-      ref: 'article-content',
-      scrollTopThreshold: '90%',
-      scrollDownHook: () => { this.setState({ speedReaderBottom: true }) }.bind(this),
-      scrollUpHook: () => { this.setState({ speedReaderBottom: false }) }.bind(this)
     })];
   }
 
@@ -73,11 +67,9 @@ class ActiveArticle extends React.Component {
   }
 
   loadSpeedReader() {
-    let controller = new ReadingPopupController();
-    controller.setArticle({
-      headline: this.props.article.headline,
-      body: this.props.article.body
-    });
+    Dispatcher.dispatch({
+      type: ArticleActions.startSpeedReading
+    })
   }
 
   clickActiveArticle(e) {
@@ -129,6 +121,14 @@ class ActiveArticle extends React.Component {
       articleContentClass += ' fade-in';
     }
 
+    let speedReaderContainerClass = 'speed-reader-container';
+    let speedReader = null;
+    if (this.props.speedReading) {
+      speedReaderContainerClass += ' active';
+      speedReader = <SpeedReader article={ article } key={ `speed-reader-${article.article_id}` }/>
+    }
+
+
     return (
       <div className={ activeArticleContainerClass } onClick={ this.clickActiveArticle.bind(this) }>
         <div className={ activeArticleClass } ref='active-article'>
@@ -148,6 +148,9 @@ class ActiveArticle extends React.Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className={ speedReaderContainerClass }>
+          { speedReader }
         </div>
       </div>
     )

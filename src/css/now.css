@@ -1,5 +1,4 @@
 @import 'base';
-@import '../../node_modules/reeeeeader/dist/styles.css';
 @import './animations/pulse';
 @import './animations/smack';
 @import './active-article';

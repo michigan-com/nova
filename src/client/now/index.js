@@ -194,7 +194,9 @@ class NowDashboard extends React.Component {
     } else if (this.props.activeArticle != null) {
         dashboardContents = (
           <div className='dashboard-container'>
-            <ActiveArticle article={ this.props.activeArticle } readers={ this.props.activeArticleReaders }/>
+            <ActiveArticle article={ this.props.activeArticle }
+                  readers={ this.props.activeArticleReaders }
+                  speedReading={ this.props.speedReading }/>
           </div>
         )
     } else {
@@ -224,6 +226,7 @@ function initDashboard() {
                   store.readers,
                   store.articleLoading,
                   store.activeArticle,
+                  store.speedReading,
                   store.clickedArticles,
                   store.activeArticleReaders,
                   store.sections);
@@ -231,13 +234,14 @@ function initDashboard() {
 }
 
 function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
-                        activeArticle=null, clickedArticles=new Map(),
+                        activeArticle=null, speedReading=false, clickedArticles=new Map(),
                         activeArticleReaders=0, sections=[]) {
   ReactDOM.render(
     <NowDashboard topArticles={ topArticles }
       readers={ readers }
       clickedArticles={ clickedArticles }
       activeArticle={ activeArticle }
+      speedReading={ speedReading }
       activeArticleReaders={ activeArticleReaders }
       articleLoading={ articleLoading }
       sections={ sections }
