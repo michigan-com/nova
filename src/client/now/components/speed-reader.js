@@ -105,9 +105,20 @@ export default class SpeedReader extends React.Component {
     this.setState({ playing });
   }
 
+  nextPara = () => {
+    if (!this.controller || this.state.playing) return;
+    this.controller.moveToNextParagraph();
+    this.setState({});
+  }
+
+  prevPara = () => {
+    if (!this.controller || this.state.playing) return;
+    this.controller.moveToPreviousParagraph();
+    this.setState({});
+  }
+
   renderCountdown() {
     if (!this.state.countdown) return;
-
     return (
       <div className='countdown-container'>
         <div className='countdown-number' key={ `countdown-${this.state.countdownIndex}` }>{ this.state.countdownIndex }</div>
@@ -137,17 +148,18 @@ export default class SpeedReader extends React.Component {
 
   renderControls() {
     let controlClass = 'controls';
+    console.log('render');
 
     return(
       <div className={ controlClass }>
-        <div className='para prev'><i className='fa fa-angle-left'></i></div>
+        <div className='para prev'><i onClick={ this.prevPara } className='fa fa-angle-left'></i></div>
         <div className='button-container'>
           <div className='button' onClick={ this.togglePlay }>
             <i className='fa fa-play'></i>
             <i className='fa fa-pause'></i>
           </div>
         </div>
-        <div className='para next'><i className='fa fa-angle-right'></i></div>
+        <div className='para next'><i onClick={ this.nextPara } className='fa fa-angle-right'></i></div>
       </div>
     )
   }

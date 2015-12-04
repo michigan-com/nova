@@ -103,6 +103,7 @@ $speed-reader-font-size: 30px;
       margin: 0 auto;
       position: relative;
       border: 1px solid grey;
+      cursor: pointer;
 
       .fa {
         text-align: center;
@@ -158,6 +159,7 @@ $speed-reader-font-size: 30px;
     .fa {
       font-size: 20px;
       width: 100%;
+      cursor: pointer;
     }
   }
 }
