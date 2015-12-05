@@ -54,7 +54,7 @@ body {
         position: absolute;
         top: 0;
         left: 0;
-        transition: top 250ms linear;
+        transition: top 500ms ease-in;
         background: white;
         border-bottom: 1px solid blue;
         padding: 10px 0px;

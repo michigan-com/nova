@@ -87,12 +87,10 @@ class NowDashboard extends React.Component {
 
     }
 
-    let newFilterTop = this.state.filterTop + (this.scrollMagnitude * -1);
-    if (scrollDelta < 0 && this.scrollMangnitude < 5) {
-      newFilterTop = 0;
-    } else if (newFilterTop > this.maxFilterTop) {
+    let newFilterTop = this.state.filterTop;
+    if (scrollDelta < 0 && this.scrollMagnitude < -10) {
       newFilterTop = this.maxFilterTop;
-    } else if (newFilterTop < this.minFilterTop) {
+    } else if (scrollDelta > 0 && this.scrollMagnitude > 10) {
       newFilterTop = this.minFilterTop;
     }
 

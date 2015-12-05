@@ -25,9 +25,9 @@ export default class SpeedReader extends React.Component {
   closeSpeedReader = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    this.deinit();
     if (this.controller) this.controller.pause();
     this.setState({ speedReaderFadeIn: false });
-    this.deinit();
 
     setTimeout(() => {
       Dispatcher.dispatch({
