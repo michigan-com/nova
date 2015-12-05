@@ -2,6 +2,8 @@
 @import './base';
 
 $speed-reader-font-size: 30px;
+$close-button-height: 10vh;
+$speed-control-height: 15vh;
 
 .speed-reader {
   opacity: 0;
@@ -59,12 +61,31 @@ $speed-reader-font-size: 30px;
     .context {
       opacity: 1;
     }
+
+    .wpm {
+      opacity: .7 !important;
+    }
+
+    .countdown-container {
+      opacity: 0;
+    }
+
   }
 
   .speed-reader-controls {
     width: 100%;
-  }
 
+    .wpm {
+      height: 30px;
+      line-height: 30px;
+      font-size: 15px;
+      width: 100%;
+      opacity: 0;
+      color: black;
+      text-align: center;
+      transition: opacity 250ms linear;
+    }
+  }
 
   .countdown-container {
     height: 50px;
@@ -72,6 +93,8 @@ $speed-reader-font-size: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: .7;
+    transition: opacity 250ms linear;
 
     .countdown-number {
       line-height: 50px;
@@ -132,7 +155,6 @@ $speed-reader-font-size: 30px;
           opacity: 0;
         }
       }
-
     }
   }
 
@@ -210,10 +232,94 @@ $speed-reader-font-size: 30px;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: $close-button-height;
   font-size: 30px;
-  line-height: 50px;
+  line-height: $close-button-height;
   text-align: center;
   background: $blue;
   color: white;
+  cursor: pointer;
 }
+
+.speed-control-container {
+  width: 100%;
+  height: $speed-control-height;
+  position: fixed;
+  bottom: $close-button-height;
+  overflow-x: scroll;
+
+  &:before, &:after {
+    content: "";
+    position: fixed;
+    bottom: $close-button-height;
+    width: 0;
+    height: $speed-control-height;
+    box-shadow: 0 0 23vw 15vw white;
+    background-color: white;
+    z-index: 200;
+  }
+
+  &:before {
+    left: 0;
+  }
+
+  &:after {
+    right: 0;
+  }
+
+  &::-webkit-scrollbar  {
+    display: none;
+  }
+
+  .speed-control {
+    position: relative;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 250ms linear;
+    transition-delay: 250ms;
+    overflow-x: scroll;
+    background-color: #eee;
+
+    &::-webkit-scrollbar  {
+      display: none;
+    }
+
+    &.draw {
+      opacity: 1;
+    }
+
+    .speed-control-step {
+      height: 100%;
+      top: 0;
+      width: 1px;
+      background: red;
+      position: absolute;
+
+      .speed-val {
+        color: red;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        font-size: 7px;
+      }
+    }
+  }
+}
+
+.center-bar {
+  position: fixed;
+  top: calc(100vh - $speed-control-height - $close-button-height);
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+
+  .fa {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    height: 20px;
+    position: absolute;
+    top: -7px; /* TODO figure this out. there is margin on the top because of the :before content */
+  }
+}
+

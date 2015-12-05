@@ -27,6 +27,7 @@ export default class SpeedReader extends React.Component {
     e.stopPropagation();
     if (this.controller) this.controller.pause();
     this.setState({ speedReaderFadeIn: false });
+    this.deinit();
 
     setTimeout(() => {
       Dispatcher.dispatch({
@@ -41,6 +42,8 @@ export default class SpeedReader extends React.Component {
       headline: this.props.article.headline,
       body: this.props.article.body
     });
+
+    this.renderSpeedHTML();
 
     setTimeout(() => {
       this.setState({ speedReaderFadeIn: true, countdown: true, playing: true });
@@ -85,6 +88,13 @@ export default class SpeedReader extends React.Component {
     }
   }
 
+  componentWillUnmount = () => { this.deinit(); }
+
+  deinit() {
+    this.controller.pause();
+    if (this.countdownTimeout) clearTimeout(this.countdownTimeout);
+  }
+
   playSpeedReader() {
     if (!this.controller) return;
     this.controller.resume();
@@ -115,6 +125,20 @@ export default class SpeedReader extends React.Component {
     if (!this.controller || this.state.playing) return;
     this.controller.moveToPreviousParagraph();
     this.setState({});
+  }
+
+  updateSpeed = (speed) => {
+    if (!this.controller) return;
+
+    this.controller.setReadingSpeed(speed, 'slider');
+    this.renderSpeedHTML();
+  }
+
+  renderSpeedHTML = () => {
+    let ref = this.refs['wpm'];
+    if (!ref) return;
+
+    ref.innerHTML = `${this.controller.readingSpeed} WPM`;
   }
 
   renderCountdown() {
@@ -148,7 +172,6 @@ export default class SpeedReader extends React.Component {
 
   renderControls() {
     let controlClass = 'controls';
-    console.log('render');
 
     return(
       <div className={ controlClass }>
@@ -161,6 +184,25 @@ export default class SpeedReader extends React.Component {
         </div>
         <div className='para next'><i onClick={ this.nextPara } className='fa fa-angle-right'></i></div>
       </div>
+    )
+  }
+
+  renderSpeedControl() {
+    let speedControl = null;
+    if (!this.state.playing && !!this.controller) {
+      speedControl = <SpeedControl speed={ this.controller.readingSpeed } updateSpeed={ this.updateSpeed }/>;
+    }
+
+    return (
+      <div className='speed-control-container'>
+        { speedControl }
+      </div>
+    )
+  }
+
+  renderWPM() {
+    return (
+      <div className='wpm' ref='wpm'></div>
     )
   }
 
@@ -177,11 +219,70 @@ export default class SpeedReader extends React.Component {
         <div ref='speed-reader'></div>
         <div className='speed-reader-controls'>
           { this.renderControls() }
+          { this.renderWPM() }
         </div>
         { this.renderCountdown() }
+        { this.renderSpeedControl() }
         <div className='close-button' onClick={ this.closeSpeedReader }>
           Close
         </div>
+      </div>
+    )
+  }
+}
+
+class SpeedControl extends React.Component {
+  static defaultProps = { speed: 200 }
+  static maxSpeed = 1000;
+  static speedStep = 25;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      drawBars: false
+    }
+  }
+
+  componentDidMount() {
+    this.parentNode = this.refs['speed-control'].parentNode;
+    this.parentNode.scrollLeft = this.props.speed;
+    this.parentNode.addEventListener('scroll', this.updateSpeed);
+    this.setState({ drawBars: true });
+  }
+
+  componentWillUnmount() {
+    this.parentNode.removeEventListener('scroll', this.updateSpeed);
+  }
+
+  updateSpeed = () => {
+    let speed = this.parentNode.scrollLeft;
+    this.props.updateSpeed(speed);
+  }
+
+  renderSteps() {
+    let numSteps = SpeedControl.maxSpeed / SpeedControl.speedStep;
+    let steps = [];
+    for (let i = 0; i < numSteps; i++) {
+      let speedVal = i * SpeedControl.speedStep;
+      let style = { left: `${speedVal + (window.innerWidth / 2)}px` }
+
+      let textContent = null;
+      if (!(speedVal % 50)) textContent = (<span className='speed-val'>{ speedVal }</span>)
+
+      steps.push(<div className='speed-control-step' key={ `speed-control-step-${i}` } style={ style }>{ textContent }</div>);
+    }
+    return steps;
+  }
+
+  render() {
+    let speedControlClass = 'speed-control';
+    if (this.state.drawBars) speedControlClass += ' draw';
+
+    let style = { width: `${SpeedControl.maxSpeed + window.innerWidth}px` }
+    return (
+      <div className={ speedControlClass } ref='speed-control' style={ style }>
+        { this.renderSteps() }
+        <div className='center-bar'><i className='fa fa-caret-down'></i></div>
       </div>
     )
   }
