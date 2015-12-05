@@ -18,7 +18,7 @@ $speed-control-height: 15vh;
   }
 
   .context {
-    height: 30vh;
+    height: 20vh;
     width: 100%;
     opacity: 0;
     display: flex;
@@ -27,7 +27,7 @@ $speed-control-height: 15vh;
     transition: opacity 250ms linear;
 
     .current-context {
-      width: 75%;
+      width: 90%;
       margin: 0 auto;
       font-size: 12px;
       color: grey;
