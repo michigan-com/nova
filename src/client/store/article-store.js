@@ -5,7 +5,6 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
 
-import ajax from '../lib/ajax';
 import Dispatcher from '../dispatcher';
 
 /** Browser history stuff */
@@ -22,12 +21,10 @@ function getArticleActions() {
     gotArticles: 'got-topArticles',
     gotQuickstats: 'got-quickstats',
     articleSelected: 'article-selected',
-    sectionSelect: 'section-select'
+    sectionSelect: 'section-select',
+    startSpeedReading: 'start-speed-reading',
+    stopSpeedReading: 'stop-speed-reading'
   }
-}
-
-function getSections() {
-  return ['all', 'business', 'sports'];
 }
 
 function defaultArticleStore() {
@@ -41,12 +38,22 @@ function defaultArticleStore() {
     activeArticle: null,
     activeArticleReaders: 0,
     clickedArticles: new Map(),
+    speedReading: false,
 
     // State management, might want this somewhere else
     articleLoading: false,
 
     // Sections
-    activeSectionIndex: 0
+    sections: [{
+      name: 'sports',
+      showArticles: true
+    }, {
+      name: 'business',
+      showArticles: true
+    }, {
+      name: 'local',
+      showArticles: true
+    }]
   }
 }
 
@@ -65,6 +72,11 @@ var Store = assign({}, EventEmitter.prototype, {
   /** Update functions */
   updateArticles(topArticles) {
 
+    let sectionState = {};
+    for (let section of store.sections) {
+      sectionState[section.name] = section.showArticles;
+    }
+
     // sort by visits desc then sort by title asc
     topArticles.sort(function(a, b) {
       var visitsA = parseInt(a.visits);
@@ -82,22 +94,17 @@ var Store = assign({}, EventEmitter.prototype, {
     for (let article of topArticles) {
       // Update the active article if we have one
       if (!store.articleLoading && store.activeArticle && store.activeArticle.article_id) {
-        if (article.article_id === store.activeArticle.article_id) {
+        if (article.url === store.activeArticle.url) {
           store.activeArticleReaders = article.visits;
-          break;
         }
       }
 
       // Look at the sections, see if we want to filter it out
       let addArticle = true;
-      if (store.activeSectionIndex !== 0) {
-        addArticle = false;
-        let activeSection = getSections()[store.activeSectionIndex];
-        for (let section of article.sections) {
-          if (section.toLowerCase() === activeSection.toLowerCase()) {
-            addArticle = true;
-            break;
-          }
+      for (let section of article.sections) {
+        if (section in sectionState && ! sectionState[section]) {
+          addArticle = false;
+          break;
         }
       }
 
@@ -107,7 +114,6 @@ var Store = assign({}, EventEmitter.prototype, {
     // Now store stuff
     store.topArticles = filteredArticles.slice(0, 25);
     store.allArticles = topArticles;
-
     this.emitChange();
   },
 
@@ -130,7 +136,6 @@ var Store = assign({}, EventEmitter.prototype, {
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
       History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
-      document.body.className = document.body.className += ' article-open';
       store.activeArticle = articleCache[articleId];
       this.emitChange();
       return;
@@ -144,24 +149,29 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   closeActiveArticle() {
-    document.body.className = document.body.className.replace('article-open', '');
     store.activeArticle = null;
     store.articleLoading = false;
+    store.speedReading = false;
     History.pushState({}, 'Top Articles', '/');
     this.emitChange();
   },
 
-  sectionSelect(sectionName) {
-    let index = getSections().indexOf(sectionName);
-    if (index < 0) return;
+  setSpeedReading(state) {
+    store.speedReading = state;
+    this.emitChange();
+  },
 
-    store.activeSectionIndex = index;
+  sectionSelect(sectionName) {
+    for (let section of store.sections) {
+      if (section.name != sectionName) continue;
+      section.showArticles = !section.showArticles;
+    }
+
     this.updateArticles(store.allArticles);
   },
 
   historyChange(e) {
     let state = History.getState();
-    console.log(state);
     let stateTitle = state.title;
 
     let articleIdMatch = /Article\s+(\d+)/.exec(stateTitle);
@@ -174,15 +184,13 @@ var Store = assign({}, EventEmitter.prototype, {
 
   /** Mapi interactions */
   fetchActiveArticle(articleId) {
-    ajax(`https://api.michigan.com/v1/article/${articleId}/`)
+    xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
       .then((data) => {
-        document.body.className = document.body.className += ' article-open';
         articleCache[articleId] = data;
         store.activeArticle = data;
         store.articleLoading = false;
 
         History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
-
         this.emitChange();
       }, (e) => {
       console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);
@@ -209,13 +217,19 @@ Dispatcher.register(function(action) {
     case ArticleActions.sectionSelect:
       Store.sectionSelect(action.sectionName);
       break;
+    case ArticleActions.startSpeedReading:
+      Store.setSpeedReading(true);
+      break;
+    case ArticleActions.stopSpeedReading:
+      Store.setSpeedReading(false);
+      break;
   }
 });
-//
+
 // See if we have an ?articleId= url param
 let parsed = url.parse(window.location.href, true);
 if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId)) {
     Store.updateActiveArticle(parseInt(parsed.query.articleId));
 }
 
-module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions, getSections }
+module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions }

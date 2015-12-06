@@ -1,8 +1,8 @@
-'use strict';
+ 'use strict';
 
 import React from 'react';
-import Dispatcher from '../dispatcher';
-import { ArticleActions } from '../store/article-store';
+import Dispatcher from '../../dispatcher';
+import { ArticleActions } from '../../store/article-store';
 
 // React Component representing article in the articles array from Chartbeat
 // toppages snapshot
@@ -15,11 +15,12 @@ class TopArticle extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      articleClicked: false,
+    }
   }
 
-  setActiveArticle(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  setSelfAsActive = () => {
     Dispatcher.dispatch({
       type: ArticleActions.articleSelected,
       article_id: this.props.article.article_id,
@@ -27,14 +28,22 @@ class TopArticle extends React.Component {
     });
   }
 
+  articleClicked = (e) => {
+    this.setState({ articleClicked: true });
+
+    // TODO figure out a good way to set this in css and JS at the same time...
+    setTimeout(() => {
+      this.setSelfAsActive();
+    }.bind(this), 750)
+  }
+
   getStyle = () => {
+    let style = {}
     let height = TopArticle.defaultStyle.height;
     let margin = TopArticle.defaultStyle.margin;
     if (window.innerWidth <= 768) height /= 2;
-
-    return {
-      top: `${(this.props.rank * (height + margin)) + margin}px`
-    }
+    style.top = `${(this.props.rank * (height + margin)) + margin}px`;
+    return style;
   }
 
   render() {
@@ -43,10 +52,18 @@ class TopArticle extends React.Component {
     let readers = article.visits;
     let headline = article.headline;
 
+    let style = {};
+    style.animationDelay = `${this.props.rank * 50}ms`;
+
+    let topArticleContainerClass = 'top-article-container';
+    if (this.state.articleClicked) {
+      topArticleContainerClass += ' clicked';
+    }
+
     return (
-      <div className='top-article-container' style={ this.getStyle() }>
-        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.setActiveArticle.bind(this) }>
-          <div className='readers'>{ readers }</div>
+      <div className={ topArticleContainerClass } style={ this.getStyle() }>
+        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.articleClicked.bind(this) } style={ style }>
+          <div className='readers-container'><div className='readers'>{ readers }</div></div>
           <div className='headline'>{ headline }</div>
         </div>
       </div>

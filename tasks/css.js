@@ -10,13 +10,15 @@ var nested = require('postcss-nested');
 var vars = require('postcss-simple-vars');
 var cssImport = require('postcss-import');
 var calc = require('postcss-calc');
+var extend = require('postcss-extend');
 
 var processors = [
+  cssImport,
   autoprefixer({ browsers: ['last 2 versions']}),
   nested,
-  cssImport,
   vars,
-  calc
+  calc,
+  extend
 ];
 
 function bundleOpts() {

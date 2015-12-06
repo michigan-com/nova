@@ -15,10 +15,12 @@ body {
   color: rgba(0,0,0,0.87);
 }
 
+*, *:before, *:after {
+  box-sizing: border-box;
+}
 
-$yellow: rgb(248,201,41);
-$grey: rgb(76,77,79);
-$blue: rgb(93,123,251);
+$yellow: #f8c929;
+$blue: #5677fc;
 
 /* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;

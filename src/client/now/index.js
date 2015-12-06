@@ -3,10 +3,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Store, defaultArticleStore, getSections } from '../store/article-store';
-import TopArticle from './top-article';
-import ActiveArticle from './active-article';
-import SectionFilter from './section-filter';
+import { Store, defaultArticleStore } from '../store/article-store';
+import TopArticle from './components/top-article';
+import ActiveArticle from './components/active-article';
+import SectionFilter from './components/section-filter';
+import LoadingImage from './components/loading-image';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -19,6 +20,107 @@ var months = [ "January", "February", "March", "April", "May", "June",
 
 class NowDashboard extends React.Component {
   static defaultProps = defaultArticleStore();
+  constructor(props) {
+    super(props);
+
+    this.drawnArticles = new Set();
+    this.scrollMagnitude = 0;
+    this.lastScrollY = 0;
+
+    this.maxFilterTop = 0;
+    this.minFilterTop = -100;
+  }
+
+  state = {
+    articlesLoading: true,
+    filterTop: 0,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.topArticles.length && nextProps.topArticles.length) {
+      this.setState({ fadeOutLoading: true });
+      setTimeout(() => {
+        this.setState({ articlesLoading: false });
+      }, 1000);
+    }
+
+    if (this.props.activeSectionIndex !== nextProps.activeSectionIndex) {
+      this.drawnArticles.clear();
+    }
+
+    if (nextProps.articleLoading || !!nextProps.activeArticle) {
+      window.removeEventListener('scroll', this.checkScroll);
+    } else if ((!nextProps.activeArticle && !!this.props.activeArticle)) {
+      window.addEventListener('scroll', this.checkScroll);
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.checkScroll);
+  }
+
+  // Save what articles are currently drawn
+  componentDidUpdate() {
+    this.drawnArticles.clear()
+
+    for (let article in this.props.topArticle) {
+      this.drawnArticles.add(article.article_id);
+    }
+  }
+
+  checkScroll = () => {
+    let scrollY = window.scrollY;
+    if (scrollY < 0) scrollY = 0;
+    let scrollDelta = scrollY - this.lastScrollY;
+
+    // scrolling down
+    if (scrollDelta > 0) {
+      scrollDelta /= 10; // scale it down a bit
+      if (this.scrollMagnitude < 0) this.scrollMagnitude = 0;
+      else this.scrollMagnitude += scrollDelta;
+    }
+
+    // scrolling up
+    else if (scrollDelta < 0) {
+      if (this.scrollMagnitude > 0) this.scrollMagnitude = 0;
+      else  this.scrollMagnitude += scrollDelta;
+
+    }
+
+    let newFilterTop = this.state.filterTop;
+    if (scrollDelta < 0 && this.scrollMagnitude < -10) {
+      newFilterTop = this.maxFilterTop;
+    } else if (scrollDelta > 0 && this.scrollMagnitude > 10) {
+      newFilterTop = this.minFilterTop;
+    }
+
+    this.lastScrollY = scrollY;
+    this.setState({ filterTop: newFilterTop });
+  }
+
+  renderSectionOptions() {
+    let activeSection = this.props.activeSectionIndex;
+
+    let filtersStyle = {};
+    filtersStyle.top = `${this.state.filterTop}%`;
+
+    return (
+      <div className='filters-container'>
+        <div className='filters' style={ filtersStyle }>
+          {
+            this.props.sections.map(function(section, index) {
+              return (
+                <SectionFilter name={ section.name }
+                            active={ section.showArticles }
+                            key={ `section-${section.name}` }/>
+              )
+            })
+          }
+        </div>
+      </div>
+    )
+  }
+
   renderHeader() {
     // TODO figure out if we want to normalize this time to detroit
     // or if we want it to be the client's computer
@@ -35,42 +137,25 @@ class NowDashboard extends React.Component {
 
     return(
       <div id='header'>
-        <div id='page-header'>Detroit Now</div>
-        <div id='readers'>
-          <div id='glasses'><img src='/img/glasses.svg'/></div>
-          <div id='numbers'>{ readers }</div>
+        <div className='header-info'>
+          <div id='page-header'>Detroit Now</div>
+          <div id='readers'>
+            <div id='glasses'><img src='/img/glasses.svg'/></div>
+            <div id='numbers'>{ readers }</div>
+          </div>
         </div>
         { this.renderSectionOptions() }
       </div>
     )
   }
 
-  renderSectionOptions() {
-    let sections = getSections();
-    let activeSection = this.props.activeSectionIndex;
-
-    return (
-      <div className='filters-container'>
-        <div className='filters'>
-          {
-            sections.map(function(section, index) {
-              return (
-                <SectionFilter name={ section }
-                            active={ index === activeSection }
-                            key={ `section-${section}` }/>
-              )
-            })
-          }
-        </div>
-      </div>
-    )
-  }
-
   renderArticles() {
-    if (!this.props.topArticles || !this.props.topArticles.length) {
+    if (this.state.articlesLoading || !this.props.topArticles.length) {
+      let className = 'loading-image-container';
+      if (this.state.fadeOutLoading) className += ' fade-out';
       return (
-        <div className='loading'>
-          Loading ...
+        <div className={ className }>
+          <LoadingImage blurbs={ ['Loading the news...'] } key='articles-loading'/>
         </div>
       )
     }
@@ -97,31 +182,35 @@ class NowDashboard extends React.Component {
     )
   }
 
-  renderActiveArticle() {
-    if (!this.props.activeArticle || this.props.articleLoading) return null;
-
-    return (
-      <ActiveArticle article={ this.props.activeArticle } readers={ this.props.activeArticleReaders }/>
-    )
-  }
-
   render() {
-    if (this.props.activeArticle && !this.props.articleLoading) return this.renderActiveArticle();
-
-
-    return (
-      <div className='dashboard-container'>
-        <div className='header-container'>
-          { this.renderHeader() }
+    let dashboardContents = null;
+    if (this.props.articleLoading) {
+      dashboardContents = (
+        <div className='dashboard-container'>
         </div>
-        <div className='top-articles-container'>
-          { this.renderArticles() }
-        </div>
-        <div className={ `article-loading${this.props.articleLoading ? ' show' : ''}`}>
-          Loading article ...
-        </div>
-      </div>
       )
+    } else if (this.props.activeArticle != null) {
+        dashboardContents = (
+          <div className='dashboard-container'>
+            <ActiveArticle article={ this.props.activeArticle }
+                  readers={ this.props.activeArticleReaders }
+                  speedReading={ this.props.speedReading }/>
+          </div>
+        )
+    } else {
+      dashboardContents = (
+        <div className='dashboard-container'>
+          <div className='header-container'>
+            { this.renderHeader() }
+          </div>
+          <div className='top-articles-container'>
+            { this.renderArticles() }
+          </div>
+        </div>
+      )
+    }
+
+    return dashboardContents;
   }
 }
 
@@ -135,23 +224,26 @@ function initDashboard() {
                   store.readers,
                   store.articleLoading,
                   store.activeArticle,
+                  store.speedReading,
                   store.clickedArticles,
                   store.activeArticleReaders,
-                  store.activeSectionIndex);
+                  store.sections);
   });
 }
 
 function drawDashboard(topArticles=[], readers=-1, articleLoading=false,
-                        activeArticle=null, clickedArticles=new Map(),
-                        activeArticleReaders=0, activeSectionIndex=0) {
+                        activeArticle=null, speedReading=false, clickedArticles=new Map(),
+                        activeArticleReaders=0, sections=[]) {
   ReactDOM.render(
     <NowDashboard topArticles={ topArticles }
       readers={ readers }
       clickedArticles={ clickedArticles }
       activeArticle={ activeArticle }
+      speedReading={ speedReading }
       activeArticleReaders={ activeArticleReaders }
       articleLoading={ articleLoading }
-      activeSectionIndex={ activeSectionIndex }/>,
+      sections={ sections }
+      key='now-dashboard'/>,
     document.getElementById('now')
   )
 }
