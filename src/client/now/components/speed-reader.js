@@ -19,7 +19,7 @@ export default class SpeedReader extends React.Component {
 
     this.countdownTime = 3;
     this.controller = null;
-    this.countdownTimeout;
+    this.countdownTimeout = undefined;
   }
 
   closeSpeedReader = (e) => {

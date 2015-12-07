@@ -288,7 +288,7 @@ $speed-control-height: 15vh;
     transition: opacity 250ms linear;
     transition-delay: 250ms;
     overflow-x: scroll;
-    background-color: #eee;
+    background: linear-gradient(to right, #3498db, #2ecc71, #f1c40f, #e74c3c);
 
     &::-webkit-scrollbar  {
       display: none;

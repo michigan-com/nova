@@ -1,6 +1,8 @@
 'use strict';
 
 import io from 'socket.io-client';
+import Polyfill from 'babel-polyfill';
+
 import Dispatcher from './dispatcher';
 import { ArticleActions } from './store/article-store';
 import { initDashboard } from './now/index';
