@@ -271,7 +271,7 @@ class SpeedControl extends React.Component {
   renderSteps() {
     let numSteps = SpeedControl.maxSpeed / SpeedControl.speedStep;
     let steps = [];
-    for (let i = 0; i < numSteps; i++) {
+    for (let i = 0; i <= numSteps; i++) {
       let speedVal = i * SpeedControl.speedStep;
       let style = { left: `${speedVal + (window.innerWidth / 2)}px` }
 
