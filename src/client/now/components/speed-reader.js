@@ -180,7 +180,7 @@ export default class SpeedReader extends React.Component {
   }
 
   renderControls() {
-    let controlClass = 'controls';
+    let controlClass = 'speed-controls';
 
     return(
       <div className={ controlClass }>
@@ -232,8 +232,13 @@ export default class SpeedReader extends React.Component {
         </div>
         { this.renderCountdown() }
         { this.renderSpeedControl() }
-        <div className='close-button' onClick={ this.closeSpeedReader }>
-          Close
+        <div className='controls'>
+          <div className='control-container'>
+            <div className='speed-button' onClick={ this.togglePlay }><span className='button-text'>Speed</span></div>
+          </div>
+          <div className='control-container'>
+            <div className='close-button' onClick={ this.closeSpeedReader }><span className='button-text'>Close</span></div>
+          </div>
         </div>
       </div>
     )

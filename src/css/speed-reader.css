@@ -1,8 +1,9 @@
-@import './animations/smack';
-@import './base';
+@import 'base';
+@import 'mixins';
+@import 'animations/smack';
 
 $speed-reader-font-size: 30px;
-$close-button-height: 10vh;
+$controls-height: 65px;
 $speed-control-height: 15vh;
 
 .speed-reader {
@@ -71,6 +72,9 @@ $speed-control-height: 15vh;
       opacity: 0;
     }
 
+    .speed-button {
+      opacity: 0;
+    }
   }
 
   .speed-reader-controls {
@@ -106,7 +110,7 @@ $speed-control-height: 15vh;
   }
 }
 
-.controls {
+.speed-controls {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -237,31 +241,58 @@ $speed-control-height: 15vh;
   display: none;
 }
 
-.close-button {
+.controls {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: $close-button-height;
-  font-size: 30px;
-  line-height: $close-button-height;
-  text-align: center;
-  background: $blue;
-  color: white;
-  cursor: pointer;
+  height: $controls-height;
+  display: flex;
+  flex-direction: row;
+  flex-direction: center;
+
+  .control-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .speed-button, .close-button {
+    font-size: 12px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .button-text {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .speed-button {
+    @mixin button $yellow, calc($controls-height * .8);
+    opacity: 1;
+    transition: opacity 250ms linear;
+  }
+
+  .close-button {
+    @mixin button $blue, calc($controls-height * .8);
+  }
 }
 
 .speed-control-container {
   width: 100%;
   height: $speed-control-height;
   position: fixed;
-  bottom: $close-button-height;
+  bottom: $controls-height;
   overflow-x: scroll;
 
   &:before, &:after {
     content: "";
     position: fixed;
-    bottom: $close-button-height;
+    bottom: $controls-height;
     width: 0;
     height: $speed-control-height;
     box-shadow: 0 0 23vw 15vw white;
@@ -288,7 +319,7 @@ $speed-control-height: 15vh;
     transition: opacity 250ms linear;
     transition-delay: 250ms;
     overflow-x: scroll;
-    background: linear-gradient(to right, #3498db, #2ecc71, #f1c40f, #e74c3c);
+    background: linear-gradient(to right, $blue, $green, $yellow, $red);
 
     &::-webkit-scrollbar  {
       display: none;
@@ -318,7 +349,7 @@ $speed-control-height: 15vh;
 
 .center-bar {
   position: fixed;
-  top: calc(100vh - $speed-control-height - $close-button-height);
+  top: calc(100vh - $speed-control-height - $controls-height);
   width: 100vw;
   display: flex;
   flex-direction: row;
