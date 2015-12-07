@@ -220,7 +220,7 @@ body {
   }
 
   .section-filter-name {
-    font-size: calc($filter-name-height * .8);
+    font-size: calc($filter-name-height * 1);
     text-transform: capitalize;
     margin: 0 auto;
 
