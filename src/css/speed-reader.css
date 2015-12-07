@@ -25,6 +25,7 @@ $speed-control-height: 15vh;
     flex-direction: row;
     align-items: center;
     transition: opacity 250ms linear;
+    padding: 10px;
 
     .current-context {
       width: 90%;
@@ -189,6 +190,15 @@ $speed-control-height: 15vh;
 .michspeed {
   width: 100%;
   height: calc($speed-reader-font-size * 3);
+  font-size: $speed-reader-font-size;
+  margin: .3em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .michspeed-container {
+    width: 100%;
+  }
 }
 
 .michspeed-reticle {
@@ -201,11 +211,11 @@ $speed-control-height: 15vh;
     position: absolute;
 }
 .michspeed-reticle-top {
-    top: -1.3em;
+    top: -1.1em;
     transform: scaley(0.75);
 }
 .michspeed-reticle-bottom {
-    top: 1.3em;
+    top: 1.1em;
     transform: rotate(180deg) scaleY(0.75);
 }
 .michspeed-orp {

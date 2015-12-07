@@ -14,7 +14,7 @@ export default class SpeedReader extends React.Component {
       speedReaderFadeIn: false,
       playing: true,
       countdown: false,
-      countdownIndex: 3
+      countdownIndex: null
     }
 
     this.countdownTime = 3;
@@ -25,9 +25,6 @@ export default class SpeedReader extends React.Component {
   closeSpeedReader = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.deinit();
-    if (this.controller) this.controller.pause();
-    this.setState({ speedReaderFadeIn: false });
 
     setTimeout(() => {
       Dispatcher.dispatch({
@@ -42,6 +39,8 @@ export default class SpeedReader extends React.Component {
       headline: this.props.article.headline,
       body: this.props.article.body
     });
+
+    window.addEventListener('blur', this._pause);
 
     this.renderSpeedHTML();
 
@@ -63,10 +62,10 @@ export default class SpeedReader extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(lastProps, lastState) {
     if (this.state.countdown) {
       if (!this.state.playing) {
-        if (this.countdownTime) clearTimeout(this.countdownTimeout);
+        if (this.countdownTimeout) clearTimeout(this.countdownTimeout);
         return;
       }
 
@@ -74,8 +73,10 @@ export default class SpeedReader extends React.Component {
         this.countdownTimeout = setTimeout(() => {
           this.setState({ countdown: false });
         }, 1000);
+      } else if (this.state.countdownIndex === null) {
+        this.setState({ countdownIndex: this.countdownTime });
       }
-      else {
+      else if (this.state.countdownIndex !== lastState.countdownIndex) {
         let newIndex = this.state.countdownIndex - 1;
         if (newIndex < 0) return;
 
@@ -88,19 +89,24 @@ export default class SpeedReader extends React.Component {
     }
   }
 
-  componentWillUnmount = () => { this.deinit(); }
+  componentWillUnmount() { this.deinit(); }
 
-  deinit() {
+  deinit = () => {
     this.controller.pause();
-    if (this.countdownTimeout) clearTimeout(this.countdownTimeout);
+    if (this.countdownTimeout) {
+      clearTimeout(this.countdownTimeout);
+    }
+    window.removeEventListener('blur', this._pause)
   }
 
-  playSpeedReader() {
+  _pause = () => { this.setState({ playing: false }); }
+
+  playSpeedReader = () => {
     if (!this.controller) return;
     this.controller.resume();
   }
 
-  pauseSpeedReader() {
+  pauseSpeedReader = () => {
     if (!this.controller) return;
     this.controller.pause();
   }
@@ -151,7 +157,10 @@ export default class SpeedReader extends React.Component {
   }
 
   renderContext() {
-    if (this.state.playing || !this.controller || !this.controller.currentContext.length) return null;
+    if (this.state.playing || !this.controller ||
+        !this.controller.currentContext || !this.controller.currentContext.length) {
+      return null;
+    }
 
     let context = this.controller.currentContext;
     let contextEl = [];

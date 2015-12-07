@@ -15,7 +15,8 @@ class ActiveArticle extends React.Component {
     this.state = {
       photoLoaded: false,
       fadeImageOut: false,
-      fadeInContent: false
+      fadeInContent: false,
+      fadeSpeedReader: false
     }
 
     this.scrollHooks = [new ScrollHook({
@@ -29,6 +30,22 @@ class ActiveArticle extends React.Component {
   componentWillMount() { this.loadPhoto(); }
   componentDidMount() { window.addEventListener('scroll',  this.checkScroll); }
   componentWillUnmount() { window.removeEventListener('scroll', this.checkScroll); }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.speedReading && !this.props.speedReading) {
+      this.setState({ fadeSpeedReader: true });
+    } else if (!nextProps.speedReading && this.props.speedReading) {
+      this.setState({ fadeSpeedReader: true});
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.fadeSpeedReader && !prevState.fadeSpeedReader) {
+      setTimeout(() => {
+        this.setState({ fadeSpeedReader: false });
+      }, 500);
+    }
+  }
 
   /**
    * Used to check the scroll at intervals in order to ease animations
@@ -109,6 +126,11 @@ class ActiveArticle extends React.Component {
   render() {
     let activeArticleContainerClass = 'active-article-container';
     if (this.state.photoLoaded) activeArticleContainerClass += ' photo-loaded';
+
+    if (this.state.fadeSpeedReader) {
+      activeArticleContainerClass += ' fade-in-speed-reader';
+    }
+    else if (this.props.speedReading) activeArticleContainerClass += ' speed-reading';
 
     let article = this.props.article;
     let activeArticleClass = 'active-article';
