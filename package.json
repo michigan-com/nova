@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node --harmony ./dist/server.js"
+    "start": "node ./dist/server.js",
+    "install": "gulp"
   },
   "dependencies": {
     "autoprefixer": "^6.1.0",
