@@ -93,8 +93,8 @@ var Store = assign({}, EventEmitter.prototype, {
     let filteredArticles = [];
     for (let article of topArticles) {
       // Update the active article if we have one
-      if (!store.articleLoading && store.activeArticle && store.activeArticle.article_id) {
-        if (article.url === store.activeArticle.url) {
+      if (!store.articleLoading && !!store.activeArticle) {
+        if (article.article_id === store.activeArticle.article_id && article.source === store.activeArticle.source) {
           store.activeArticleReaders = article.visits;
         }
       }
