@@ -14,20 +14,17 @@ export default class SpeedReader extends React.Component {
       speedReaderFadeIn: false,
       playing: true,
       countdown: false,
-      countdownIndex: 3
+      countdownIndex: null
     }
 
     this.countdownTime = 3;
     this.controller = null;
-    this.countdownTimeout;
+    this.countdownTimeout = undefined;
   }
 
   closeSpeedReader = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.deinit();
-    if (this.controller) this.controller.pause();
-    this.setState({ speedReaderFadeIn: false });
 
     setTimeout(() => {
       Dispatcher.dispatch({
@@ -42,6 +39,8 @@ export default class SpeedReader extends React.Component {
       headline: this.props.article.headline,
       body: this.props.article.body
     });
+
+    window.addEventListener('blur', this._pause);
 
     this.renderSpeedHTML();
 
@@ -63,10 +62,10 @@ export default class SpeedReader extends React.Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(lastProps, lastState) {
     if (this.state.countdown) {
       if (!this.state.playing) {
-        if (this.countdownTime) clearTimeout(this.countdownTimeout);
+        if (this.countdownTimeout) clearTimeout(this.countdownTimeout);
         return;
       }
 
@@ -74,8 +73,10 @@ export default class SpeedReader extends React.Component {
         this.countdownTimeout = setTimeout(() => {
           this.setState({ countdown: false });
         }, 1000);
+      } else if (this.state.countdownIndex === null) {
+        this.setState({ countdownIndex: this.countdownTime });
       }
-      else {
+      else if (this.state.countdownIndex !== lastState.countdownIndex) {
         let newIndex = this.state.countdownIndex - 1;
         if (newIndex < 0) return;
 
@@ -88,19 +89,24 @@ export default class SpeedReader extends React.Component {
     }
   }
 
-  componentWillUnmount = () => { this.deinit(); }
+  componentWillUnmount() { this.deinit(); }
 
-  deinit() {
+  deinit = () => {
     this.controller.pause();
-    if (this.countdownTimeout) clearTimeout(this.countdownTimeout);
+    if (this.countdownTimeout) {
+      clearTimeout(this.countdownTimeout);
+    }
+    window.removeEventListener('blur', this._pause)
   }
 
-  playSpeedReader() {
+  _pause = () => { this.setState({ playing: false }); }
+
+  playSpeedReader = () => {
     if (!this.controller) return;
     this.controller.resume();
   }
 
-  pauseSpeedReader() {
+  pauseSpeedReader = () => {
     if (!this.controller) return;
     this.controller.pause();
   }
@@ -151,7 +157,10 @@ export default class SpeedReader extends React.Component {
   }
 
   renderContext() {
-    if (this.state.playing || !this.controller || !this.controller.currentContext.length) return null;
+    if (this.state.playing || !this.controller ||
+        !this.controller.currentContext || !this.controller.currentContext.length) {
+      return null;
+    }
 
     let context = this.controller.currentContext;
     let contextEl = [];
@@ -171,7 +180,7 @@ export default class SpeedReader extends React.Component {
   }
 
   renderControls() {
-    let controlClass = 'controls';
+    let controlClass = 'speed-controls';
 
     return(
       <div className={ controlClass }>
@@ -223,8 +232,13 @@ export default class SpeedReader extends React.Component {
         </div>
         { this.renderCountdown() }
         { this.renderSpeedControl() }
-        <div className='close-button' onClick={ this.closeSpeedReader }>
-          Close
+        <div className='controls'>
+          <div className='control-container'>
+            <div className='speed-button' onClick={ this.togglePlay }><span className='button-text'>Speed</span></div>
+          </div>
+          <div className='control-container'>
+            <div className='close-button' onClick={ this.closeSpeedReader }><span className='button-text'>Close</span></div>
+          </div>
         </div>
       </div>
     )
@@ -262,7 +276,7 @@ class SpeedControl extends React.Component {
   renderSteps() {
     let numSteps = SpeedControl.maxSpeed / SpeedControl.speedStep;
     let steps = [];
-    for (let i = 0; i < numSteps; i++) {
+    for (let i = 0; i <= numSteps; i++) {
       let speedVal = i * SpeedControl.speedStep;
       let style = { left: `${speedVal + (window.innerWidth / 2)}px` }
 

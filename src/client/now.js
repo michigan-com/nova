@@ -1,6 +1,9 @@
 'use strict';
 
 import io from 'socket.io-client';
+import Polyfill from 'babel-polyfill';
+
+import Config from '../../config';
 import Dispatcher from './dispatcher';
 import { ArticleActions } from './store/article-store';
 import { initDashboard } from './now/index';
@@ -12,7 +15,7 @@ function init() {
   initDashboard();
 
   // Connect the socket
-  var socket = io('https://api.michigan.com', {transports: ['websocket', 'xhr-polling']});
+  var socket = io(Config.socketUrl, {transports: ['websocket', 'xhr-polling']});
   socket.emit('get_popular');
   socket.on('got_popular', function(data) {
     Dispatcher.dispatch({

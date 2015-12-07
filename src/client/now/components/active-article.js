@@ -15,7 +15,8 @@ class ActiveArticle extends React.Component {
     this.state = {
       photoLoaded: false,
       fadeImageOut: false,
-      fadeInContent: false
+      fadeInContent: false,
+      fadeSpeedReader: false
     }
 
     this.scrollHooks = [new ScrollHook({
@@ -29,6 +30,22 @@ class ActiveArticle extends React.Component {
   componentWillMount() { this.loadPhoto(); }
   componentDidMount() { window.addEventListener('scroll',  this.checkScroll); }
   componentWillUnmount() { window.removeEventListener('scroll', this.checkScroll); }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.speedReading && !this.props.speedReading) {
+      this.setState({ fadeSpeedReader: true });
+    } else if (!nextProps.speedReading && this.props.speedReading) {
+      this.setState({ fadeSpeedReader: true});
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.fadeSpeedReader && !prevState.fadeSpeedReader) {
+      setTimeout(() => {
+        this.setState({ fadeSpeedReader: false });
+      }, 500);
+    }
+  }
 
   /**
    * Used to check the scroll at intervals in order to ease animations
@@ -72,17 +89,10 @@ class ActiveArticle extends React.Component {
     })
   }
 
-  clickActiveArticle(e) {
-    if (/start-speed-reader|fa-forward/.test(e.target.className)) {
-      this.loadSpeedReader();
-      return;
-    } else if (!(/(close-article|active-article-container)/.test(e.target.className))) {
-      return;
-    } else {
-      Dispatcher.dispatch({
-        type: ArticleActions.closeActiveArticle
-      });
-    }
+  closeActiveArticle(e) {
+    Dispatcher.dispatch({
+      type: ArticleActions.closeActiveArticle
+    });
   }
 
 
@@ -110,6 +120,11 @@ class ActiveArticle extends React.Component {
     let activeArticleContainerClass = 'active-article-container';
     if (this.state.photoLoaded) activeArticleContainerClass += ' photo-loaded';
 
+    if (this.state.fadeSpeedReader) {
+      activeArticleContainerClass += ' fade-in-speed-reader';
+    }
+    else if (this.props.speedReading) activeArticleContainerClass += ' speed-reading';
+
     let article = this.props.article;
     let activeArticleClass = 'active-article';
     let articleContentClass = 'article-content';
@@ -130,7 +145,7 @@ class ActiveArticle extends React.Component {
 
 
     return (
-      <div className={ activeArticleContainerClass } onClick={ this.clickActiveArticle.bind(this) }>
+      <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
           <div className='article-image' style={ this.getBackgroundStyle() }></div>
           <div className='article-content-container' ref='article-content-container'>
@@ -143,8 +158,12 @@ class ActiveArticle extends React.Component {
                 { article.summary.map(this.renderSummarySentence) }
               </div>
               <div className='article-controls'>
-                <div className='control start-speed-reader'>Speed Read</div>
-                <div className='control close-article'>Close</div>
+                <div className='control-container start-speed-reader'>
+                  <div className='control' onClick={ this.loadSpeedReader.bind(this) }><span className='control-text'>Speed Read</span></div>
+                </div>
+                <div className='control-container close-article'>
+                  <div className='control' onClick={ this.closeActiveArticle.bind(this) }><span className='control-text'>Close</span></div>
+                </div>
               </div>
             </div>
           </div>

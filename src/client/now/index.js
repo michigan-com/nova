@@ -175,11 +175,7 @@ class NowDashboard extends React.Component {
     // Rank positioning is done within <TopArticle/> Component
     topArticles.sort((a,b) => { return b.props.article.article_id - a.props.article.article_id });
 
-    return (
-      <div>
-        { topArticles }
-      </div>
-    )
+    return topArticles;
   }
 
   render() {
@@ -198,13 +194,16 @@ class NowDashboard extends React.Component {
           </div>
         )
     } else {
+      let topArticles = this.renderArticles();
+      let style = {};
+      if (topArticles.length) style.height = topArticles.length * (50 + 10); // Height * padding
       dashboardContents = (
         <div className='dashboard-container'>
           <div className='header-container'>
             { this.renderHeader() }
           </div>
-          <div className='top-articles-container'>
-            { this.renderArticles() }
+          <div className='top-articles-container' style={ style }>
+            { topArticles }
           </div>
         </div>
       )
