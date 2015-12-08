@@ -9,6 +9,8 @@ import ActiveArticle from './components/active-article';
 import SectionFilter from './components/section-filter';
 import LoadingImage from './components/loading-image';
 
+import Config from '../../../config';
+
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
 function formatNumber(num) {
@@ -138,7 +140,7 @@ class NowDashboard extends React.Component {
     return(
       <div id='header'>
         <div className='header-info'>
-          <div id='page-header'>Detroit Now</div>
+          <div id='page-header'>{ Config.appName }</div>
           <div id='readers'>
             <div id='glasses'><img src='/img/glasses.svg'/></div>
             <div id='numbers'>{ readers }</div>
