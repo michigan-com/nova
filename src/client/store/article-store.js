@@ -194,7 +194,7 @@ var Store = assign({}, EventEmitter.prototype, {
         History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
         this.emitChange();
       }, (e) => {
-      console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);
+      console.log(`Failed to fetch article ${Config.socketUrl}/v1/article/${articleId}/`);
       this.closeActiveArticle();
     });
   }
