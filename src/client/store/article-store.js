@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
 
+import Config from '../../../config';
 import Dispatcher from '../dispatcher';
 
 /** Browser history stuff */
@@ -184,7 +185,7 @@ var Store = assign({}, EventEmitter.prototype, {
 
   /** Mapi interactions */
   fetchActiveArticle(articleId) {
-    xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
+    xr.get(`${Config.socketUrl}/v1/article/${articleId}/`)
       .then((data) => {
         articleCache[articleId] = data;
         store.activeArticle = data;
