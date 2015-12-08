@@ -19,8 +19,11 @@ body {
   box-sizing: border-box;
 }
 
-$yellow: #f8c929;
-$blue: #5677fc;
+$yellow: #f1c40f;
+$blue: #3498db;
+$green: #2ecc71;
+$red: #e74c3c;
+
 
 /* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;
