@@ -136,7 +136,7 @@ var Store = assign({}, EventEmitter.prototype, {
 
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
-      History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
+      History.pushState({ articleId }, `Article ${articleId}`, `/article/${articleId}/`);
       store.activeArticle = articleCache[articleId];
       this.emitChange();
       return;
@@ -191,7 +191,7 @@ var Store = assign({}, EventEmitter.prototype, {
         store.activeArticle = data;
         store.articleLoading = false;
 
-        History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
+        History.pushState({ articleId }, `Article ${articleId}`, `/article/${articleId}/`);
         this.emitChange();
       }, (e) => {
       console.log(`Failed to fetch article ${Config.socketUrl}/v1/article/${articleId}/`);
@@ -228,9 +228,10 @@ Dispatcher.register(function(action) {
 });
 
 // See if we have an ?articleId= url param
-let parsed = url.parse(window.location.href, true);
-if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId)) {
-    Store.updateActiveArticle(parseInt(parsed.query.articleId));
+// window.location.pathname
+let match = /^\/article\/(\d+)\/?$/.exec(window.location.pathname);
+if (match) {
+    Store.updateActiveArticle(parseInt(match[1]));
 }
 
 module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions }
