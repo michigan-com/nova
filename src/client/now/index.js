@@ -41,7 +41,8 @@ class NowDashboard extends React.Component {
     this.state = {
       articlesLoading: true,
       filterTop: 0,
-      windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall
+      windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall,
+      showInfo: false
     }
   }
 
@@ -121,6 +122,11 @@ class NowDashboard extends React.Component {
     this.setState({ filterTop: newFilterTop });
   }
 
+  toggleInfo = () => {
+    let showInfo = !this.state.showInfo;
+    this.setState({ showInfo });
+  }
+
   renderSectionOptions() {
     let activeSection = this.props.activeSectionIndex;
 
@@ -158,14 +164,30 @@ class NowDashboard extends React.Component {
     let readers = '';
     if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} readers`;
 
+    let siteInfoClass = 'site-info';
+    if (this.state.showInfo) siteInfoClass += ' show';
+
     return(
       <div id='header'>
+        <div className={ siteInfoClass }>
+          <div className='info-content'>
+            <p>{ `${Config.appName} uses artificial intelligence to give you essential news in less time.` }</p>
+            <ol>
+              <li>{ `${Config.appName}'s algorithms surface the most-read Michigan news, in real-time.` }</li>
+              <li>Its summarization engine distills each story down to the 3 details you need to know.</li>
+              <li>The speed reader enables you to absorb the full story in a fraction of the normal time.</li>
+            </ol>
+            <p>Feedback? We'd love to hear it.</p>
+            <a href='#' id='email-us'>Email Us</a>
+          </div>
+        </div>
         <div className='header-info'>
           <div id='page-header'>{ Config.appName }</div>
           <div id='readers'>
             <div id='glasses'><img src='/img/glasses.svg'/></div>
             <div id='numbers'>{ readers }</div>
           </div>
+          <div id='info' onClick={ this.toggleInfo }><span className='info-button'>i</span></div>
         </div>
         { this.renderSectionOptions() }
       </div>
