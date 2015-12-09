@@ -189,7 +189,6 @@ class NowDashboard extends React.Component {
           </div>
           <div id='info' onClick={ this.toggleInfo }><span className='info-button'>i</span></div>
         </div>
-        { this.renderSectionOptions() }
       </div>
     )
   }
@@ -248,6 +247,7 @@ class NowDashboard extends React.Component {
           <div className='header-container'>
             { this.renderHeader() }
           </div>
+          { this.renderSectionOptions() }
           <div className='top-articles-container' style={ style }>
             { topArticles }
           </div>
