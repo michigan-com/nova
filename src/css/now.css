@@ -75,7 +75,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: white;
+    color: black;
     background-color: #d8d8d8;
     overflow: hidden;
     transition: height 400ms ease-out;

@@ -66,11 +66,10 @@ class TopArticle extends React.Component {
     }
 
     let containerStyle = this.getStyle();
-    console.log(containerStyle.top);
 
     return (
       <div className={ topArticleContainerClass } style={ containerStyle } id={ `top-article-container-${this.props.rank}-${this.props.windowSize}` }>
-        <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.articleClicked.bind(this) } style={ style }>
+        <div className={ `top-article${this.props.clicked ? ' clicked' : ''}` }  onClick={ this.articleClicked.bind(this) } style={ style }>
           <div className='readers-container'><div className='readers'>{ readers }</div></div>
           <div className='headline'>{ headline }</div>
         </div>
