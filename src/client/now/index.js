@@ -29,11 +29,32 @@ class NowDashboard extends React.Component {
 
     this.maxFilterTop = 0;
     this.minFilterTop = -100;
+
+    this.prevWindowWidth = window.innerWidth;
+    this.windowSmall = 768;
+    this.windowMid = 992;
+
+    window.onresize = this.resize;
+
+    this.state = {
+      articlesLoading: true,
+      filterTop: 0,
+      windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall
+    }
   }
 
-  state = {
-    articlesLoading: true,
-    filterTop: 0,
+
+  resize = () => {
+    let currentWidth = window.innerWidth;
+
+    if (this.prevWindowWidth <= this.windowMid && currentWidth > this.windowMid) {
+      this.setState({ windowSize: this.windowSmall })
+    }
+    else if (this.prevWindowWidth > this.windowMid && currentWidth <= this.windowMid) {
+      this.setState({ windowSize: this.windowMid })
+    }
+
+    this.prevWindowWidth = currentWidth;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -133,7 +154,7 @@ class NowDashboard extends React.Component {
     else if (hour >= 6) greeting = 'Good Evening';
 
     let readers = '';
-    if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} now reading`;
+    if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} readers`;
 
     return(
       <div id='header'>
@@ -166,6 +187,7 @@ class NowDashboard extends React.Component {
       topArticles.push(
         <TopArticle article={ article }
             rank={ index }
+            windowSize={ this.state.windowSize }
             clicked={ this.props.clickedArticles.has(article.article_id) }
             key={ `article-${article.url}` }/>
       )
@@ -196,7 +218,7 @@ class NowDashboard extends React.Component {
     } else {
       let topArticles = this.renderArticles();
       let style = {};
-      if (topArticles.length) style.height = topArticles.length * (50 + 10); // Height * padding
+      if (topArticles.length) style.height = topArticles.length * (TopArticle.getHeight() + 10); // Height * padding
       dashboardContents = (
         <div className='dashboard-container'>
           <div className='header-container'>

@@ -6,10 +6,12 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-$article-height: 50px;
+$article-height: 60px;
+$article-height-lg: 100px;
 
 /* container info */
 $header-height-sm: 30px;
+$header-height-lg: 50px;
 $header-z-index: calc($active-article-z-index / 2);
 
 $filter-height: 65px;
@@ -29,7 +31,11 @@ body {
     width: 100%;
 
     .header-container {
-      height: $header-height-sm;
+      height: $header-height-lg;
+
+      @media (max-width: $screen-sm) {
+        height: $header-height-sm;
+      }
     }
 
     .filters-container {
@@ -40,7 +46,6 @@ body {
       display: flex;
       flex-direction: row;
       align-items: stretch;
-      overflow: hidden;
       height: $filter-height;
 
       &, & * {
@@ -111,20 +116,13 @@ body {
     font-weight: bold;
     font-size: 30px;
     line-height: 50px;
+    font-family: 'Open Sans';
 
     @media (max-width: $screen-sm) {
       width: 50%;
       font-size: 20px;
       line-height: 30px;
     }
-  }
-
-  #today {
-    text-transform: capitalize;
-    color: black;
-    font-size: 20px;
-    line-height: 35px;
-    text-align: center;
   }
 
   #readers {
@@ -136,6 +134,8 @@ body {
     align-items: center;
     padding: 10px;
     color: $blue;
+    font-family: 'Open Sans';
+    font-weight: normal;
 
     @media (max-width: $screen-sm) {
       width: 50%;
@@ -274,7 +274,7 @@ body {
 
   /* Desktop, etc */
   @media (min-width: $screen-md) {
-    height: calc($article-height * 2);
+    height: $article-height-lg;
     width: 70%;
     margin: 0 15%;
   }
@@ -337,11 +337,15 @@ body {
       flex-direction: column;
       align-items: center;
       width: 100%;
+      font-family: 'Open Sans';
+      font-weight: normal;
     }
   }
 
   .headline {
-    font-size: calc($article-height * .2);
+    font-size: calc($article-height * .23);
+    font-family: 'Open Sans';
+    font-weight: normal;
     height: $article-height;
     color: black;
     font-weight: bold;

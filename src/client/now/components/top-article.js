@@ -12,6 +12,12 @@ class TopArticle extends React.Component {
   // TODO make this responsive? Move this functionality into CSS?
   // height: 100px, padding 10px
   static defaultStyle = { height: 100, margin: 10 }
+  static getHeight = () => {
+    let height = TopArticle.defaultStyle.height;
+    if (window.innerWidth <= 992) height *= .6; // 60 px
+    return height;
+  }
+
   constructor(props) {
     super(props);
 
@@ -39,9 +45,8 @@ class TopArticle extends React.Component {
 
   getStyle = () => {
     let style = {}
-    let height = TopArticle.defaultStyle.height;
+    let height = TopArticle.getHeight();
     let margin = TopArticle.defaultStyle.margin;
-    if (window.innerWidth <= 768) height /= 2;
     style.top = `${(this.props.rank * (height + margin)) + margin}px`;
     return style;
   }
@@ -60,8 +65,11 @@ class TopArticle extends React.Component {
       topArticleContainerClass += ' clicked';
     }
 
+    let containerStyle = this.getStyle();
+    console.log(containerStyle.top);
+
     return (
-      <div className={ topArticleContainerClass } style={ this.getStyle() }>
+      <div className={ topArticleContainerClass } style={ containerStyle } id={ `top-article-container-${this.props.rank}-${this.props.windowSize}` }>
         <div className={ `top-article${this.props.clicked ? 'clicked' : ''}` }  onClick={ this.articleClicked.bind(this) } style={ style }>
           <div className='readers-container'><div className='readers'>{ readers }</div></div>
           <div className='headline'>{ headline }</div>
