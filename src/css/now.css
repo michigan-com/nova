@@ -112,11 +112,12 @@ body {
 
     .info-content {
       margin: 0 auto;
-      height: 80%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
+      overflow: scroll;
 
       ol {
         margin: 0px 10px;
@@ -130,9 +131,11 @@ body {
     #email-us {
       display: block;
       background-color: $green;
-      padding: 10px 20px;
       text-align: center;
       font-size: 16px;
+      line-height: 30px;
+      height: 30px;
+      width: 50%;
       text-decoration: none;
       color: white;
 
