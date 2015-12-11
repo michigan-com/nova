@@ -6,12 +6,12 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-$article-height: 60px;
+$article-height: 70px;
 $article-height-lg: 100px;
 
 /* container info */
-$header-height-sm: 30px;
-$header-height-lg: 50px;
+$header-height-sm: 60px;
+$header-height-lg: 100px;
 $header-z-index: calc($active-article-z-index / 2);
 
 $filter-height: 65px;
@@ -61,7 +61,6 @@ body {
 
 #header {
   position: fixed;
-  text-align: center;
   width: 100%;
   z-index: 2;
   top: 0;
@@ -82,7 +81,11 @@ body {
     z-index: $header-z-index;
 
     &.show {
-      height: 75vh;
+      height: 50vh;
+
+      @media (max-width: $screen-sm) {
+        height: 75vh;
+      }
     }
 
     .info-content {
@@ -91,29 +94,39 @@ body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      padding: 20px 15%;
       overflow: scroll;
+      color: white;
 
-      ol {
-        margin: 0px 10px;
+      .info-header {
+        font-size: 22px;
+        line-height: calc(22px * 1.4);
+        font-weight: 600;
+        font-family: 'Open Sans';
       }
 
-      li {
-        text-align: left;
+      .list p {
+        margin: 10px 0;
+      }
+
+      .feedback {
+        text-align: center;
       }
     }
 
     #email-us {
-      display: block;
-      background-color: $green;
-      text-align: center;
+      font-weight: 600;
       font-size: 16px;
-      line-height: 30px;
-      height: 30px;
-      width: 50%;
+      line-height: 45px;
+      height: 45px;
+      width: 40%;
+      display: block;
+      background-color: #71BF44;
+      text-align: center;
       text-decoration: none;
       color: white;
       z-index: $header-z-index;
+      border-radius: 5%;
 
       &:hover {
 
@@ -122,23 +135,31 @@ body {
   }
 
   .header-info {
-    background-color: $yellow;
+    background-color: $red;
+    color: white;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     z-index: $header-z-index;
     box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.20);
+    height: $header-height-lg;
+
+    @media (max-width: $screen-sm) {
+      height: $header-height-sm;
+    }
   }
 
   #page-header {
     text-transform: uppercase;
-    color: black;
+    color: white;
     font-weight: bold;
     font-family: 'Open Sans';
-    width: 50%;
-    font-size: 20px;
+    font-weight: 800;
+    width: 60%;
+    font-size: 26px;
     line-height: 30px;
+    margin-left: 19px;
 
     @media (min-width: $screen-md) {
       width: 70%;
@@ -151,15 +172,16 @@ body {
 
   #readers {
     color: $blue;
-    font-size: 15px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 17px;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 10px;
-    color: $blue;
     font-family: 'Open Sans';
     font-weight: normal;
+    text-transform: uppercase;
+    text-transform: center;
     width: 40%;
     padding: 0;
 
@@ -186,6 +208,7 @@ body {
     #numbers {
       display: inline-block;
       text-align: center;
+      color: color(white a(70%));
 
       @media (max-width: $screen-sm) {
         width: 100%;
@@ -201,13 +224,13 @@ body {
     width: 10%;
 
     .info-button {
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       line-height: 17px;
       font-size: 13px;
       border-radius: 50%;
-      background: white;
-      color: $green;
+      background-color: color(white a(40%));
+      color: black;
       text-align: center;
       cursor: pointer;
       font-family: 'Lora';
@@ -392,11 +415,10 @@ body {
   }
 
   .readers-container {
-    font-size: calc($article-height * .3);
-    color: $blue;
+    color: $red;
     height: 75%;
     position: relative;
-    border-right: 1px solid #eee;
+    border-right: 1px solid color(black a(12%));
     text-align: center;
     width: 20%;
     display: flex;
@@ -404,7 +426,7 @@ body {
     align-items: center;
 
     @media (min-width: $screen-md) {
-      font-size: calc($article-height);
+      font-size: 30px;
       width: 20%;
     }
 
@@ -414,14 +436,15 @@ body {
       align-items: center;
       width: 100%;
       font-family: 'Open Sans';
-      font-weight: normal;
+      font-weight: 300;
+      font-size: 20px;
     }
   }
 
   .headline {
-    font-size: calc($article-height * .23);
+    font-size: 14px;
     font-family: 'Open Sans';
-    font-weight: normal;
+    font-weight: 600;
     height: $article-height;
     color: black;
     font-weight: bold;
@@ -484,7 +507,7 @@ body {
 
   .loading-bars-container {
     .bar {
-      background-color: $yellow;
+      background-color: $red;
       height: 10px;
       max-width: 10%;
       min-width: 100px;

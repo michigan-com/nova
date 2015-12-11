@@ -12,15 +12,17 @@ var cssImport = require('postcss-import');
 var calc = require('postcss-calc');
 var extend = require('postcss-extend');
 var mixins = require('postcss-mixins')
+var color = require('postcss-color-function');
 
 var processors = [
   cssImport,
-  autoprefixer({ browsers: ['last 2 versions']}),
   mixins,
   nested,
   vars,
+  color(),
   calc,
-  extend
+  extend,
+  autoprefixer({ browsers: ['last 2 versions']})
 ];
 
 function bundleOpts() {

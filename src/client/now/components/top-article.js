@@ -14,7 +14,7 @@ class TopArticle extends React.Component {
   static defaultStyle = { height: 100, margin: 10 }
   static getHeight = () => {
     let height = TopArticle.defaultStyle.height;
-    if (window.innerWidth <= 992) height *= .6; // 60 px
+    if (window.innerWidth <= 992) height *= .7; // 60 px
     return height;
   }
 

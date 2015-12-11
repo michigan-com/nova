@@ -113,7 +113,7 @@ export default class SpeedReader extends React.Component {
 
   togglePlay = () => {
     if (this.state.countdown) {
-      this.setState({ playing: !this.state.playing, countdownIndex: this.countdownTime});
+      this.setState({ playing: !this.state.playing, countdownIndex: null});
       return;
     }
 
@@ -234,7 +234,7 @@ export default class SpeedReader extends React.Component {
         { this.renderSpeedControl() }
         <div className='controls'>
           <div className='control-container'>
-            <div className='speed-button' onClick={ this.togglePlay }><span className='button-text'>Speed</span></div>
+            <div className='speed-button' onClick={ this.togglePlay }><span className='button-text'><img src='/img/rabbit-red.svg'/></span></div>
           </div>
           <div className='control-container'>
             <div className='close-button' onClick={ this.closeSpeedReader }><span className='button-text'>Close</span></div>

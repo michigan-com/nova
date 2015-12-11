@@ -72,7 +72,7 @@ $speed-control-height: 15vh;
       opacity: 0;
     }
 
-    .speed-button {
+    .controls {
       opacity: 0;
     }
   }
@@ -250,6 +250,8 @@ $speed-control-height: 15vh;
   display: flex;
   flex-direction: row;
   flex-direction: center;
+  opacity: 1;
+  transition: opacity 250ms linear;
 
   .control-container {
     flex-grow: 1;
@@ -272,13 +274,15 @@ $speed-control-height: 15vh;
   }
 
   .speed-button {
-    @mixin button $yellow, calc($controls-height * .8);
-    opacity: 1;
-    transition: opacity 250ms linear;
+    @mixin button white calc($controls-height * .8);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
   }
 
   .close-button {
-    @mixin button $blue, calc($controls-height * .8);
+    @mixin button $red, calc($controls-height * .8);
   }
 }
 

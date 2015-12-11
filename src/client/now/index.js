@@ -171,13 +171,13 @@ class NowDashboard extends React.Component {
       <div id='header'>
         <div className={ siteInfoClass }>
           <div className='info-content'>
-            <p>{ `${Config.appName} uses artificial intelligence to give you essential news in less time.` }</p>
-            <ol>
-              <li>{ `${Config.appName}'s algorithms surface the most-read Michigan news, in real-time.` }</li>
-              <li>Its summarization engine distills each story down to the 3 details you need to know.</li>
-              <li>The speed reader enables you to absorb the full story in a fraction of the normal time.</li>
-            </ol>
-            <p>Feedback? We'd love to hear it.</p>
+            <p className='info-header'>{ `${Config.appName} uses artificial intelligence to give you essential news in less time.` }</p>
+            <div className='list'>
+              <p>{ `${Config.appName}'s algorithms surface the most-read Michigan news, in real-time.` }</p>
+              <p>Its summarization engine distills each story down to the 3 details you need to know.</p>
+              <p>The speed reader enables you to absorb the full story in a fraction of the normal time.</p>
+            </div>
+            <p className='feedback'>Feedback? We'd love to hear it.</p>
             <a href='#' id='email-us'>Email Us</a>
           </div>
         </div>

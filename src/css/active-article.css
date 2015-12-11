@@ -205,15 +205,15 @@ $controls-height: 65px;
         align-items: center;
         &.close-article {
           .control {
-            @mixin button $blue, calc($controls-height * .8);
-            background-color: $blue;
+            @mixin button $red, calc($controls-height * .8);
+            background-color: $red;
           }
         }
 
         &.start-speed-reader {
           .control {
-            @mixin button $yellow, calc($controls-height * .8);
-            background-color: $yellow;
+            @mixin button $blue, calc($controls-height * .8);
+            background-color: $blue;
           }
         }
 
@@ -250,7 +250,7 @@ $controls-height: 65px;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  color: $yellow;
+  color: $red;
   z-index: $active-article-z-index - 10;
   padding-top: 30%;
 
