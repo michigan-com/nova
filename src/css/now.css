@@ -6,10 +6,12 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-$article-height: 50px;
+$article-height: 60px;
+$article-height-lg: 100px;
 
 /* container info */
 $header-height-sm: 30px;
+$header-height-lg: 50px;
 $header-z-index: calc($active-article-z-index / 2);
 
 $filter-height: 65px;
@@ -29,37 +31,13 @@ body {
     width: 100%;
 
     .header-container {
-      height: $header-height-sm;
-    }
+      height: $header-height-lg;
 
-    .filters-container {
-      width: 100%;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      display: flex;
-      flex-direction: row;
-      align-items: stretch;
-      overflow: hidden;
-      height: $filter-height;
-
-      &, & * {
-        z-index: calc($header-z-index - 1);
-      }
-
-      .filters {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        width: 100%;
-        padding: 0;
-        height: 90%;
-        top: 0;
-        left: 0;
-        transition: top 500ms ease-in;
-        padding: 10px 0px;
+      @media (max-width: $screen-sm) {
+        height: $header-height-sm;
       }
     }
+
 
     .top-articles-container {
       position: relative;
@@ -90,9 +68,57 @@ body {
   left: 0;
   flex-direction: row;
   flex-wrap: wrap;
+  z-index: $header-z-index;
 
-  #today {
-    width: 100%;
+  .site-info {
+    height: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: black;
+    background-color: #d8d8d8;
+    overflow: hidden;
+    transition: height 400ms ease-out;
+    z-index: $header-z-index;
+
+    &.show {
+      height: 75vh;
+    }
+
+    .info-content {
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow: scroll;
+
+      ol {
+        margin: 0px 10px;
+      }
+
+      li {
+        text-align: left;
+      }
+    }
+
+    #email-us {
+      display: block;
+      background-color: $green;
+      text-align: center;
+      font-size: 16px;
+      line-height: 30px;
+      height: 30px;
+      width: 50%;
+      text-decoration: none;
+      color: white;
+      z-index: $header-z-index;
+
+      &:hover {
+
+      }
+    }
   }
 
   .header-info {
@@ -109,22 +135,18 @@ body {
     text-transform: uppercase;
     color: black;
     font-weight: bold;
-    font-size: 30px;
-    line-height: 50px;
-
-    @media (max-width: $screen-sm) {
-      width: 50%;
-      font-size: 20px;
-      line-height: 30px;
-    }
-  }
-
-  #today {
-    text-transform: capitalize;
-    color: black;
+    font-family: 'Open Sans';
+    width: 50%;
     font-size: 20px;
-    line-height: 35px;
-    text-align: center;
+    line-height: 30px;
+
+    @media (min-width: $screen-md) {
+      width: 70%;
+      margin-left: 20px;
+      text-align: left;
+      font-size: 30px;
+      line-height: 50px;
+    }
   }
 
   #readers {
@@ -136,14 +158,17 @@ body {
     align-items: center;
     padding: 10px;
     color: $blue;
+    font-family: 'Open Sans';
+    font-weight: normal;
+    width: 40%;
+    padding: 0;
 
-    @media (max-width: $screen-sm) {
-      width: 50%;
-      padding: 0;
+    @media (min-width: $screen-md) {
+      width: 15%;
     }
 
     #glasses {
-      width: 15%;
+      width: 50px;
       margin-right: 15px;
       display: inline-block;
       text-align: left;
@@ -166,6 +191,56 @@ body {
         width: 100%;
       }
     }
+  }
+
+  #info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 15px;
+    width: 10%;
+
+    .info-button {
+      width: 17px;
+      height: 17px;
+      line-height: 17px;
+      font-size: 13px;
+      border-radius: 50%;
+      background: white;
+      color: $green;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Lora';
+    }
+  }
+
+}
+
+.filters-container {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: $filter-height;
+
+  &, & * {
+    z-index: calc($header-z-index - 1);
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    height: 90%;
+    top: 0;
+    left: 0;
+    transition: top 500ms ease-in;
+    padding: 10px 0px;
   }
 }
 
@@ -195,6 +270,7 @@ body {
       display: flex;
       flex-direction: row;
       align-items: center;
+      text-align: center;
 
       .fa {
         width: 100%;
@@ -274,7 +350,7 @@ body {
 
   /* Desktop, etc */
   @media (min-width: $screen-md) {
-    height: calc($article-height * 2);
+    height: $article-height-lg;
     width: 70%;
     margin: 0 15%;
   }
@@ -337,11 +413,15 @@ body {
       flex-direction: column;
       align-items: center;
       width: 100%;
+      font-family: 'Open Sans';
+      font-weight: normal;
     }
   }
 
   .headline {
-    font-size: calc($article-height * .2);
+    font-size: calc($article-height * .23);
+    font-family: 'Open Sans';
+    font-weight: normal;
     height: $article-height;
     color: black;
     font-weight: bold;

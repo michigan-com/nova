@@ -9,6 +9,8 @@ import ActiveArticle from './components/active-article';
 import SectionFilter from './components/section-filter';
 import LoadingImage from './components/loading-image';
 
+import Config from '../../../config';
+
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
 function formatNumber(num) {
@@ -29,11 +31,33 @@ class NowDashboard extends React.Component {
 
     this.maxFilterTop = 0;
     this.minFilterTop = -100;
+
+    this.prevWindowWidth = window.innerWidth;
+    this.windowSmall = 768;
+    this.windowMid = 992;
+
+    window.onresize = this.resize;
+
+    this.state = {
+      articlesLoading: true,
+      filterTop: 0,
+      windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall,
+      showInfo: false
+    }
   }
 
-  state = {
-    articlesLoading: true,
-    filterTop: 0,
+
+  resize = () => {
+    let currentWidth = window.innerWidth;
+
+    if (this.prevWindowWidth <= this.windowMid && currentWidth > this.windowMid) {
+      this.setState({ windowSize: this.windowSmall })
+    }
+    else if (this.prevWindowWidth > this.windowMid && currentWidth <= this.windowMid) {
+      this.setState({ windowSize: this.windowMid })
+    }
+
+    this.prevWindowWidth = currentWidth;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -98,6 +122,11 @@ class NowDashboard extends React.Component {
     this.setState({ filterTop: newFilterTop });
   }
 
+  toggleInfo = () => {
+    let showInfo = !this.state.showInfo;
+    this.setState({ showInfo });
+  }
+
   renderSectionOptions() {
     let activeSection = this.props.activeSectionIndex;
 
@@ -133,18 +162,33 @@ class NowDashboard extends React.Component {
     else if (hour >= 6) greeting = 'Good Evening';
 
     let readers = '';
-    if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} now reading`;
+    if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} readers`;
+
+    let siteInfoClass = 'site-info';
+    if (this.state.showInfo) siteInfoClass += ' show';
 
     return(
       <div id='header'>
+        <div className={ siteInfoClass }>
+          <div className='info-content'>
+            <p>{ `${Config.appName} uses artificial intelligence to give you essential news in less time.` }</p>
+            <ol>
+              <li>{ `${Config.appName}'s algorithms surface the most-read Michigan news, in real-time.` }</li>
+              <li>Its summarization engine distills each story down to the 3 details you need to know.</li>
+              <li>The speed reader enables you to absorb the full story in a fraction of the normal time.</li>
+            </ol>
+            <p>Feedback? We'd love to hear it.</p>
+            <a href='#' id='email-us'>Email Us</a>
+          </div>
+        </div>
         <div className='header-info'>
-          <div id='page-header'>Detroit Now</div>
+          <div id='page-header'>{ Config.appName }</div>
           <div id='readers'>
             <div id='glasses'><img src='/img/glasses.svg'/></div>
             <div id='numbers'>{ readers }</div>
           </div>
+          <div id='info' onClick={ this.toggleInfo }><span className='info-button'>i</span></div>
         </div>
-        { this.renderSectionOptions() }
       </div>
     )
   }
@@ -166,6 +210,7 @@ class NowDashboard extends React.Component {
       topArticles.push(
         <TopArticle article={ article }
             rank={ index }
+            windowSize={ this.state.windowSize }
             clicked={ this.props.clickedArticles.has(article.article_id) }
             key={ `article-${article.url}` }/>
       )
@@ -196,12 +241,13 @@ class NowDashboard extends React.Component {
     } else {
       let topArticles = this.renderArticles();
       let style = {};
-      if (topArticles.length) style.height = topArticles.length * (50 + 10); // Height * padding
+      if (topArticles.length) style.height = topArticles.length * (TopArticle.getHeight() + 10); // Height * padding
       dashboardContents = (
         <div className='dashboard-container'>
           <div className='header-container'>
             { this.renderHeader() }
           </div>
+          { this.renderSectionOptions() }
           <div className='top-articles-container' style={ style }>
             { topArticles }
           </div>

@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
 
+import Config from '../../../config';
 import Dispatcher from '../dispatcher';
 
 /** Browser history stuff */
@@ -14,6 +15,7 @@ window.onpopstate = (e) => {
 }
 
 var ARTICLE_CHANGE = 'article-change';
+var articleIdUrlRegex = /^\/article\/(\d+)\/?$/;
 
 
 function getArticleActions() {
@@ -132,27 +134,16 @@ var Store = assign({}, EventEmitter.prototype, {
     if (store.activeArticle != null || store.articleLoading) return;
 
     store.activeArticleReaders = readers;
-
-    if (articleId in articleCache) {
-      // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
-      History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
-      store.activeArticle = articleCache[articleId];
-      this.emitChange();
-      return;
-    }
-
-    store.articleLoading = true;
-    store.clickedArticles.get(articleId, true);
     this.emitChange();
 
     this.fetchActiveArticle(articleId);
   },
 
   closeActiveArticle() {
+    console.log('closeActiveArticle');
     store.activeArticle = null;
     store.articleLoading = false;
     store.speedReading = false;
-    History.pushState({}, 'Top Articles', '/');
     this.emitChange();
   },
 
@@ -174,29 +165,44 @@ var Store = assign({}, EventEmitter.prototype, {
     let state = History.getState();
     let stateTitle = state.title;
 
-    let articleIdMatch = /Article\s+(\d+)/.exec(stateTitle);
+    let articleIdMatch = articleIdUrlRegex.exec(window.location.pathname);
 
-    // We were on a page and now we're going back
-    if (articleIdMatch) {
+    console.log(window.location.pathname,/^\/$/.test(window.location.pathname))
+    if (/^\/$/.test(window.location.pathname)) {
       this.closeActiveArticle();
+    } else if (articleIdMatch) {
+      this.fetchActiveArticle(parseInt(articleIdMatch[1]));
     }
   },
 
-  /** Mapi interactions */
   fetchActiveArticle(articleId) {
-    xr.get(`https://api.michigan.com/v1/article/${articleId}/`)
-      .then((data) => {
-        articleCache[articleId] = data;
-        store.activeArticle = data;
+    let _renderArticleFromCache = (id) => {
+        let article = articleCache[id];
+        History.pushState({ id }, `${article.headline}`, `/article/${id}/`);
+        store.activeArticle = article;
         store.articleLoading = false;
-
-        History.pushState({ articleId }, `Article ${articleId}`, `?articleId=${articleId}`);
         this.emitChange();
-      }, (e) => {
-      console.log(`Failed to fetch article https://api.michigan.com/v1/article/${articleId}/`);
-      this.closeActiveArticle();
-    });
+    }
+
+    store.articleLoading = true;
+    if (articleId in articleCache) {
+      // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
+      _renderArticleFromCache(articleId);
+    } else {
+      store.clickedArticles.set(articleId, true);
+
+      xr.get(`${Config.socketUrl}/v1/article/${articleId}/`)
+        .then((data) => {
+          articleCache[articleId] = data;
+          _renderArticleFromCache(articleId);
+
+        }, (e) => {
+        console.log(`Failed to fetch article ${Config.socketUrl}/v1/article/${articleId}/`);
+        this.closeActiveArticle();
+      });
+    }
   }
+
 
 });
 
@@ -212,6 +218,7 @@ Dispatcher.register(function(action) {
       Store.updateActiveArticle(action.article_id, action.readers);
       break;
     case ArticleActions.closeActiveArticle:
+      History.pushState({}, Config.appName, '/');
       Store.closeActiveArticle();
       break;
     case ArticleActions.sectionSelect:
@@ -227,9 +234,10 @@ Dispatcher.register(function(action) {
 });
 
 // See if we have an ?articleId= url param
-let parsed = url.parse(window.location.href, true);
-if (parsed.query && 'articleId' in parsed.query && !isNaN(parsed.query.articleId)) {
-    Store.updateActiveArticle(parseInt(parsed.query.articleId));
+// window.location.pathname
+let match = articleIdUrlRegex.exec(window.location.pathname);
+if (match) {
+    Store.updateActiveArticle(parseInt(match[1]));
 }
 
 module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions }
