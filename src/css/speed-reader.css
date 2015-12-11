@@ -274,7 +274,7 @@ $speed-control-height: 15vh;
   }
 
   .speed-button {
-    @mixin button white calc($controls-height * .8);
+    @mixin button white, calc($controls-height * .8);
     display: flex;
     flex-direction: row;
     align-items: center;

@@ -156,10 +156,11 @@ body {
     font-weight: bold;
     font-family: 'Open Sans';
     font-weight: 800;
-    width: 60%;
+    width: 70%;
     font-size: 26px;
     line-height: 30px;
-    margin-left: 19px;
+    margin-left: 13px;
+    min-width: 200px;
 
     @media (min-width: $screen-md) {
       width: 70%;
@@ -182,7 +183,7 @@ body {
     font-weight: normal;
     text-transform: uppercase;
     text-transform: center;
-    width: 40%;
+    width: 25%;
     padding: 0;
 
     @media (min-width: $screen-md) {
@@ -221,7 +222,7 @@ body {
     flex-direction: column;
     align-items: flex-end;
     margin-right: 15px;
-    width: 10%;
+    width: 5%;
 
     .info-button {
       width: 18px;
