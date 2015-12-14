@@ -84,7 +84,7 @@ body {
       height: 50vh;
 
       @media (max-width: $screen-sm) {
-        height: 80vh;
+        height: 70vh;
       }
     }
 
