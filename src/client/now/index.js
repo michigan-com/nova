@@ -67,16 +67,6 @@ class NowDashboard extends React.Component {
         this.setState({ articlesLoading: false });
       }, 1000);
     }
-
-    if (this.props.activeSectionIndex !== nextProps.activeSectionIndex) {
-      this.drawnArticles.clear();
-    }
-
-    if (nextProps.articleLoading || !!nextProps.activeArticle) {
-      window.removeEventListener('scroll', this.checkScroll);
-    } else if ((!nextProps.activeArticle && !!this.props.activeArticle)) {
-      window.addEventListener('scroll', this.checkScroll);
-    }
   }
 
   componentDidMount() {
@@ -92,35 +82,6 @@ class NowDashboard extends React.Component {
     }
   }
 
-  checkScroll = () => {
-    let scrollY = window.scrollY;
-    if (scrollY < 0) scrollY = 0;
-    let scrollDelta = scrollY - this.lastScrollY;
-
-    // scrolling down
-    if (scrollDelta > 0) {
-      scrollDelta /= 10; // scale it down a bit
-      if (this.scrollMagnitude < 0) this.scrollMagnitude = 0;
-      else this.scrollMagnitude += scrollDelta;
-    }
-
-    // scrolling up
-    else if (scrollDelta < 0) {
-      if (this.scrollMagnitude > 0) this.scrollMagnitude = 0;
-      else  this.scrollMagnitude += scrollDelta;
-
-    }
-
-    let newFilterTop = this.state.filterTop;
-    if (scrollDelta < 0 && this.scrollMagnitude < -10) {
-      newFilterTop = this.maxFilterTop;
-    } else if (scrollDelta > 0 && this.scrollMagnitude > 10) {
-      newFilterTop = this.minFilterTop;
-    }
-
-    this.lastScrollY = scrollY;
-    this.setState({ filterTop: newFilterTop });
-  }
 
   toggleInfo = () => {
     let showInfo = !this.state.showInfo;
@@ -130,12 +91,9 @@ class NowDashboard extends React.Component {
   renderSectionOptions() {
     let activeSection = this.props.activeSectionIndex;
 
-    let filtersStyle = {};
-    filtersStyle.top = `${this.state.filterTop}%`;
-
     return (
       <div className='filters-container'>
-        <div className='filters' style={ filtersStyle }>
+        <div className='filters'>
           {
             this.props.sections.map(function(section, index) {
               return (

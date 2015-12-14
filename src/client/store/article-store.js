@@ -25,7 +25,7 @@ function getArticleActions() {
     articleSelected: 'article-selected',
     sectionSelect: 'section-select',
     startSpeedReading: 'start-speed-reading',
-    stopSpeedReading: 'stop-speed-reading'
+    stopSpeedReading: 'stop-speed-reading',
   }
 }
 
@@ -62,6 +62,8 @@ function defaultArticleStore() {
 var store =  defaultArticleStore();
 var articleCache = {};
 var ArticleActions = getArticleActions()
+
+var bodyScrollTop = document.body.scrollTop;
 
 var Store = assign({}, EventEmitter.prototype, {
   /** Register stuff */
@@ -140,10 +142,18 @@ var Store = assign({}, EventEmitter.prototype, {
   },
 
   closeActiveArticle() {
-    console.log('closeActiveArticle');
     store.activeArticle = null;
     store.articleLoading = false;
     store.speedReading = false;
+
+
+    // TODO do this after we decide on an animation from close article ->
+    // top articles
+    //
+    //console.log(document.body.clientHeight)
+    //document.body.scrollTop = bodyScrollTop;
+    //console.log(`Set scrollTop to ${bodyScrollTop}: ${document.body.scrollTop}`)
+
     this.emitChange();
   },
 
@@ -167,7 +177,6 @@ var Store = assign({}, EventEmitter.prototype, {
 
     let articleIdMatch = articleIdUrlRegex.exec(window.location.pathname);
 
-    console.log(window.location.pathname,/^\/$/.test(window.location.pathname))
     if (/^\/$/.test(window.location.pathname)) {
       this.closeActiveArticle();
     } else if (articleIdMatch) {
@@ -181,9 +190,16 @@ var Store = assign({}, EventEmitter.prototype, {
         History.pushState({ id }, `${article.headline}`, `/article/${id}/`);
         store.activeArticle = article;
         store.articleLoading = false;
+
+        // Deal with scrollTop. Store the old one and set the body scroll
+        // top to 0. Store the old one and set the body scroll
+        document.body.scrollTop = 0;
+
         this.emitChange();
     }
 
+    bodyScrollTop = document.body.scrollTop;
+    console.log(`saving ${bodyScrollTop}`)
     store.articleLoading = true;
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
@@ -202,8 +218,6 @@ var Store = assign({}, EventEmitter.prototype, {
       });
     }
   }
-
-
 });
 
 Dispatcher.register(function(action) {
@@ -229,6 +243,9 @@ Dispatcher.register(function(action) {
       break;
     case ArticleActions.stopSpeedReading:
       Store.setSpeedReading(false);
+      break;
+    case ArticleActions.resetScroll:
+      Store.resetScroll();
       break;
   }
 });
