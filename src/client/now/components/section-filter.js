@@ -27,7 +27,7 @@ export default class SectionFilter extends React.Component {
           <div className='icon'><i className='fa fa-times'></i></div>
           <div className={ activeIconClass }><i className='fa fa-check'></i></div>
         </div>
-        <div className='section-filter-name'>{ this.props.name }</div>
+        <div className='section-filter-name'>{ this.props.displayName || this.props.name }</div>
       </div>
     )
   }

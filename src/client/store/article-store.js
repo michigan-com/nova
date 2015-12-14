@@ -56,6 +56,7 @@ function defaultArticleStore() {
       showArticles: true
     }, {
       name: 'local',
+      displayName: 'news',
       showArticles: true
     }]
   }

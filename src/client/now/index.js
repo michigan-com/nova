@@ -98,6 +98,7 @@ class NowDashboard extends React.Component {
             this.props.sections.map(function(section, index) {
               return (
                 <SectionFilter name={ section.name }
+                            displayName={ section.displayName }
                             active={ section.showArticles }
                             key={ `section-${section.name}` }/>
               )
