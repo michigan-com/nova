@@ -4,6 +4,7 @@ import url from 'url';
 import { EventEmitter } from 'events';
 import assign from 'object-assign';
 import xr from 'xr';
+import Cookies from 'cookies-js';
 
 import Config from '../../../config';
 import Dispatcher from '../dispatcher';
@@ -15,6 +16,7 @@ window.onpopstate = (e) => {
 }
 
 var ARTICLE_CHANGE = 'article-change';
+var ARTICLEID_COOKIE = 'articleIds';
 var articleIdUrlRegex = /^\/article\/(\d+)\/?$/;
 
 
@@ -39,7 +41,7 @@ function defaultArticleStore() {
     // Active article stuff
     activeArticle: null,
     activeArticleReaders: 0,
-    clickedArticles: new Map(),
+    clickedArticles: new Set(getArticleIdsFromCookie()),
     speedReading: false,
 
     // State management, might want this somewhere else
@@ -198,14 +200,15 @@ var Store = assign({}, EventEmitter.prototype, {
         this.emitChange();
     }
 
+
     bodyScrollTop = document.body.scrollTop;
-    console.log(`saving ${bodyScrollTop}`)
     store.articleLoading = true;
     if (articleId in articleCache) {
       // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
       _renderArticleFromCache(articleId);
     } else {
-      store.clickedArticles.set(articleId, true);
+      store.clickedArticles.add(articleId);
+      saveArticleIdsToCookie(store.clickedArticles);
 
       xr.get(`${Config.socketUrl}/v1/article/${articleId}/`)
         .then((data) => {
@@ -255,6 +258,43 @@ Dispatcher.register(function(action) {
 let match = articleIdUrlRegex.exec(window.location.pathname);
 if (match) {
     Store.updateActiveArticle(parseInt(match[1]));
+}
+
+/**
+ * Read the cookie 'articleIds'. Expected to be a comma-separated list of numbers.
+ * Will filter out anything that is not a number
+ *
+ * @returns {Set} Set of article IDs
+ */
+function getArticleIdsFromCookie() {
+  let cookie = Cookies.get(ARTICLEID_COOKIE) || '';
+  console.log(cookie);
+  let cookieSplit = cookie.split(',');
+  let articleIds = new Set();
+
+  for (let value of cookieSplit) {
+    if (isNaN(value)) continue;
+    articleIds.add(parseInt(value));
+  }
+  return articleIds;
+}
+
+/**
+ * Given a Set of numbers representing article IDs of clicked articles,
+ * save to the articleIds cookie
+ *
+ * @param {Set} articleIds - Set of article IDs
+ */
+function saveArticleIdsToCookie(articleIds) {
+  let ids = []
+  for (let val of articleIds) {
+    if (isNaN(val)) continue;
+    ids.push(val);
+  }
+
+  let cookieVal = ids.join(',');
+  Cookies.set(ARTICLEID_COOKIE, cookieVal);
+  console.log(Cookies.get(ARTICLEID_COOKIE))
 }
 
 module.exports = { Store, ArticleActions, defaultArticleStore, getArticleActions }
