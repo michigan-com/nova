@@ -84,15 +84,13 @@ body {
       height: 50vh;
 
       @media (max-width: $screen-sm) {
-        height: 75vh;
+        height: 80vh;
       }
     }
 
     .info-content {
       margin: 0 auto;
       height: 100%;
-      display: flex;
-      flex-direction: column;
       align-items: center;
       padding: 20px 15%;
       overflow: scroll;
@@ -127,6 +125,7 @@ body {
       color: white;
       z-index: $header-z-index;
       border-radius: 5%;
+      margin: 0 auto;
 
       &:hover {
 
