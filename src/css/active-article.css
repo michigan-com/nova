@@ -20,6 +20,8 @@ $controls-height: 65px;
   color: black;
   display: flex;
   flex-direction: column;
+  opacity: 1;
+  transition: opacity 250ms linear;
 
   &.photo-loaded {
 
@@ -41,6 +43,10 @@ $controls-height: 65px;
     .active-article {
       display: none;
     }
+  }
+
+  &.fade-out-article {
+    opacity: 0;
   }
 
   &:after {

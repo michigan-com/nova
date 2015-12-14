@@ -32,6 +32,9 @@ class NowDashboard extends React.Component {
     this.maxFilterTop = 0;
     this.minFilterTop = -100;
 
+    this.lastClickedArticleId = -1;
+    this.lastScrollTop = document.body.scrollTop;
+
     this.prevWindowWidth = window.innerWidth;
     this.windowSmall = 768;
     this.windowMid = 992;
@@ -42,7 +45,8 @@ class NowDashboard extends React.Component {
       articlesLoading: true,
       filterTop: 0,
       windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall,
-      showInfo: false
+      showInfo: false,
+      activeArticleClose: false
     }
   }
 
@@ -56,7 +60,6 @@ class NowDashboard extends React.Component {
     else if (this.prevWindowWidth > this.windowMid && currentWidth <= this.windowMid) {
       this.setState({ windowSize: this.windowMid })
     }
-
     this.prevWindowWidth = currentWidth;
   }
 
@@ -67,6 +70,16 @@ class NowDashboard extends React.Component {
         this.setState({ articlesLoading: false });
       }, 1000);
     }
+
+    if ((nextProps.activeArticle && !this.props.activeArticle) && nextProps.activeArticle.articleId !== this.lastClickedArticleId) {
+      this.lastScrollTop = document.body.scrollTop;
+      document.body.scrollTop = 0;
+      this.lastClickedArticleId = nextProps.activeArticle.article_id;
+    }
+
+    if (!!this.props.activeArticle && !nextProps.activeArticle) {
+      this.setState({ activeArticleClose: true });
+    }
   }
 
   componentDidMount() {
@@ -74,11 +87,19 @@ class NowDashboard extends React.Component {
   }
 
   // Save what articles are currently drawn
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.drawnArticles.clear()
 
     for (let article in this.props.topArticle) {
       this.drawnArticles.add(article.article_id);
+    }
+
+    if (!prevState.activeArticleClose && this.state.activeArticleClose) {
+      document.body.scrollTop = this.lastScrollTop;
+      this.lastClickedArticleId = -1;
+      setTimeout(() => {
+        this.setState({ activeArticleClose: false });
+      }, 250);
     }
   }
 
@@ -171,6 +192,7 @@ class NowDashboard extends React.Component {
             rank={ index }
             windowSize={ this.state.windowSize }
             clicked={ this.props.clickedArticles.has(article.article_id) }
+            lastClickedArticle={ article.article_id === this.lastClickedArticleId }
             key={ `article-${article.url}` }/>
       )
     }
@@ -201,13 +223,16 @@ class NowDashboard extends React.Component {
       let topArticles = this.renderArticles();
       let style = {};
       if (topArticles.length) style.height = topArticles.length * (TopArticle.getHeight() + 10); // Height * padding
+
+      let topArticlesContainerClass = 'top-articles-container';
+      if (this.state.activeArticleClose) topArticlesContainerClass += ' active-article-close';
       dashboardContents = (
         <div className='dashboard-container'>
           <div className='header-container'>
             { this.renderHeader() }
           </div>
           { this.renderSectionOptions() }
-          <div className='top-articles-container' style={ style }>
+          <div className={ topArticlesContainerClass } style={ style }>
             { topArticles }
           </div>
         </div>

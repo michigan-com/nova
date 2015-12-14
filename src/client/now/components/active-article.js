@@ -16,7 +16,9 @@ class ActiveArticle extends React.Component {
       photoLoaded: false,
       fadeImageOut: false,
       fadeInContent: false,
-      fadeSpeedReader: false
+      fadeSpeedReader: false,
+
+      fadeOutArticle: false
     }
 
     this.scrollHooks = [new ScrollHook({
@@ -91,11 +93,13 @@ class ActiveArticle extends React.Component {
   }
 
   closeActiveArticle(e) {
-    Dispatcher.dispatch({
-      type: ArticleActions.closeActiveArticle
-    });
+    this.setState({ fadeOutArticle: true });
+    setTimeout(() => {
+      Dispatcher.dispatch({
+        type: ArticleActions.closeActiveArticle
+      });
+    }, 500);
   }
-
 
   getBackgroundStyle() {
     let article = this.props.article;
@@ -121,10 +125,9 @@ class ActiveArticle extends React.Component {
     let activeArticleContainerClass = 'active-article-container';
     if (this.state.photoLoaded) activeArticleContainerClass += ' photo-loaded';
 
-    if (this.state.fadeSpeedReader) {
-      activeArticleContainerClass += ' fade-in-speed-reader';
-    }
+    if (this.state.fadeSpeedReader) activeArticleContainerClass += ' fade-in-speed-reader';
     else if (this.props.speedReading) activeArticleContainerClass += ' speed-reading';
+    else if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
 
     let article = this.props.article;
     let activeArticleClass = 'active-article';
