@@ -21,7 +21,8 @@ class ActiveArticle extends React.Component {
 
     this.scrollHooks = [new ScrollHook({
       ref: 'article-content',
-      scrollTopThreshold: '10%',
+      scrollTopThresholdDown: '10%',
+      scrollTopThresholdUp: '30%',
       scrollDownHook: () => { this.setState({ fadeImageOut: true }) }.bind(this),
       scrollUpHook: () => { this.setState({ fadeImageOut: false }) }.bind(this),
     })];

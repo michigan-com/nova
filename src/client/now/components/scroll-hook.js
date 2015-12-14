@@ -2,10 +2,14 @@
 
 import assign from 'object-assign';
 
+let SCROLL_UP = 'up';
+let SCROLL_DOWN = 'down';
+
 export default class ScrollHook {
-  defaultProps = {
+  static defaultProps = {
     ref: '', // string or array
-    scrollTopThreshold: '0px',
+    scrollTopThresholdDown: '0px',
+    scrollTopThresholdUp: '0px',
     scrollDownHook: () => {},
     scrollUpHook: () => {}
   }
@@ -18,20 +22,26 @@ export default class ScrollHook {
     this.scrollTop = null;
   }
 
+  getScrollDirection() {
+    return this.lastScrollTop > this.scrollTop ? SCROLL_UP : SCROLL_DOWN;
+  }
+
   shouldTriggerHook(scrollNode) {
     if (this.lastScrollTop === null || this.scrollTop === null) return false;
 
-    let threshold = this.getThreshold(scrollNode);
+    let scrollThreshold = this.opts.scrollTopThresholdDown;
+    let scrollDirection = this.getScrollDirection();
+    if (scrollDirection === SCROLL_UP) {
+      scrollThreshold = this.opts.scrollTopThresholdUp;
+    }
+
+    let threshold = this.getThreshold(scrollNode, scrollThreshold);
     if (threshold === null) return false;
 
-    if (this.scrollTop >= threshold) {
-      if (this.lastScrollTop <= threshold) {
-        return true;
-      }
-    } else {
-      if (this.lastScrollTop >= threshold) {
-        return true;
-      }
+    if (this.scrollTop >= threshold && scrollDirection === SCROLL_DOWN) {
+      return true;
+    } else if (this.scrollTop < threshold && scrollDirection === SCROLL_UP) {
+      return true;
     }
 
     return false;
@@ -45,18 +55,17 @@ export default class ScrollHook {
     }
   }
 
-  getThreshold(scrollNode) {
-    let pxMatch = /^(\d+)px$/.exec(this.opts.scrollTopThreshold);
+  getThreshold(scrollNode, threshold) {
+    let pxMatch = /^(\d+)px$/.exec(threshold);
     if (pxMatch) {
       return pxMatch(1);
     }
 
-    let percentMatch = /^(\d+)%$/.exec(this.opts.scrollTopThreshold);
+    let percentMatch = /^(\d+)%$/.exec(threshold);
     if (percentMatch) {
       return (document.body.clientHeight - window.innerHeight) * (percentMatch[1] / 100);
       //return (scrollNode.scrollHeight - scrollNode.clientHeight) * (percentMatch[1]) / 100
     }
-
     return null;
   }
 

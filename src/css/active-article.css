@@ -5,6 +5,7 @@
 $active-article-z-index: 100;
 $active-image-z-index: 1;
 $article-content-padding: 15px;
+$active-article-top-padding: 30vh;
 
 $summary-font-size: 20px;
 
@@ -25,6 +26,10 @@ $controls-height: 65px;
     .article-image {
       background-size: auto 100%;
       opacity: 1;
+
+      @media (min-width: $screen-md) {
+        background-size: 75% auto;
+      }
     }
 
     .article-content-container {
@@ -63,19 +68,23 @@ $controls-height: 65px;
     position: fixed;
     top: 0;
     left: 0;
-    height: 50%;
+    height: calc($active-article-top-padding * 1.2);
     width: 100%;
     z-index: $active-image-z-index;
     transition: all 500ms linear;
     background-size: auto 75%;
     opacity: 0;
+
+    @media (min-width: $screen-md) {
+      background-size: 75% auto;
+    }
   }
 }
 
 
 .active-article {
   width: 100%;
-  padding-top: 30vh;
+  padding-top: $active-article-top-padding;
   overflow-y: auto;
   position: relative;
   background-color: transparent;
@@ -91,6 +100,10 @@ $controls-height: 65px;
     .article-image {
       background-size: auto 75%;
       opacity: 0;
+
+      @media (min-width: $screen-md) {
+        background-size: 75% auto;
+      }
     }
   }
 
@@ -126,10 +139,11 @@ $controls-height: 65px;
 .article-content-container {
   width: 100%;
   position: relative;
-  background-color: transparent;
+  background-color: white;
   z-index: calc($active-image-z-index * 2);
   opacity: 0;
   transition: opacity 250ms linear;
+  box-shadow: 0 0 50px 5vh white;
 
   .article-content {
     display: flex;
