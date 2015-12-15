@@ -31,6 +31,8 @@ export default class SectionFilters extends React.Component {
     let scrollTop = document.body.scrollTop;
     let delta = scrollTop - this.lastScrollTop;
 
+    if (scrollTop < 0 || scrollTop > window.innerHeight) return;
+
     if ((delta > 0 && this.scrollVelocity > delta) || (delta < 0 && this.scrollVelocity < 0))  {
       this.scrollVelocity += delta;
     }
