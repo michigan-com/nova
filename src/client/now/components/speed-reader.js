@@ -209,10 +209,9 @@ export default class SpeedReader extends React.Component {
   }
 
   renderSpeedControl() {
-    let speedControl = null;
-    if (!this.state.playing && !!this.controller) {
-      speedControl = <SpeedControl speed={ this.controller.readingSpeed } updateSpeed={ this.updateSpeed }/>;
-    }
+    if (this.state.playing || !this.controller) return null;
+
+    let speedControl = <SpeedControl speed={ this.controller.readingSpeed } updateSpeed={ this.updateSpeed }/>;
 
     return (
       <div className='speed-control-container'>
@@ -231,13 +230,15 @@ export default class SpeedReader extends React.Component {
     return (
       <div className={ speedReaderClass }>
         <div className='context'> { this.renderContext() }</div>
-        <div ref='speed-reader'></div>
+        <div className='speed-reader-content'>
+          <div ref='speed-reader'></div>
+          { this.renderCountdown() }
+        </div>
         <div className='speed-reader-controls'>
           { this.renderControls() }
           <div className='wpm' ref='wpm'></div>
           <div className='time-remaining' ref='time-remaining'></div>
         </div>
-        { this.renderCountdown() }
         { this.renderSpeedControl() }
         <div className='controls'>
           <div className='control-container'>
@@ -275,9 +276,16 @@ class SpeedControl extends React.Component {
     this.parentNode.removeEventListener('scroll', this.updateSpeed);
   }
 
-  updateSpeed = () => {
-    let speed = this.parentNode.scrollLeft;
-    this.props.updateSpeed(speed);
+  updateSpeed = (e) => {
+
+    // Don't allow 0 wpm
+    if (!this.parentNode.scrollLeft) {
+      e.preventDefault();
+      e.stopPropagation;
+      this.parentNode.scrollLeft = 1;
+    }
+
+    this.props.updateSpeed(this.parentNode.scrollLeft);
   }
 
   renderSteps() {

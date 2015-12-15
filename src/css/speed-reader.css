@@ -77,6 +77,11 @@ $speed-control-height: 15vh;
     }
   }
 
+  .speed-reader-content {
+    width: 100%;
+    position: relative;
+  }
+
   .speed-reader-controls {
     width: 100%;
 
@@ -93,18 +98,24 @@ $speed-control-height: 15vh;
   }
 
   .countdown-container {
-    height: 50px;
+    position: absolute;
+    top: 5%;
+    left: 0;
+    z-index: 10;
+    height: 90%;
     width: 100%;
+    background: $red;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    opacity: .7;
     transition: opacity 250ms linear;
 
     .countdown-number {
       line-height: 50px;
       font-size: 30px;
-      color: #dc0037;
+      color: white;
+      width: 100%;
+      text-align: center;
       @extend smack;
     }
   }
@@ -195,7 +206,7 @@ $speed-control-height: 15vh;
   width: 100%;
   height: calc($speed-reader-font-size * 3);
   font-size: $speed-reader-font-size;
-  margin: .3em;
+  padding: .3em .5em;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -290,13 +301,14 @@ $speed-control-height: 15vh;
   width: 100%;
   height: $speed-control-height;
   position: fixed;
-  bottom: $controls-height;
+  bottom: 0;
   overflow-x: scroll;
+  z-index: 10;
 
   &:before, &:after {
     content: "";
     position: fixed;
-    bottom: $controls-height;
+    bottom: 0;
     width: 0;
     height: $speed-control-height;
     box-shadow: 0 0 23vw 15vw white;
@@ -353,7 +365,7 @@ $speed-control-height: 15vh;
 
 .center-bar {
   position: fixed;
-  top: calc(100vh - $speed-control-height - $controls-height);
+  bottom: $speed-control-height;
   width: 100vw;
   display: flex;
   flex-direction: row;
