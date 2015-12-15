@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { Store, defaultArticleStore } from '../store/article-store';
 import TopArticle from './components/top-article';
 import ActiveArticle from './components/active-article';
-import SectionFilter from './components/section-filter';
+import SectionFilters from './filters';
 import LoadingImage from './components/loading-image';
 
 import Config from '../../../config';
@@ -107,27 +107,6 @@ class NowDashboard extends React.Component {
   toggleInfo = () => {
     let showInfo = !this.state.showInfo;
     this.setState({ showInfo });
-  }
-
-  renderSectionOptions() {
-    let activeSection = this.props.activeSectionIndex;
-
-    return (
-      <div className='filters-container'>
-        <div className='filters'>
-          {
-            this.props.sections.map(function(section, index) {
-              return (
-                <SectionFilter name={ section.name }
-                            displayName={ section.displayName }
-                            active={ section.showArticles }
-                            key={ `section-${section.name}` }/>
-              )
-            })
-          }
-        </div>
-      </div>
-    )
   }
 
   renderHeader() {
@@ -231,7 +210,9 @@ class NowDashboard extends React.Component {
           <div className='header-container'>
             { this.renderHeader() }
           </div>
-          { this.renderSectionOptions() }
+
+          <SectionFilters sections={ this.props.sections } activeSectionIndex={ this.props.activeSectionIndex }/>
+
           <div className={ topArticlesContainerClass } style={ style }>
             { topArticles }
           </div>

@@ -6,7 +6,7 @@ import Polyfill from 'babel-polyfill';
 import Config from '../../config';
 import Dispatcher from './dispatcher';
 import { ArticleActions } from './store/article-store';
-import { initDashboard } from './now/index';
+import { initDashboard } from './now/dashboard';
 
 document.addEventListener('DOMContentLoaded', init);
 
