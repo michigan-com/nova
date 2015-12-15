@@ -2,7 +2,7 @@
 
 import express from 'express';
 import debug from 'debug';
-import xr from 'xr';
+import request from 'request';
 
 import Config from '../config';
 
@@ -24,8 +24,30 @@ router.get('/article/:articleId/', (req, res, next) => {
     return;
   }
 
-  res.render('now', {
-    title: Config.appName,
+  let url = `${Config.socketUrl}/v1/article/${articleId}/`;
+  logger(`Fetching ${url}`);
+  request.get(url, (err, response, body) => {
+    if (err) {
+      res.status(404);
+      next();
+      return
+    }
+
+    let article = JSON.parse(body);
+    let photoUrl = '';
+    let title = article.headline;
+    let description = article.subheadline;
+    if (article.photo) {
+      photoUrl = article.photo.full.url
+    }
+
+    res.render('now', {
+      currentUrl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+      metaTags: true,
+      title,
+      photoUrl,
+      description
+    });
   });
 });
 
