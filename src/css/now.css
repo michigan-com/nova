@@ -248,6 +248,7 @@ body {
   flex-direction: row;
   align-items: stretch;
   height: $filter-height;
+  background-color: #f2f2f2;
 
   &, & * {
     z-index: calc($header-z-index - 1);
@@ -259,11 +260,10 @@ body {
     align-items: center;
     width: 100%;
     padding: 0;
-    height: 90%;
+    height: 100%;
     top: 0;
     left: 0;
     transition: top 500ms ease-in;
-    padding: 10px 0px;
   }
 }
 
@@ -276,17 +276,27 @@ body {
   flex-grow: 1;
   cursor: pointer;
   transition: all 150ms linear;
-  color: $blue;
+
+  &.active {
+    .active-icon {
+      opacity: 1 !important;
+    }
+
+    .icon {
+      opacity: 0 !important;
+    }
+  }
 
   .section-circle {
-    @mixin button;
+    height: $button-height;
+    width: $button-height;
+    cursor: pointer;
     position: relative;
 
     .icon, .active-icon {
       height: 100%;
       width: 100%;
       position: absolute;
-      border-radius: 50%;
       top: 0;
       left: 0;
       transition: opacity 250ms linear;
@@ -294,37 +304,33 @@ body {
       flex-direction: row;
       align-items: center;
       text-align: center;
+      border-radius: 50%;
 
-      .fa {
+      img {
         width: 100%;
-        font-size: calc($filter-circle-height * .5);
       }
     }
 
     .icon {
       background: white;
-      color: $blue;
       opacity: 1;
     }
 
     .active-icon {
-      background: $blue;
+      background-color: $red;
       color: white;
       opacity: 0;
-
-      &.active {
-        opacity: 1;
-      }
     }
   }
 
   .section-filter-name {
     font-size: calc($filter-name-height * .8);
-    text-transform: capitalize;
+    text-transform: uppercase;
     margin: 0 auto;
+    font-weight: 400;
 
     @media (max-width: $screen-sm) {
-      font-size: calc($filter-name-height * .5)
+      font-size: calc($filter-name-height * .7)
     }
   }
 }

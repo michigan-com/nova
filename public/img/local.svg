@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: sketchtool 3.4.4 (395) - http://www.bohemiancoding.com/sketch -->
+    <title>local</title>
+    <desc>Created with sketchtool.</desc>
+    <defs></defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="loading" sketch:type="MSArtboardGroup" transform="translate(-302.000000, -145.000000)" stroke="#E14E48">
+            <g id="local" sketch:type="MSLayerGroup" transform="translate(302.000000, 145.000000)">
+                <circle id="base-copy" sketch:type="MSShapeGroup" cx="14" cy="14" r="13"></circle>
+                <g id="Page-1" transform="translate(8.000000, 6.000000)" sketch:type="MSShapeGroup" stroke-linejoin="round">
+                    <path d="M6.06857647,7.42283333 L3.95163529,8.62783333 L4.5114,6.3555 L2.64363529,4.82616667 L5.10787059,4.62616667 L6.06857647,2.4755 L7.03175294,4.62616667 L9.49492941,4.82616667 L7.62575294,6.3555 L8.18587059,8.62783333 L6.06857647,7.42283333 L6.06857647,7.42283333 Z" id="Stroke-1" stroke-linecap="round"></path>
+                    <path d="M11.7866471,5.40136667 C11.7866471,8.38203333 6.06864706,16.0000333 6.06864706,16.0000333 C6.06864706,16.0000333 0.352764706,8.38203333 0.352764706,5.40136667 C0.352764706,2.41736667 2.91158824,3.33333333e-05 6.06864706,3.33333333e-05 C9.22570588,3.33333333e-05 11.7866471,2.41736667 11.7866471,5.40136667 L11.7866471,5.40136667 Z" id="Stroke-2"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
