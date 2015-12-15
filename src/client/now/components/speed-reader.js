@@ -113,23 +113,27 @@ export default class SpeedReader extends React.Component {
 
   togglePlay = () => {
     if (this.state.countdown) {
+      this.renderRemainingTime();
       this.setState({ playing: !this.state.playing, countdownIndex: null});
       return;
     }
 
     let playing = !this.state.playing;
+    if (!playing) this.renderRemainingTime();
     this.setState({ playing });
   }
 
   nextPara = () => {
     if (!this.controller || this.state.playing) return;
     this.controller.moveToNextParagraph();
+    this.renderRemainingTime();
     this.setState({});
   }
 
   prevPara = () => {
     if (!this.controller || this.state.playing) return;
     this.controller.moveToPreviousParagraph();
+    this.renderRemainingTime();
     this.setState({});
   }
 
@@ -138,6 +142,7 @@ export default class SpeedReader extends React.Component {
 
     this.controller.setReadingSpeed(speed, 'slider');
     this.renderSpeedHTML();
+    this.renderRemainingTime();
   }
 
   renderSpeedHTML = () => {
@@ -145,6 +150,13 @@ export default class SpeedReader extends React.Component {
     if (!ref) return;
 
     ref.innerHTML = `${this.controller.readingSpeed} WPM`;
+  }
+
+  renderRemainingTime = () => {
+    let ref = this.refs['time-remaining'];
+    if (!ref) return;
+
+    ref.innerHTML = `${this.controller.getRemainingTime()} remaining`;
   }
 
   renderCountdown() {
@@ -209,12 +221,6 @@ export default class SpeedReader extends React.Component {
     )
   }
 
-  renderWPM() {
-    return (
-      <div className='wpm' ref='wpm'></div>
-    )
-  }
-
   render() {
     let speedReaderClass = 'speed-reader';
     if (this.state.speedReaderFadeIn) {
@@ -228,7 +234,8 @@ export default class SpeedReader extends React.Component {
         <div ref='speed-reader'></div>
         <div className='speed-reader-controls'>
           { this.renderControls() }
-          { this.renderWPM() }
+          <div className='wpm' ref='wpm'></div>
+          <div className='time-remaining' ref='time-remaining'></div>
         </div>
         { this.renderCountdown() }
         { this.renderSpeedControl() }

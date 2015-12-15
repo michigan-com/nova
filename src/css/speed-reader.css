@@ -64,7 +64,7 @@ $speed-control-height: 15vh;
       opacity: 1;
     }
 
-    .wpm {
+    .wpm, .time-remaining {
       opacity: .7 !important;
     }
 
@@ -80,7 +80,7 @@ $speed-control-height: 15vh;
   .speed-reader-controls {
     width: 100%;
 
-    .wpm {
+    .wpm, .time-remaining {
       height: 30px;
       line-height: 30px;
       font-size: 15px;
