@@ -13,11 +13,14 @@ export default class LoadingImage extends React.Component {
     numBars: 3
   }
 
-  state = {
-    pulsingIndex: -1,
-    blurbIndex: 0
-  }
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      pulsingIndex: -1,
+      blurbIndex: getRandomInt(0, this.props.blurbs.length - 1)
+    }
+  }
 
   componentDidMount() {
     this.pulse();

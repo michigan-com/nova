@@ -503,7 +503,7 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 100%;
+  width: 90%;
 
   .blurb-container {
     display: flex;

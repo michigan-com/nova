@@ -11,6 +11,20 @@ import LoadingImage from './components/loading-image';
 
 import Config from '../../../config';
 
+let loadingBlurbs = [
+  'Bots are summarizing...',
+  'Artificial intelligence at work...',
+  'Algorithms analyzing news...',
+  'Summary engine cranking...',
+  'Fetching just the news you need...',
+  'News distillation in process...',
+  'Reducing time-to-smart ratios...',
+  'Speed reader revving up...',
+  'Greasing the speed reader...',
+  'Shaving demands on your attention...',
+  'Compressing time requirements...'
+]
+
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
 function formatNumber(num) {
@@ -158,7 +172,7 @@ class NowDashboard extends React.Component {
       if (this.state.fadeOutLoading) className += ' fade-out';
       return (
         <div className={ className }>
-          <LoadingImage blurbs={ ['Loading the news...'] } key='articles-loading'/>
+          <LoadingImage blurbs={ loadingBlurbs } key='articles-loading'/>
         </div>
       )
     }
