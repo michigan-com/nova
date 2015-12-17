@@ -69,7 +69,7 @@ export default class SpeedReader extends React.Component {
         return;
       }
 
-      if (this.state.countdownIndex === 0) {
+      if (this.state.countdownIndex === 1) {
         this.countdownTimeout = setTimeout(() => {
           this.setState({ countdown: false });
         }, 1000);
@@ -161,9 +161,22 @@ export default class SpeedReader extends React.Component {
 
   renderCountdown() {
     if (!this.state.countdown) return;
+
+    let word = '';
+    switch(this.state.countdownIndex) {
+      case 3:
+        word = 'Ready?';
+        break;
+      case 2:
+        word = 'Set...';
+        break;
+      default:
+      case 1:
+        word = 'Go!';
+    }
     return (
       <div className='countdown-container'>
-        <div className='countdown-number' key={ `countdown-${this.state.countdownIndex}` }>{ this.state.countdownIndex }</div>
+        <div className='countdown-content' key={ `countdown-${this.state.countdownIndex}` }>{ word }</div>
       </div>
     )
   }
@@ -226,13 +239,19 @@ export default class SpeedReader extends React.Component {
       speedReaderClass += ' fade-in';
     }
 
+    let countdown = null;
+    if (this.state.countdown && this.state.countdownIndex) {
+      speedReaderClass += ` countdown countdown-${this.state.countdownIndex}`;
+      countdown = this.renderCountdown();
+    }
+
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
       <div className={ speedReaderClass }>
         <div className='context'> { this.renderContext() }</div>
         <div className='speed-reader-content'>
           <div ref='speed-reader'></div>
-          { this.renderCountdown() }
+          { countdown }
         </div>
         <div className='speed-reader-controls'>
           { this.renderControls() }
