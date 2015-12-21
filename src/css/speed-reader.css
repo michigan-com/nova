@@ -380,15 +380,19 @@ $speed-control-height: 15vh;
       height: 100%;
       top: 0;
       width: 1px;
-      background: red;
       position: absolute;
+      background-image: linear-gradient(to bottom, #fff 10%, rgba(255, 255, 255, 0) 0%);
+      background-position: left;
+      background-size: 1px 10px;
+      background-repeat: repeat-y;
 
       .speed-val {
-        color: red;
+        color: white;
         position: absolute;
         top: 0;
         left: 100%;
-        font-size: 7px;
+        font-size: 12px;
+        margin-left: 1px;
       }
     }
   }
