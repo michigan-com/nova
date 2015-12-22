@@ -7,6 +7,7 @@ import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
 import cookieParser from 'cookie-parser';
+import Config from '../config';
 
 var BASE_DIR = path.dirname(__dirname);
 
@@ -24,4 +25,10 @@ export default function configureMiddleware(app) {
   app.use(cookieParser());
   app.use(express.static(path.join(BASE_DIR, 'public')));
   app.use(express.static(path.join(BASE_DIR, 'node_modules')));
+
+  // Store locals for templates
+  app.use((req, res, next) => {
+    res.locals.googleAnalyticsId = Config.googleAnalyticsId;
+    next();
+  });
 }

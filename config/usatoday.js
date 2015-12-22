@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
 module.exports = {
-  "appName": "The Pulse",
-  "socketUrl": "http://api.thepul.se"
+  'appName': 'The Pulse',
+  'socketUrl': 'http://api.thepul.se'
 };
