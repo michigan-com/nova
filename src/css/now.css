@@ -346,7 +346,7 @@ body {
   flex-direction: row;
   align-items: center;
   top: 100%;
-  transition: all 500ms linear;
+  transition: width 500ms linear, margin 500ms linear;
   z-index: 1;
 
   &.clicked {

@@ -14,7 +14,6 @@ $controls-height: 65px;
 
 .active-article-container {
   width: 100%;
-  background-color: rgba(0, 0, 0, .5);
   z-index: $active-article-z-index;
   align-items: center;
   color: black;
