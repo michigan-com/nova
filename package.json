@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./dist/server.js",
-    "install": "gulp"
+    "start": "node ./dist/server.js"
   },
   "dependencies": {
     "autoprefixer": "^6.1.0",
