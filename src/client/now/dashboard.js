@@ -71,19 +71,22 @@ class NowDashboard extends React.Component {
     }
 
     // So we don't lose our place in the list
-    if ((nextProps.activeArticle && !this.props.activeArticle)) {
+    //if ((nextProps.activeArticle && !this.props.activeArticle)) {
+    if(nextProps.articleLoading && !this.props.articleLoading) {
       this.lastScrollTop = document.body.scrollTop;
       document.body.scrollTop = 0;
     }
 
     // We closed the active article
     if (!!this.props.activeArticle && !nextProps.activeArticle) {
+      document.body.scrollTop = this.lastScrollTop;
       this.setState({ activeArticleClose: true });
     }
 
     // The active article probably threw a 404
     else if (this.props.articleLoading && !nextProps.articleLoading && !nextProps.activeArticle) {
       this.setState({ activeArticleClose: true });
+      document.body.scrollTop = this.lastScrollTop;
     }
   }
 

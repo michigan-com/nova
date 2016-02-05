@@ -154,11 +154,23 @@ class ActiveArticle extends React.Component {
                 { article.summary.map(this.renderSummarySentence) }
               </div>
               <div className='article-controls'>
-                <div className='control-container start-speed-reader'>
-                  <div className='control' onClick={ this.loadSpeedReader.bind(this) }><span className='control-text'>Speed Read</span></div>
+                <div className='control-container feed' onClick={ this.closeActiveArticle.bind(this) }>
+                  <div className='article-control'>
+                    <img src='/img/cards.svg'/>
+                    <div className='control-text'>Feed</div>
+                  </div>
                 </div>
-                <div className='control-container close-article'>
-                  <div className='control' onClick={ this.closeActiveArticle.bind(this) }><span className='control-text'>Close</span></div>
+                <a href={ article.url } target='_blank' className='control-container link'>
+                  <div className='article-control'>
+                    <img src='/img/story.svg'/>
+                    <div className='control-text'>Story</div>
+                  </div>
+                </a>
+                <div className='control-container speed-read' onClick={ () => { Store.dispatch(startSpeedReading()) } }>
+                  <div className='article-control'>
+                    <img src='/img/speed-rabbit.svg'/>
+                    <div className='control-text'>Speed</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,4 +184,4 @@ class ActiveArticle extends React.Component {
   }
 }
 
-module.exports = ActiveArticle
+module.exports = ActiveArticle;

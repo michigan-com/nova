@@ -17,7 +17,7 @@ var articleCache = {};
 export function getActiveArticleReaders(articles, state) {
   if (state.articleLoading || !state.activeArticle) return -1;
   for (let article of articles) {
-    if (state.activeArticle.article_id === article.id &&
+    if (state.activeArticle.article_id === article.article_id &&
         state.activeArticle.source === article.source) {
       return article.visits;
     }

@@ -11,6 +11,7 @@ $summary-font-size: 20px;
 
 $start-speed-reader-height: 50px;
 $controls-height: 65px;
+$controls-background-color: rgb(242, 242, 242);
 
 .active-article-container {
   width: 100%;
@@ -205,11 +206,11 @@ $controls-height: 65px;
       position: fixed;
       left: 0;
       bottom: 0;
-      width: 100%;
       display: flex;
       flex-direction: row;
       align-items: center;
       height: $controls-height;
+      border-top: 1px solid grey;
 
       @media (min-width $screen-md) {
         width: 50%;
@@ -222,34 +223,51 @@ $controls-height: 65px;
         display: flex;
         flex-direction: row;
         align-items: center;
-        &.close-article {
-          .control {
-            @mixin button $red, calc($controls-height * .8);
-            background-color: $red;
-          }
+        position: relative;
+        cursor: pointer;
+        background-color: $controls-background-color;
+        transition: background-color 250ms linear;
+        text-decoration: none !important;
+        color: inherit;
+
+
+        &:hover {
+          background-color: color($controls-background-color blackness(25%));
         }
 
-        &.start-speed-reader {
-          .control {
-            @mixin button $blue, calc($controls-height * .8);
-            background-color: $blue;
-          }
+        &.speed-read:after {
+          content: '>';
+          position: absolute;
+          top: 0;
+          line-height: $controls-height;
+          right: 25%;
         }
 
-        .control {
-          margin: 0 auto;
-          position: relative;
-          font-size: 12px;
-          text-align: center;
-          color: white;
+        &.feed:after {
+          content: '<';
+          position: absolute;
+          top: 0;
+          line-height: $controls-height;
+          left: 25%;
+        }
+
+        .article-control {
+          width: 100%;
           display: flex;
-          flex-direction: row;
-          align-items: center;
+          flex-direction: column;
+          text-align: center;
 
+          img {
+            height: calc($controls-height * .5);
+            line-height: calc($controls-height * .4);
+            color: $red;
+            padding: 7px;
+          }
 
           .control-text {
-            width: 100%;
-            text-align: center;
+            text-transform: uppercase;
+            font-size: 10px;
+            line-height: 13px;
           }
         }
       }
