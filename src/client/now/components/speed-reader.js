@@ -3,8 +3,8 @@
 import React from 'react';
 import { SimpleReader } from 'reeeeeader';
 
-import Dispatcher from '../../dispatcher';
-import { ArticleActions } from '../../store/article-store';
+import Store from '../../store';
+import { stopSpeedReading } from '../../actions/active-article';
 
 export default class SpeedReader extends React.Component {
   constructor(props) {
@@ -25,12 +25,7 @@ export default class SpeedReader extends React.Component {
   closeSpeedReader = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    setTimeout(() => {
-      Dispatcher.dispatch({
-        type: ArticleActions.stopSpeedReading
-      });
-    }, 500);
+    setTimeout(() => { Store.dispatch(stopSpeedReading()); }, 500);
   }
 
   componentDidMount() {

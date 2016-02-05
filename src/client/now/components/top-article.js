@@ -1,8 +1,9 @@
  'use strict';
 
 import React from 'react';
-import Dispatcher from '../../dispatcher';
-import { ArticleActions } from '../../store/article-store';
+
+import Store from '../../store';
+import { articleSelected } from '../../actions/active-article';
 
 // React Component representing article in the articles array from Chartbeat
 // toppages snapshot
@@ -27,17 +28,15 @@ class TopArticle extends React.Component {
   }
 
   setSelfAsActive = () => {
-    Dispatcher.dispatch({
-      type: ArticleActions.articleSelected,
-      article_id: this.props.article.article_id,
-      readers: this.props.article.visits
-    });
+    let article = this.props.article;
+    Store.dispatch(articleSelected(article.article_id, article.visits));
   }
 
   articleClicked = (e) => {
     this.setState({ articleClicked: true });
 
-    // TODO figure out a good way to set this in css and JS at the same time...
+    // TODO this should maybe be handled by the store, so we're not waiting
+    // on the animation and THEN the fetching of the data in sequence
     setTimeout(() => {
       this.setSelfAsActive();
     }.bind(this), 750)

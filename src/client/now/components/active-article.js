@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import Dispatcher from '../../dispatcher';
-import { ArticleActions } from '../../store/article-store';
+import Store from '../../store';
+import { startSpeedReading, closeActiveArticle } from '../../actions/active-article';
 import LoadingImage from './loading-image';
 import ScrollHook from './scroll-hook';
 import SpeedReader from './speed-reader';
@@ -86,19 +86,11 @@ class ActiveArticle extends React.Component {
     i.src = article.photo.full.url;
   }
 
-  loadSpeedReader() {
-    Dispatcher.dispatch({
-      type: ArticleActions.startSpeedReading
-    })
-  }
+  loadSpeedReader() { Store.dispatch(startSpeedReading()); }
 
   closeActiveArticle(e) {
     this.setState({ fadeOutArticle: true });
-    setTimeout(() => {
-      Dispatcher.dispatch({
-        type: ArticleActions.closeActiveArticle
-      });
-    }, 500);
+    setTimeout(() => { Store.dispatch(closeActiveArticle()); }, 500);
   }
 
   getBackgroundStyle() {

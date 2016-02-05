@@ -2,20 +2,13 @@
 
 import React from 'react';
 
-import Dispatcher from '../../dispatcher';
-import { getArticleActions } from '../../store/article-store';
-
-let actions = getArticleActions();
+import Store from '../../store';
+import { sectionSelect } from '../../actions/filters';
 
 // This ended up being much less complicated than initially anticipated
 export default class SectionFilter extends React.Component {
 
-  toggleFilter = () => {
-    Dispatcher.dispatch({
-      type: actions.sectionSelect,
-      sectionName: this.props.name
-    });
-  }
+  toggleFilter = () => { Store.dispatch(sectionSelect(this.props.name)); }
 
   render() {
     let sectionFilterClass = `section-filter ${this.props.name}`;
