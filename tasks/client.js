@@ -92,8 +92,8 @@ function bundle(done, options) {
     .on('error', gutil.log)
     .pipe(source(options.fname))
     .pipe(buffer())
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(sourcemaps.write('./'))
+    .pipe(sourcemaps.init())
+    .pipe(sourcemaps.write())
     .pipe(flatten())
     .pipe(gulp.dest(options.dest))
     .on('end', function() {
