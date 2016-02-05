@@ -34,8 +34,12 @@ function defaultSections() {
       showArticles: true,
     });
   }
-
+  writeSectionCookie(sections);
   return sections;
+}
+
+export function writeSectionCookie(sectionState=DEFAULT_SECTIONS) {
+  Cookies.set(SECTION_COOKIE, JSON.stringify(sectionState));
 }
 
 export function sectionSelect(sectionName='') {

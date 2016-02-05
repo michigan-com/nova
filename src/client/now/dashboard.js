@@ -3,14 +3,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Store, DEFAULT_STATE } from '../store';
+import Store, { DEFAULT_STATE } from '../store';
 import TopArticle from './components/top-article';
 import ActiveArticle from './components/active-article';
 import SectionFilters from './filters';
 import LoadingImage from './components/loading-image';
 import Header from './components/header';
 
-import Config from '../../../config';
+import { appName } from '../../../config';
 
 let loadingBlurbs = [
   'Bots are summarizing...',
@@ -76,7 +76,13 @@ class NowDashboard extends React.Component {
       document.body.scrollTop = 0;
     }
 
+    // We closed the active article
     if (!!this.props.activeArticle && !nextProps.activeArticle) {
+      this.setState({ activeArticleClose: true });
+    }
+
+    // The active article probably threw a 404
+    else if (this.props.articleLoading && !nextProps.articleLoading && !nextProps.activeArticle) {
       this.setState({ activeArticleClose: true });
     }
   }
@@ -149,7 +155,7 @@ class NowDashboard extends React.Component {
         <div className='dashboard-container'>
           <Header readers={ this.props.readers }
             showInfo={ this.props.showInfo }
-            appName={ Config.appName }/>
+            appName={ appName }/>
           <div className={ topArticlesContainerClass } style={ style }>
             { topArticles }
           </div>

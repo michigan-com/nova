@@ -53,7 +53,7 @@ export function sortTopArticles(articles=[], state) {
   for (let article of articles) {
     let addArticle = true;
     for (let section of article.sections) {
-      if (section in sectionState && !sectionState[section].showArticles) {
+      if (section in sectionState && !sectionState[section]) {
         addArticle = false;
         break;
       }
@@ -86,6 +86,7 @@ export function toggleInfo() {
 
 export const DEFAULT_ARTICLE_LIST = {
   topArticles: [],
+  allArticles: [],
   totalReaders: 0,
   clickedArticles: new Set(getArticleIdsFromCookie()),
   showInfo: false

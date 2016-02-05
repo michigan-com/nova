@@ -8,7 +8,7 @@ require('historyjs/scripts/bundled/html4+html5/native.history.js');
 import Config from '../../config';
 import Store from './store';
 import { closeActiveArticle, articleSelected } from './actions/active-article';
-import { gotTopArticles, gotQuicktats } from './actions/article-list';
+import { gotTopArticles, gotQuickstats } from './actions/article-list';
 import { initDashboard } from './now/dashboard';
 
 const articleIdUrlRegex = /^\/article\/(\d+)\/?$/;
@@ -40,6 +40,10 @@ function historyChange(e) {
 
   let articleIdMatch = articleIdUrlRegex.exec(window.location.pathname);
 
-  if (/^\/$/.test(window.location.pathname)) Store.dispatch(closeActiveArticle);
-  else if (articleIdMatch) Store.dispatch(articleSelected(parseInt(articleIdMatch[1])));
+  if (/^\/$/.test(window.location.pathname)) {
+    Store.dispatch(closeActiveArticle(false));
+  }
+  else if (articleIdMatch) {
+    Store.dispatch(articleSelected(parseInt(articleIdMatch[1])));
+  }
 }
