@@ -5,19 +5,33 @@ import React from 'react';
 import Store from '../../store';
 import { articleSelected } from '../../actions/active-article';
 
+export const TOP_ARTICLE_STYLE = {
+  height: 100,
+  margin: 10
+}
+
+export function getTopArticleHeight() {
+  let height = TOP_ARTICLE_STYLE.height;
+  if (window.innerWidth <= 992) height *= .7; // 70px
+  return height;
+}
+
+export function getTopArticleStyle(rank) {
+  let style = {
+    height: getTopArticleHeight(),
+    margin: TOP_ARTICLE_STYLE.margin
+  };
+  style.top = `${(rank * (style.height + style.margin)) + style.margin}px`;
+  return style;
+}
+
 // React Component representing article in the articles array from Chartbeat
 // toppages snapshot
 //
 // https://api.michigan.com/v1/snapshot/toppages/ -> articles[n]
-class TopArticle extends React.Component {
+export default class TopArticle extends React.Component {
   // TODO make this responsive? Move this functionality into CSS?
   // height: 100px, padding 10px
-  static defaultStyle = { height: 100, margin: 10 }
-  static getHeight = () => {
-    let height = TopArticle.defaultStyle.height;
-    if (window.innerWidth <= 992) height *= .7; // 60 px
-    return height;
-  }
 
   constructor(props) {
     super(props);
@@ -42,14 +56,6 @@ class TopArticle extends React.Component {
     }.bind(this), 750)
   }
 
-  getStyle = () => {
-    let style = {}
-    let height = TopArticle.getHeight();
-    let margin = TopArticle.defaultStyle.margin;
-    style.top = `${(this.props.rank * (height + margin)) + margin}px`;
-    return style;
-  }
-
   render() {
     // TODO figure out best way to animate this
     let article = this.props.article;
@@ -69,7 +75,7 @@ class TopArticle extends React.Component {
       topArticleClass += ' clicked';
     }
 
-    let containerStyle = this.getStyle();
+    let containerStyle = getTopArticleStyle(this.props.rank);
     return (
       <div className={ topArticleContainerClass } style={ containerStyle } id={ `top-article-container-${this.props.rank}-${this.props.windowSize}` }>
         <div className={ topArticleClass }  onClick={ this.articleClicked.bind(this) } style={ style }>
@@ -80,5 +86,3 @@ class TopArticle extends React.Component {
     )
   }
 }
-
-module.exports = TopArticle;

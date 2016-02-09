@@ -4,7 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Store, { DEFAULT_STATE } from '../store';
-import TopArticle from './components/top-article';
+import InfoTile from './components/info-tile';
+import TopArticle, { getTopArticleHeight } from './components/top-article';
 import ActiveArticle from './components/active-article';
 import SectionFilters from './filters';
 import LoadingImage from './components/loading-image';
@@ -114,20 +115,35 @@ class NowDashboard extends React.Component {
     }
 
     let topArticles = [];
+    let rank = 0;
     for (let index = 0; index < this.props.topArticles.length; index++) {
       let article = this.props.topArticles[index];
+
+      if (rank === 4) {
+        topArticles.push(
+          <InfoTile type='inline' rank={ rank } infoText={ this.props.infoText }/>
+        )
+        rank += 1;
+      }
+
       topArticles.push(
         <TopArticle article={ article }
-            rank={ index }
+            rank={ rank }
             windowSize={ this.state.windowSize }
             clicked={ this.props.clickedArticles.has(article.article_id) }
             key={ `article-${article.url}` }/>
       )
+
+      rank += 1;
     }
 
     // Have to draw in the same order every time, so sort by article ID before rendering
     // Rank positioning is done within <TopArticle/> Component
-    topArticles.sort((a,b) => { return b.props.article.article_id - a.props.article.article_id });
+    topArticles.sort((a,b) => {
+      if (!b.props.article) return -1;
+      else if (!a.props.article) return 1;
+      return b.props.article.article_id - a.props.article.article_id
+    });
 
     return topArticles;
   }
@@ -151,7 +167,7 @@ class NowDashboard extends React.Component {
       let topArticles = this.renderArticles();
       let style = {};
       let dashboardContainerClass = 'dashboard-container';
-      if (topArticles.length) style.height = topArticles.length * (TopArticle.getHeight() + 10); // Height * padding
+      if (topArticles.length) style.height = topArticles.length * (getTopArticleHeight() + 10); // Height * padding
       else dashboardContainerClass += ' articles-loading';
 
       let topArticlesContainerClass = 'top-articles-container';
@@ -200,6 +216,9 @@ function drawDashboard(state=DEFAULT_STATE) {
       speedReading={ state.ActiveArticle.speedReading }
       activeArticleReaders={ state.ActiveArticle.activeArticleReaders }
       articleLoading={ state.ActiveArticle.articleLoading }
+
+      // Info Stuff
+      infoText={ state.ArticleList.infoBlurbs[state.ArticleList.blurbIndex] }
 
       key='now-dashboard'/>,
     document.getElementById('now')

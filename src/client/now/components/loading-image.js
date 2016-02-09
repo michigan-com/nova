@@ -2,9 +2,7 @@
 
 import React from 'react';
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
+import { getRandomInt } from '../../lib/random';
 
 export default class LoadingImage extends React.Component {
   static defaultProps = {

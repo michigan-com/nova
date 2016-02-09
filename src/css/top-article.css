@@ -1,10 +1,9 @@
 @import 'base';
 @import './animations/smack';
 
-$definition-height: 40px;
+$definition-height: 35px;
 
-.top-article-container {
-  height: $article-height;
+.top-article-container, .info-tile-container {
   position: absolute;
   width: 90%;
   margin: 0 5%;
@@ -53,7 +52,7 @@ $definition-height: 40px;
   }
 }
 
-.top-article {
+.top-article, .info-tile {
   @extend smack;
   width: 100%;
   top: 0%;
@@ -97,7 +96,7 @@ $definition-height: 40px;
 }
 
 /* Pulled out because its used in the definitions at the top of the page */
-.readers-container {
+.readers-container, .img-container {
   color: $red;
   height: 75%;
   position: relative;
@@ -124,7 +123,7 @@ $definition-height: 40px;
   }
 }
 
-.headline {
+.headline, .text-container {
   font-size: 14px;
   font-family: 'Open Sans';
   font-weight: 600;
@@ -148,9 +147,8 @@ $definition-height: 40px;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
-  margin-bottom: 10px;
   opacity: 1;
   transition: opacity 250ms linear;
 
@@ -173,4 +171,20 @@ $definition-height: 40px;
     margin-right: 10px;
     font-size: inherit;
   }
+}
+
+.info-tile {
+  .img-container {
+    border: none !important;
+
+    img {
+      height: 75%;
+      margin: 0 auto;
+    }
+  }
+
+  .text-container {
+    font-weight: normal;
+  }
+
 }
