@@ -11,10 +11,10 @@ export default class SpeedReader extends React.Component {
     super(props);
 
     this.state = {
-      speedReaderFadeIn: false,
-      playing: true,
-      countdown: false,
-      countdownIndex: null
+      gotStarted: false,
+      playing: false,
+      countdown: true,
+      countdownIndex: null,
     }
 
     this.countdownTime = 3;
@@ -37,17 +37,10 @@ export default class SpeedReader extends React.Component {
 
     window.addEventListener('blur', this._pause);
 
-    this.renderSpeedHTML();
-
-    setTimeout(() => {
-      this.setState({ speedReaderFadeIn: true, countdown: true, playing: true });
-    }, 500);
+    this.renderRemainingTime();
   }
 
   componentWillUpdate(nextProps, nextState) {
-    // don't do anything on the fade in state change
-    if (nextState.speedReaderFadeIn && !this.state.speedReaderFadeIn) return;
-
     // State changes
     if (!nextState.countdown && this.state.countdown) this.playSpeedReader();
 
@@ -107,6 +100,11 @@ export default class SpeedReader extends React.Component {
   }
 
   togglePlay = () => {
+    if (!this.state.gotStarted) {
+      this.setState({ gotStarted: true, countdown: true, playing: true });
+      return;
+    }
+
     if (this.state.countdown) {
       this.renderRemainingTime();
       this.setState({ playing: !this.state.playing, countdownIndex: null});
@@ -136,11 +134,12 @@ export default class SpeedReader extends React.Component {
     if (!this.controller) return;
 
     this.controller.setReadingSpeed(speed, 'slider');
-    this.renderSpeedHTML();
+    this.renderWPM();
     this.renderRemainingTime();
   }
 
-  renderSpeedHTML = () => {
+  renderWPM = () => {
+    if (!this.state.gotStarted) return;
     let ref = this.refs['wpm'];
     if (!ref) return;
 
@@ -148,13 +147,30 @@ export default class SpeedReader extends React.Component {
   }
 
   renderRemainingTime = () => {
-    let ref = this.refs['time-remaining'];
-    if (!ref) return;
+    let ref = null;
+    if (!this.state.gotStarted) {
+      ref = this.refs['total-time']
+      if (!ref) return;
 
-    ref.innerHTML = `${this.controller.getRemainingTime()} remaining`;
+      let remainingTime = this.controller.getRemainingTime();
+      let minutes = remainingTime.split(':')[0];
+      ref.innerHTML = minutes;
+    } else {
+      ref = this.refs['time-remaining'];
+      if (!ref) return;
+      ref.innerHTML = `${this.controller.getRemainingTime()} remaining`;
+    }
   }
 
   renderCountdown() {
+    if (!this.state.gotStarted) {
+      return (
+        <div className='countdown-container'>
+          <div className='get-started'>Click Play to get started!</div>
+        </div>
+      )
+    }
+
     if (!this.state.countdown) return;
 
     let word = '';
@@ -178,7 +194,8 @@ export default class SpeedReader extends React.Component {
 
   renderContext() {
     if (this.state.playing || !this.controller ||
-        !this.controller.currentContext || !this.controller.currentContext.length) {
+        !this.controller.currentContext || !this.controller.currentContext.length ||
+       !this.state.gotStarted) {
       return null;
     }
 
@@ -201,6 +218,7 @@ export default class SpeedReader extends React.Component {
 
   renderControls() {
     let controlClass = 'speed-controls';
+    if (!this.state.gotStarted) controlClass += ' not-started';
 
     return(
       <div className={ controlClass }>
@@ -217,12 +235,13 @@ export default class SpeedReader extends React.Component {
   }
 
   renderSpeedControl() {
-    if (this.state.playing || !this.controller) return null;
+    if (this.state.playing || !this.controller || !this.state.gotStarted) return null;
 
     let speedControl = <SpeedControl speed={ this.controller.readingSpeed } updateSpeed={ this.updateSpeed }/>;
 
     return (
-      <div className='speed-control-container'>
+      <div className='speed'>
+        <div className='center-bar'><i className='fa fa-caret-down'></i></div>
         { speedControl }
       </div>
     )
@@ -230,9 +249,7 @@ export default class SpeedReader extends React.Component {
 
   render() {
     let speedReaderClass = 'speed-reader';
-    if (this.state.speedReaderFadeIn) {
-      speedReaderClass += ' fade-in';
-    }
+    if (!this.state.gotStarted) speedReaderClass += ' not-started';
 
     let countdown = null;
     if (this.state.countdown && this.state.countdownIndex) {
@@ -240,9 +257,13 @@ export default class SpeedReader extends React.Component {
       countdown = this.renderCountdown();
     }
 
+    let startText = null;
+    if (!this.state.gotStarted) startText = <div className='get-started'>Speed read this story in <span ref='total-time'></span> minutes! Click Play to get started </div>
+
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
       <div className={ speedReaderClass }>
+        { startText }
         <div className='context'> { this.renderContext() }</div>
         <div className='speed-reader-content'>
           <div ref='speed-reader'></div>
@@ -254,14 +275,6 @@ export default class SpeedReader extends React.Component {
           <div className='time-remaining' ref='time-remaining'></div>
         </div>
         { this.renderSpeedControl() }
-        <div className='controls'>
-          <div className='control-container'>
-            <div className='speed-button' onClick={ this.togglePlay }><span className='button-text'><img src='/img/rabbit-red.svg'/></span></div>
-          </div>
-          <div className='control-container'>
-            <div className='close-button' onClick={ this.closeSpeedReader }><span className='button-text'>Close</span></div>
-          </div>
-        </div>
       </div>
     )
   }
@@ -323,9 +336,10 @@ class SpeedControl extends React.Component {
 
     let style = { width: `${SpeedControl.maxSpeed + window.innerWidth}px` }
     return (
-      <div className={ speedControlClass } ref='speed-control' style={ style }>
-        { this.renderSteps() }
-        <div className='center-bar'><i className='fa fa-caret-down'></i></div>
+      <div className='speed-control-container'>
+        <div className={ speedControlClass } ref='speed-control' style={ style }>
+          { this.renderSteps() }
+        </div>
       </div>
     )
   }

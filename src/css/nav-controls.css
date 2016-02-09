@@ -1,0 +1,88 @@
+@import './base';
+
+.nav-control {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: $controls-height;
+  z-index: calc($active-article-z-index + 2);
+
+  @media (min-width $screen-md) {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .button-container {
+    width: 50%;
+    height: $controls-height;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 250ms linear;
+    text-decoration: none !important;
+    color: inherit;
+    background: transparent;
+
+    &.back {
+      border-right: 1px solid $red;
+      .arrow {
+        transform: rotate(90deg);
+        left: 5%;
+        order: 1;
+      }
+    }
+
+    &.forward {
+      border-left: 1px solid $red;
+      .arrow {
+        transform: rotate(-90deg);
+        right: 5%;
+        order: 3;
+      }
+    }
+
+    .button {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: $controls-background-color;
+      border-top: 1px solid $red;
+
+      .arrow {
+        width: 15%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: $controls-height;
+  text-align: center;
+  width: 85%;
+  order: 2;
+
+  img {
+    height: calc($controls-height * .7);
+    line-height: calc($controls-height * .8);
+    color: $red;
+    padding: 7px;
+  }
+
+  .text {
+    text-transform: uppercase;
+    font-size: 10px;
+    line-height: 13px;
+  }
+}

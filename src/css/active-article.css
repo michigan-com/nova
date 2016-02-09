@@ -2,16 +2,9 @@
 @import 'mixins';
 @import 'speed-reader';
 
-$active-article-z-index: 100;
-$active-image-z-index: 1;
-$article-content-padding: 15px;
-$active-article-top-padding: 30vh;
-
-$summary-font-size: 20px;
-
-$start-speed-reader-height: 50px;
-$controls-height: 65px;
-$controls-background-color: rgb(242, 242, 242);
+body.photo-loading {
+  overflow: hidden;
+}
 
 .active-article-container {
   width: 100%;
@@ -125,18 +118,6 @@ $controls-background-color: rgb(242, 242, 242);
     transition: background-color 400ms linear;
   }
 
-  &:after {
-    content: "";
-    height: 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    box-shadow: 0 0 200px 75vh white;
-    z-index: $active-image-z-index;
-    background-color: transparent;
-  }
-
   @media (min-width: $screen-md) {
     margin: 0 auto;
   }
@@ -149,7 +130,6 @@ $controls-background-color: rgb(242, 242, 242);
   z-index: calc($active-image-z-index * 2);
   opacity: 0;
   transition: opacity 250ms linear;
-  box-shadow: 0 0 50px 5vh white;
 
   .article-content {
     display: flex;
@@ -163,20 +143,29 @@ $controls-background-color: rgb(242, 242, 242);
     }
 
     .title {
-      font-size: 30px;
+      font-size: 25px;
+      line-height: 35px;
       margin: 10px 0px;
+      font-weight: 500;
     }
 
-    .subtitle-container {
+    .readers-container {
       display: flex;
       flex-direction: row;
+      font-size: 11px;
+      align-items: center;
+      margin-top: 5px;
+      color: black;
+
+      .pipe-divider {
+        margin: 0px 10px;
+      }
     }
 
     .readers {
       color: grey;
-      font-size: 12px;
+      font-size: 22px;
       margin: 10px 0px;
-      width: 50%;
       align-self: left;
     }
 
@@ -184,14 +173,28 @@ $controls-background-color: rgb(242, 242, 242);
     .summary-container {
       opacity: 0;
       transition: opacity 250ms linear;
-      margin-bottom: 50px;
+      margin-bottom: 20px;
+
+      .summary-title {
+        font-size: 15px;
+        text-align: center;
+        margin: 20px 0px 30px 0px;
+      }
 
       .summary-sentence {
         margin-bottom: 15px;
 
         .summary-index {
-          margin-bottom: 10px;
-          font-size: $summary-font-size * .5;
+          margin: 10px auto;
+          width: 25px;
+          height: 25px;
+          font-size: 15px;
+          line-height: 25px;
+          border-radius: 50%;
+          background-color: $red;
+          color: white;
+          text-align: center;
+          font-weight: 500;
         }
 
         .sentence {
@@ -200,80 +203,9 @@ $controls-background-color: rgb(242, 242, 242);
         }
       }
     }
-
-    .article-controls {
-      width: 100%;
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: $controls-height;
-      border-top: 1px solid grey;
-
-      @media (min-width $screen-md) {
-        width: 50%;
-        margin: 0 auto;
-      }
-
-      .control-container {
-        height: $controls-height;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        position: relative;
-        cursor: pointer;
-        background-color: $controls-background-color;
-        transition: background-color 250ms linear;
-        text-decoration: none !important;
-        color: inherit;
-
-
-        &:hover {
-          background-color: color($controls-background-color blackness(25%));
-        }
-
-        &.speed-read:after {
-          content: '>';
-          position: absolute;
-          top: 0;
-          line-height: $controls-height;
-          right: 25%;
-        }
-
-        &.feed:after {
-          content: '<';
-          position: absolute;
-          top: 0;
-          line-height: $controls-height;
-          left: 25%;
-        }
-
-        .article-control {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-
-          img {
-            height: calc($controls-height * .5);
-            line-height: calc($controls-height * .4);
-            color: $red;
-            padding: 7px;
-          }
-
-          .control-text {
-            text-transform: uppercase;
-            font-size: 10px;
-            line-height: 13px;
-          }
-        }
-      }
-    }
   }
 }
+
 
 .article-loading {
   display: none;
@@ -296,5 +228,28 @@ $controls-background-color: rgb(242, 242, 242);
 }
 
 .speed-reader-container {
-  z-index: calc($active-article-z-index * 2);
+  z-index: calc($active-article-z-index + 1);
+}
+
+.keep-scrolling {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  z-index: $active-article-z-index;
+  padding-bottom: 20px;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  .text-box {
+    box-shadow: 0px 2px 4px 1.5px rgba(0, 0, 0, 0.25);
+    font-size: $summary-font-size;
+    width: 90%;
+    margin: 0 auto;
+    line-height: 24px;
+    font-weight: 500;
+    padding: 10px;
+  }
 }

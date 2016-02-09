@@ -3,22 +3,10 @@
 @import './animations/pulse';
 @import './animations/smack';
 @import './active-article';
+@import './nav-controls';
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-$article-height: 70px;
-$article-height-lg: 100px;
-
-/* container info */
-$header-height-sm: 60px;
-$header-height-lg: 100px;
-$header-z-index: calc($active-article-z-index / 2);
-
-$filter-height: 65px;
-$filter-circle-height: calc($filter-height * .5);
-$filter-name-height: calc($filter-height * .3);
-
-$top-article-z-index: $active-article-z-index;
 
 body {
   font-family: 'Open Sans', sans-serif;

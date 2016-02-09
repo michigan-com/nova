@@ -32,6 +32,32 @@ $notdesktop: new-breakpoint(max-width 991px 12);
 $desktop: new-breakpoint(min-width 992px 12);
 $mobile: new-breakpoint(max-width 768px 12);
 
+$start-speed-reader-height: 50px;
+$controls-height: 65px;
+$controls-background-color: rgb(242, 242, 242);
+
+$article-height: 70px;
+$article-height-lg: 100px;
+
+$active-article-z-index: 100;
+$active-image-z-index: 1;
+$article-content-padding: 15px;
+$active-article-top-padding: 30vh;
+
+$summary-font-size: 15px;
+
+/* container info */
+$header-height-sm: 60px;
+$header-height-lg: 100px;
+$header-z-index: calc($active-article-z-index / 2);
+
+$filter-height: 65px;
+$filter-circle-height: calc($filter-height * .5);
+$filter-name-height: calc($filter-height * .3);
+
+$top-article-z-index: $active-article-z-index;
+
+
 .text-center {
   text-align: center;
 }

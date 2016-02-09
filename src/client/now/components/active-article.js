@@ -3,13 +3,12 @@
 import React from 'react';
 
 import Store from '../../store';
-import { startSpeedReading, closeActiveArticle } from '../../actions/active-article';
 import LoadingImage from './loading-image';
 import ScrollHook from './scroll-hook';
 import SpeedReader from './speed-reader';
 import { toggleClass } from '../../lib/dom';
 
-class ActiveArticle extends React.Component {
+export default class ActiveArticle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,8 +24,8 @@ class ActiveArticle extends React.Component {
       ref: 'article-content',
       scrollTopThresholdDown: '10%',
       scrollTopThresholdUp: '30%',
-      scrollDownHook: () => { this.setState({ fadeImageOut: true }) }.bind(this),
-      scrollUpHook: () => { this.setState({ fadeImageOut: false }) }.bind(this),
+      scrollDownHook: () => { /*this.setState({ fadeImageOut: true })*/ }.bind(this),
+      scrollUpHook: () => { /*this.setState({ fadeImageOut: false })*/ }.bind(this),
     })];
   }
 
@@ -74,6 +73,7 @@ class ActiveArticle extends React.Component {
   }
 
   loadPhoto() {
+    document.body.className = `${document.body.className} photo-loading`;
     let article = this.props.article;
     if (!article.photo) {
       this.photoLoaded();
@@ -89,6 +89,7 @@ class ActiveArticle extends React.Component {
   loadSpeedReader() { Store.dispatch(startSpeedReading()); }
 
   closeActiveArticle(e) {
+    // TODO
     this.setState({ fadeOutArticle: true });
     setTimeout(() => { Store.dispatch(closeActiveArticle()); }, 500);
   }
@@ -96,6 +97,8 @@ class ActiveArticle extends React.Component {
   getBackgroundStyle() {
     let article = this.props.article;
     let style = {}
+
+    document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
 
     if (this.state.photoLoaded && !!article.photo) {
       style.backgroundImage = `url(${article.photo.full.url})`;
@@ -133,55 +136,35 @@ class ActiveArticle extends React.Component {
     }
 
     let speedReaderContainerClass = 'speed-reader-container';
-    let speedReader = null;
-    if (this.props.speedReading) {
-      speedReaderContainerClass += ' active';
-      speedReader = <SpeedReader article={ article } key={ `speed-reader-${article.article_id}` }/>
-    }
-
-
     return (
       <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
           <div className='article-image' style={ this.getBackgroundStyle() }></div>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
+              <div className='readers-container'>
+                <span className='readers'>{ `${this.props.readers}` }</span>
+                <span className='pipe-divider'>|</span>
+                <span>now reading</span>
+              </div>
               <div className='title'>{ article.headline }</div>
-              <div className='subtitle-container'>
-                <div className='readers'>{ `Current Readers: ${this.props.readers}` }</div>
-              </div>
               <div className='summary-container'>
+                <div className='summary-title'>Summary</div>
                 { article.summary.map(this.renderSummarySentence) }
-              </div>
-              <div className='article-controls'>
-                <div className='control-container feed' onClick={ this.closeActiveArticle.bind(this) }>
-                  <div className='article-control'>
-                    <img src='/img/cards.svg'/>
-                    <div className='control-text'>Feed</div>
-                  </div>
-                </div>
-                <a href={ article.url } target='_blank' className='control-container link'>
-                  <div className='article-control'>
-                    <img src='/img/story.svg'/>
-                    <div className='control-text'>Story</div>
-                  </div>
-                </a>
-                <div className='control-container speed-read' onClick={ () => { Store.dispatch(startSpeedReading()) } }>
-                  <div className='article-control'>
-                    <img src='/img/speed-rabbit.svg'/>
-                    <div className='control-text'>Speed</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
+        <div className='keep-scrolling'>
+          <img src='/img/speed-rabbit.svg'/>
+          <div className='text-box'>Keep scrolling to speed read this article in record time!</div>
+        </div>
         <div className={ speedReaderContainerClass }>
-          { speedReader }
+          <SpeedReader article={ article }
+              key={ `speed-reader-${article.article_id}` }/>
         </div>
       </div>
     )
   }
 }
 
-module.exports = ActiveArticle;
