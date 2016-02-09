@@ -4,13 +4,14 @@ import React from 'react';
 import Cookies from 'cookies-js';
 
 import { getRandomInt } from '../lib/random';
+import { appName } from '../../../config';
 
 export const GOT_TOP_ARTICLES = 'GOT_TOP_ARTICLES';
 export const GOT_QUICKSTATS = 'GOT_QUICKSTATS';
 export const TOGGLE_INFO = 'TOGGLE_INFO';
 
 export const INFO_BLURBS = [
-  <div>Using Detroit Now's Speed Reader, you can read an entire article in a fraction of the time!</div>,
+  <div>{ `Using ${appName}'s Speed Reader, you can read an entire article in a fraction of the time! `}</div>,
   <div>On an iPhone? Save our site to your home screen using the <img src='/img/share-button.svg'/> button</div>,
   <div>Our bots love nothing more than working all day summarizing articles for you</div>,
   <div>Did you hear that one story about that one guy? So crazy.</div>,
