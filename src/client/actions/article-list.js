@@ -14,7 +14,7 @@ export const INFO_BLURBS = [
   <div>On an iPhone? Save our site to your home screen using the <img src='/img/share-button.svg'/> button</div>,
   <div>Our bots love nothing more than working all day summarizing articles for you</div>,
   <div>Did you hear that one story about that one guy? So crazy.</div>,
-  <div>Fun fact: Rabbits move much slower than our Speed Reader, but it\'s the closest comparison we could come up with</div>,
+  <div>Fun fact: Rabbits move much slower than our Speed Reader, but it's the closest comparison we could come up with</div>,
   <div>Out of articles? Don't worry! This list updates every 10 seconds, check back for more later!</div>,
   <div>News updates for you, as fast as you can handle it</div>,
   <div>Speed Reading tip: Try not reading the words out loud in your head, it'll help!</div>,

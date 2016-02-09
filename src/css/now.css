@@ -269,9 +269,11 @@ body {
   align-items: center;
   flex-grow: 1;
   cursor: pointer;
+  opacity: .38;
   transition: all 150ms linear;
 
   &.active {
+    opacity: 1;
     .active-icon {
       opacity: 1 !important;
     }
