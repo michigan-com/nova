@@ -29,9 +29,11 @@ export default class ActiveArticle extends React.Component {
     })];
   }
 
-  componentWillMount() { this.loadPhoto(); }
-  componentDidMount() { window.addEventListener('scroll',  this.checkScroll); }
-  componentWillUnmount() { window.removeEventListener('scroll', this.checkScroll); }
+  componentWillMount() {
+    this.loadPhoto();
+    document.body.scrollTop = 0;
+  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.speedReading && !this.props.speedReading) {

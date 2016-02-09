@@ -29,7 +29,7 @@ export default class SpeedReader extends React.Component {
   }
 
   componentDidMount() {
-    this.controller = new SimpleReader(this.refs['speed-reader']);
+    this.controller = new SimpleReader(this.refs['speed-reader-text']);
     this.controller.setArticle({
       headline: this.props.article.headline,
       body: this.props.article.body
@@ -79,6 +79,33 @@ export default class SpeedReader extends React.Component {
 
   componentWillUnmount() { this.deinit(); }
 
+  scrollIntoView(lastScrollTop=null) {
+    let body = document.body;
+    let currentScrollTop = body.scrollTop;
+
+    // this means the user is trying to scroll up, so just let them already
+    if (currentScrollTop < lastScrollTop) return;
+
+    let scrollTopGoal = document.body.clientHeight - window.innerHeight;
+    let remaining = scrollTopGoal - currentScrollTop;
+    let step = remaining < 10 ? remaining : 10;
+
+    if (step === 0) {
+      setTimeout(() => {
+        this.setState({ gotStarted: true, countdown: true, playing: true });
+      }.bind(this), 100);
+      return
+    }
+
+    let newScrollTop = body.scrollTop + step;
+    body.scrollTop = newScrollTop;
+    setTimeout(((newScrollTop) => {
+      return () => {
+        this.scrollIntoView(newScrollTop);
+      }.bind(this)
+    })(newScrollTop), 10);
+  }
+
   deinit = () => {
     this.controller.pause();
     if (this.countdownTimeout) {
@@ -101,7 +128,7 @@ export default class SpeedReader extends React.Component {
 
   togglePlay = () => {
     if (!this.state.gotStarted) {
-      this.setState({ gotStarted: true, countdown: true, playing: true });
+      this.scrollIntoView(document.body.scrollTop);
       return;
     }
 
@@ -262,11 +289,11 @@ export default class SpeedReader extends React.Component {
 
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
-      <div className={ speedReaderClass }>
+      <div className={ speedReaderClass } ref='speed-reader'>
         { startText }
         <div className='context'> { this.renderContext() }</div>
         <div className='speed-reader-content'>
-          <div ref='speed-reader'></div>
+          <div ref='speed-reader-text'></div>
           { countdown }
         </div>
         <div className='speed-reader-controls'>
