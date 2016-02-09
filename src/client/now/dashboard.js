@@ -150,15 +150,21 @@ class NowDashboard extends React.Component {
     } else {
       let topArticles = this.renderArticles();
       let style = {};
+      let dashboardContainerClass = 'dashboard-container';
       if (topArticles.length) style.height = topArticles.length * (TopArticle.getHeight() + 10); // Height * padding
+      else dashboardContainerClass += ' articles-loading';
 
       let topArticlesContainerClass = 'top-articles-container';
       if (this.state.activeArticleClose) topArticlesContainerClass += ' active-article-close';
       dashboardContents = (
-        <div className='dashboard-container'>
+        <div className={ dashboardContainerClass }>
           <Header readers={ this.props.readers }
             showInfo={ this.props.showInfo }
             appName={ appName }/>
+          <div className='definitions'>
+            <div className='readers-container'><div className='readers'>readers</div></div>
+            <div className='articles'>article</div>
+          </div>
           <div className={ topArticlesContainerClass } style={ style }>
             { topArticles }
           </div>

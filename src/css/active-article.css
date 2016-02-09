@@ -156,6 +156,7 @@ body.photo-loading {
       align-items: center;
       margin-top: 5px;
       color: black;
+      border: none;
 
       .pipe-divider {
         margin: 0px 10px;

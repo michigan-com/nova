@@ -1,0 +1,176 @@
+@import 'base';
+@import './animations/smack';
+
+$definition-height: 40px;
+
+.top-article-container {
+  height: $article-height;
+  position: absolute;
+  width: 90%;
+  margin: 0 5%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  top: 100%;
+  transition: top 250ms linear, width 500ms linear, margin 500ms linear;
+  z-index: 1;
+
+  &.clicked {
+    width: 100%;
+    margin: 0%;
+    z-index: $top-article-z-index;
+
+    &, & * {
+      z-index: calc($top-article-z-index + 2);
+    }
+
+    &:before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .8);
+    }
+
+    .top-article {
+      height: 200vh;
+      top: -100vh;
+
+      * {
+        opacity: 0;
+      }
+    }
+  }
+
+
+  /* Desktop, etc */
+  @media (min-width: $screen-md) {
+    height: $article-height-lg;
+    width: 70%;
+    margin: 0 15%;
+  }
+}
+
+.top-article {
+  @extend smack;
+  width: 100%;
+  top: 0%;
+  left: 0%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 2px;
+  background: #fefefe;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  cursor: pointer;
+  transition: height 250ms linear, top 250ms linear;
+  transition-delay: 500ms;
+
+  * {
+    opacity: 1;
+    transition: opacity 200ms linear;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    opacity: 0;
+    transition: opacity 250ms linear, height 250ms linear, width 250ms linear;
+    transition-delay: 250ms;
+  }
+
+
+  &.clicked {
+    .headline {
+      font-weight: normal;
+    }
+  }
+}
+
+/* Pulled out because its used in the definitions at the top of the page */
+.readers-container {
+  color: $red;
+  height: 75%;
+  position: relative;
+  border-right: 1px solid color(black a(12%));
+  text-align: center;
+  width: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  @media (min-width: $screen-md) {
+    font-size: 30px;
+    width: 20%;
+  }
+
+  .readers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-family: 'Open Sans';
+    font-weight: 300;
+    font-size: 20px;
+  }
+}
+
+.headline {
+  font-size: 14px;
+  font-family: 'Open Sans';
+  font-weight: 600;
+  height: $article-height;
+  color: black;
+  font-weight: bold;
+  width: 80%;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  @media (min-width: $screen-md) {
+    padding: 20px;
+    font-size: calc($article-height * .4);
+  }
+}
+
+.definitions {
+  height: $definition-height;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  opacity: 1;
+  transition: opacity 250ms linear;
+
+  .articles, .readers-container {
+    font-size: 12px !important;
+    line-height: 15px !important;
+    height: 15px !important;
+  }
+
+  .articles {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  .readers {
+    color: black !important;
+    align-items: flex-end !important;
+    margin-right: 10px;
+    font-size: inherit;
+  }
+}
