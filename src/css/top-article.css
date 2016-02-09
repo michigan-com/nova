@@ -185,6 +185,10 @@ $definition-height: 35px;
 
   .text-container {
     font-weight: normal;
+
+    img {
+      margin: 0 10px;
+    }
   }
 
 }
