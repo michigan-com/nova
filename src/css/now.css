@@ -61,6 +61,27 @@ body {
   flex-wrap: wrap;
   z-index: $header-z-index;
 
+  .close-header {
+    background-color: $red;
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    line-height: 25px;
+    padding: 0px 20px;
+    cursor: pointer;
+    display: none;
+    border: 1px solid transparent;
+    transition: all 250ms linear;
+
+    &:hover {
+      border: 1px solid $red;
+      color: 1px solid $red;
+      background-color: transparent;
+    }
+  }
+
   .site-info {
     height: 0px;
     display: flex;
@@ -74,6 +95,10 @@ body {
 
     &.show {
       height: 50vh;
+
+      .close-header {
+        display: block;
+      }
 
       @media (max-width: $screen-sm) {
         height: 70vh;
