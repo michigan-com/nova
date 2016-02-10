@@ -88,12 +88,19 @@ export default class SpeedReader extends React.Component {
 
     let scrollTopGoal = document.body.clientHeight - window.innerHeight;
     let remaining = scrollTopGoal - currentScrollTop;
-    let step = remaining < 10 ? remaining : 10;
+    let step = 15;
+    step = remaining < step ? remaining : step;
 
     if (step === 0) {
+      let state = { playing: true };
+      if (!this.state.gotStarted) {
+        state.gotStarted = true;
+        state.countdown = true;
+      }
+
       setTimeout(() => {
-        this.setState({ gotStarted: true, countdown: true, playing: true });
-      }.bind(this), 100);
+        this.setState(state);
+      }.bind(this), 650);
       return
     }
 
@@ -166,7 +173,6 @@ export default class SpeedReader extends React.Component {
   }
 
   renderWPM = () => {
-    if (!this.state.gotStarted) return;
     let ref = this.refs['wpm'];
     if (!ref) return;
 
@@ -175,18 +181,27 @@ export default class SpeedReader extends React.Component {
 
   renderRemainingTime = () => {
     let ref = null;
-    if (!this.state.gotStarted) {
-      ref = this.refs['total-time']
-      if (!ref) return;
+    let remainingTime = this.controller.getRemainingTime();
+    let remainingTimeSplit = remainingTime.split(':');
+    let minutes = parseInt(remainingTimeSplit[0]);
+    let seconds = parseInt(remainingTimeSplit[1]);
 
-      let remainingTime = this.controller.getRemainingTime();
-      let minutes = remainingTime.split(':')[0];
-      ref.innerHTML = minutes;
-    } else {
-      ref = this.refs['time-remaining'];
-      if (!ref) return;
-      ref.innerHTML = `${this.controller.getRemainingTime()} remaining`;
+    // Total time
+    ref = this.refs['total-time']
+    if (!ref) return;
+    if (!minutes) {
+      ref.innerHTML = `under 1 minute`;
     }
+    else {
+      let approxMin = minutes;
+      if (seconds >= 30) approxMin += 1;
+      ref.innerHTML = `${approxMin} minute${approxMin > 1 ? 's': ''}`;
+    }
+
+    // Remaining time
+    ref = this.refs['time-remaining'];
+    if (!ref) return;
+    ref.innerHTML = `${minutes}:${seconds} remaining`;
   }
 
   renderCountdown() {
@@ -262,7 +277,8 @@ export default class SpeedReader extends React.Component {
   }
 
   renderSpeedControl() {
-    if (this.state.playing || !this.controller || !this.state.gotStarted) return null;
+    //if (this.state.playing || !this.controller || !this.state.gotStarted) return null;
+    if (!this.controller) return null;
 
     let speedControl = <SpeedControl speed={ this.controller.readingSpeed } updateSpeed={ this.updateSpeed }/>;
 
@@ -285,23 +301,33 @@ export default class SpeedReader extends React.Component {
     }
 
     let startText = null;
-    if (!this.state.gotStarted) startText = <div className='get-started'>Speed read this story in <span ref='total-time'></span> minutes! Click Play to get started </div>
+    if (!this.state.gotStarted) startText = <div className='get-started'>Adjust your speed, then press Play to get started </div>
 
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
-      <div className={ speedReaderClass } ref='speed-reader'>
-        { startText }
-        <div className='context'> { this.renderContext() }</div>
-        <div className='speed-reader-content'>
-          <div ref='speed-reader-text'></div>
-          { countdown }
+      <div className='speed-reader-container'>
+        <div className='keep-scrolling'>
+          <img className='speed-rabbit' src='/img/speed-rabbit.svg'/>
+          <div className='text-box'>Keep scrolling to speed read this article in <span ref='total-time'></span>!</div>
+          <div className='arrow-container'>
+            <img src='/img/chevron-down-white.svg' onClick={ () => { this.scrollIntoView(document.body.scrollTop) }.bind(this) }/>
+          </div>
+          <a href={ this.props.article.url }>View the original article</a>
         </div>
-        <div className='speed-reader-controls'>
-          { this.renderControls() }
-          <div className='wpm' ref='wpm'></div>
-          <div className='time-remaining' ref='time-remaining'></div>
+        <div className={ speedReaderClass } ref='speed-reader'>
+          { startText }
+          <div className='context'> { this.renderContext() }</div>
+          <div className='speed-reader-content'>
+            <div ref='speed-reader-text'></div>
+            { countdown }
+          </div>
+          <div className='speed-reader-controls'>
+            { this.renderControls() }
+            <div className='wpm' ref='wpm'></div>
+            <div className='time-remaining' ref='time-remaining'></div>
+          </div>
+          { this.renderSpeedControl() }
         </div>
-        { this.renderSpeedControl() }
       </div>
     )
   }

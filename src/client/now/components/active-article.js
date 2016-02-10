@@ -144,7 +144,7 @@ export default class ActiveArticle extends React.Component {
           <div className='article-image' style={ this.getBackgroundStyle() }></div>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
-              <div className='readers-container'>
+              <div className='current-readers-container'>
                 <span className='readers'>{ `${this.props.readers}` }</span>
                 <span className='pipe-divider'>|</span>
                 <span>now reading</span>
@@ -157,14 +157,8 @@ export default class ActiveArticle extends React.Component {
             </div>
           </div>
         </div>
-        <div className='keep-scrolling'>
-          <img src='/img/speed-rabbit.svg'/>
-          <div className='text-box'>Keep scrolling to speed read this article in record time!</div>
-        </div>
-        <div className={ speedReaderContainerClass }>
-          <SpeedReader article={ article }
-              key={ `speed-reader-${article.article_id}` }/>
-        </div>
+        <SpeedReader article={ article }
+            key={ `speed-reader-${article.article_id}` }/>
       </div>
     )
   }

@@ -149,7 +149,7 @@ body.photo-loading {
       font-weight: 500;
     }
 
-    .readers-container {
+    .current-readers-container {
       display: flex;
       flex-direction: row;
       font-size: 11px;
@@ -239,7 +239,7 @@ body.photo-loading {
   z-index: $active-article-z-index;
   padding-bottom: 20px;
 
-  img {
+  .speed-rabbit {
     height: 30px;
     width: 30px;
   }
@@ -252,5 +252,29 @@ body.photo-loading {
     line-height: 24px;
     font-weight: 500;
     padding: 10px;
+  }
+
+  .arrow-container {
+    height: 50px;
+    width: 50px;
+    margin: 20px auto;
+    text-align: center;
+    cursor: pointer;
+    background-color: $red;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 50%;
+      height: 100%;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+    color: black;
+    font-size: 10px;
   }
 }

@@ -20,18 +20,17 @@ $speed-control-bottom: calc($controls-height * 1.3);
 
 .speed-reader-container {
   width: 100%;
-  height: 100vh;
   background-color: white;
   transition: all 500ms ease-in;
 }
 
 .speed-reader {
+  height: 100vh;
+  width: 100%;
   transition: opacity 250ms linear, background-color 250ms linear;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 100%;
   background-color: white;
   position: relative;
 
@@ -134,7 +133,6 @@ $speed-control-bottom: calc($controls-height * 1.3);
       line-height: 30px;
       font-size: 15px;
       width: 100%;
-      opacity: 0;
       color: black;
       text-align: center;
       transition: opacity 250ms linear;
