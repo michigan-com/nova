@@ -6,7 +6,8 @@ $definition-height: 35px;
 .top-article-container, .info-tile-container {
   position: absolute;
   width: 90%;
-  margin: 0 5%;
+  margin-left: 5%;
+  margin-right: 5%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -147,7 +148,7 @@ $definition-height: 35px;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
   opacity: 1;
   transition: opacity 250ms linear;

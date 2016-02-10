@@ -79,7 +79,7 @@ export default class SpeedReader extends React.Component {
 
   componentWillUnmount() { this.deinit(); }
 
-  scrollIntoView(lastScrollTop=null) {
+  scrollIntoView(lastScrollTop=null, autoplay=false) {
     let body = document.body;
     let currentScrollTop = body.scrollTop;
 
@@ -92,6 +92,8 @@ export default class SpeedReader extends React.Component {
     step = remaining < step ? remaining : step;
 
     if (step === 0) {
+      if (!autoplay) return;
+
       let state = { playing: true };
       if (!this.state.gotStarted) {
         state.gotStarted = true;
@@ -108,7 +110,7 @@ export default class SpeedReader extends React.Component {
     body.scrollTop = newScrollTop;
     setTimeout(((newScrollTop) => {
       return () => {
-        this.scrollIntoView(newScrollTop);
+        this.scrollIntoView(newScrollTop, autoplay);
       }.bind(this)
     })(newScrollTop), 10);
   }
@@ -135,7 +137,7 @@ export default class SpeedReader extends React.Component {
 
   togglePlay = () => {
     if (!this.state.gotStarted) {
-      this.scrollIntoView(document.body.scrollTop);
+      this.scrollIntoView(document.body.scrollTop, true);
       return;
     }
 

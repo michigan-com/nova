@@ -19,9 +19,9 @@ export function getTopArticleHeight() {
 export function getTopArticleStyle(rank) {
   let style = {
     height: getTopArticleHeight(),
-    margin: TOP_ARTICLE_STYLE.margin
+    marginBottom: TOP_ARTICLE_STYLE.margin
   };
-  style.top = `${(rank * (style.height + style.margin)) + style.margin}px`;
+  style.top = `${(rank * (style.height + style.marginBottom)) + style.marginBottom}px`;
   return style;
 }
 
