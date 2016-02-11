@@ -59,6 +59,7 @@ export default class SectionFilters extends React.Component {
 
     return (
       <div className='filters-container' style={ style }>
+        <div className='includes'>includes:</div>
         <div className='filters'>
           {
             this.props.sections.map(function(section, index) {

@@ -262,7 +262,7 @@ body {
   bottom: 0;
   left: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   height: $filter-height;
   background-color: #f2f2f2;
@@ -271,6 +271,12 @@ body {
 
   &, & * {
     z-index: calc($header-z-index - 1);
+  }
+
+  .includes {
+    font-size: 10px;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   .filters {
@@ -309,8 +315,8 @@ body {
   }
 
   .section-circle {
-    height: $button-height;
-    width: $button-height;
+    height: calc($filter-height * .45);
+    width: calc($filter-height * .45);
     cursor: pointer;
     position: relative;
 
@@ -345,13 +351,13 @@ body {
   }
 
   .section-filter-name {
-    font-size: calc($filter-name-height * .8);
+    font-size: calc($filter-name-height * .5);
     text-transform: uppercase;
     margin: 0 auto;
     font-weight: 400;
 
     @media (max-width: $screen-sm) {
-      font-size: calc($filter-name-height * .7)
+      font-size: calc($filter-name-height * .5)
     }
   }
 }
