@@ -4,7 +4,7 @@ import assign from 'object-assign';
 
 import { GOT_TOP_ARTICLES, GOT_QUICKSTATS, DEFAULT_ARTICLE_LIST, TOGGLE_INFO,
   sortTopArticles, saveArticleIdsToCookie } from '../../actions/article-list';
-import { DEFAULT_SECTIONS, SECTION_SELECT, writeSectionCookie } from '../../actions/filters';
+import { DEFAULT_SECTIONS, SECTION_SELECT, writeSectionCookie} from '../../actions/filters';
 import { ARTICLE_LOADED, CLOSE_ACTIVE_ARTICLE } from '../../actions/active-article';
 import { getRandomInt } from '../../lib/random';
 

@@ -12,7 +12,7 @@ export default function (state=DEFAULT_ARTICLE, action) {
   let articleLoading, activeArticle, speedReading, activeArticleReaders;
   switch (action.type) {
     case ARTICLE_SELECTED:
-      activeArticleReaders = action.value;
+      activeArticleReaders = action.value.readers;
       articleLoading = true;
       return assign({}, state, { activeArticleReaders, articleLoading });
     case ARTICLE_LOADED:

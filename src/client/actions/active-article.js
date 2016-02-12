@@ -5,15 +5,25 @@ import assign from 'object-assign';
 
 import { appName, socketUrl } from '../../../config';
 
+import { googleTagEvent, ARTICLE_SELECTED_EVENT, ARTICLE_LOADED_EVENT,
+  ARTICLE_LOAD_FAILED_EVENT, ARTICLE_CLOSED_EVENT } from './tag-manager';
+
 export const ARTICLE_SELECTED = 'ARTICLE_SELECTED';
 export const ARTICLE_LOADING = 'ARTICLE_LOADING';
 export const ARTICLE_LOADED = 'ARTICLE_LOADED';
+export const ARTICLE_LOAD_FAILED  = 'ARTICLE_LOAD_FAILED ';
 export const START_SPEED_READING = 'START_SPEED_READING';
 export const STOP_SPEED_READING = 'STOP_SPEED_READING';
 export const CLOSE_ACTIVE_ARTICLE = 'CLOSE_ACTIVE_ARTICLE';
 
 var articleCache = {};
 
+/**
+ * Iterate through the active articles, update the active readers
+ *
+ * @param {Array} articles - New set of top articles
+ * @param {Object} state - current state of things
+ */
 export function getActiveArticleReaders(articles, state) {
   if (state.articleLoading || !state.activeArticle) return -1;
   for (let article of articles) {
@@ -25,6 +35,11 @@ export function getActiveArticleReaders(articles, state) {
   return -1;
 }
 
+/**
+ * Hit the api at ${socketUrl} and fetch the article. Promised based.
+ *
+ * @param {Number} articleId - id of the selected article
+ */
 function fetchActiveArticle(articleId) {
     return new Promise((resolve, reject) => {
       let _renderArticleFromCache = (id) => {
@@ -50,7 +65,16 @@ function fetchActiveArticle(articleId) {
     });
 }
 
+/**
+ * Action triggered when a user clicks on a top article in the list. Attempts
+ * to load the article from the api, and closes the article if it fails
+ *
+ * @param {Number} articleId - ID of the selected article, will be used to look up in api
+ * @param {Number} readers - Init the active article with the readers, so we dont have
+ *  to wait for the next socket update
+ */
 export function articleSelected(articleId=-1, readers=0) {
+  googleTagEvent(ARTICLE_SELECTED_EVENT, { articleId } )
   return async dispatch => {
     dispatch(articleLoading(readers));
     try {
@@ -58,7 +82,7 @@ export function articleSelected(articleId=-1, readers=0) {
       dispatch(articleLoaded(article));
     } catch (e) {
       console.log(e);
-      dispatch(closeActiveArticle());
+      dispatch(articleLoadFailed(articleId));
     }
   }
 }
@@ -71,6 +95,7 @@ export function articleLoading(readers=0) {
 }
 
 export function articleLoaded(article=null) {
+  googleTagEvent(ARTICLE_LOADED_EVENT, { articleId: article.article_id });
   return {
     type: ARTICLE_LOADED,
     value: article
@@ -93,6 +118,12 @@ export function closeActiveArticle(changeHistory=true) {
   if (changeHistory) History.pushState({}, appName, '/');
   return {
     type: CLOSE_ACTIVE_ARTICLE
+  }
+}
+
+export function articleLoadFailed(articleId=-1) {
+  return {
+    type: ARTICLE_LOAD_FAILED
   }
 }
 

@@ -1,0 +1,23 @@
+meta(charset="utf-8")
+meta(http-equiv="X-UA-Compatible", content="IE=edge")
+meta(name="viewport", content="width=device-width, initial-scale=1")
+meta(name="theme-color", content="#f8c929")
+link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800', rel='stylesheet', type='text/css')
+link(href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic', rel='stylesheet', type='text/css')
+link(href='/img/rabbit.png', rel='apple-touch-icon')
+link(href='/img/rabbit-120x120.png', rel='apple-touch-icon', sizes='120x120')
+link(href='/img/rabbit-180x180.png', rel='apple-touch-icon', sizes='180x180')
+
+if metaTags
+  if photoUrl
+    meta(name='twitter:card', content='summary_large_image')
+    meta(name='twitter:image', content='#{photoUrl}')
+    meta(property='og:image', content='#{photoUrl}')
+  else
+    meta(name='twitter:card', content='summary')
+  meta(name='twitter:title', content='#{title}')
+  meta(name='twitter:description', content='#{description}')
+
+  meta(property='og:title', content='#{title}')
+  meta(property='og:url', content='#{currentUrl}')
+  meta(property='og:description', content='#{description}')

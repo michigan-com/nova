@@ -12,14 +12,15 @@ var router = express.Router();
 
 router.get('/', (req, res, next) => {
   res.render('now', {
-    title: Config.appName
+    title: Config.appName,
+    initialPage: 'list-view'
   });
 });
 
 router.get('/article/:articleId/', (req, res, next) => {
   let articleId = req.params.articleId;
   if (isNaN(articleId)) {
-    res.status(404)
+    res.status(404);
     next();
     return;
   }
@@ -46,7 +47,8 @@ router.get('/article/:articleId/', (req, res, next) => {
       metaTags: true,
       title,
       photoUrl,
-      description
+      description,
+      initialPage: `Article ${article.article_id}: ${article.headline}`
     });
   });
 });
