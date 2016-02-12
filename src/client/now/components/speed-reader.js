@@ -13,6 +13,7 @@ export default class SpeedReader extends React.Component {
     this.state = {
       gotStarted: false,
       playing: false,
+      speedReaderFinished: false,
       countdown: true,
       countdownIndex: null,
     }
@@ -29,13 +30,23 @@ export default class SpeedReader extends React.Component {
   }
 
   componentDidMount() {
-    this.controller = new SimpleReader(this.refs['speed-reader-text']);
+    this.initSpeedReader();
+    window.addEventListener('blur', this._pause);
+  }
+
+  initSpeedReader() {
+    this.controller = new SimpleReader(this.refs['speed-reader-text'], {
+      onComplete: () => {
+        setTimeout( () => {
+          this.setState({ speedReaderFinished: true, playing: false });
+        }.bind(this), 250);
+      }
+    });
     this.controller.setArticle({
       headline: this.props.article.headline,
-      body: this.props.article.body
+      //body: this.props.article.body
+      body: 'asdf dfdbg. df fthwgw vf e b yuum u. fgset'
     });
-
-    window.addEventListener('blur', this._pause);
 
     this.renderRemainingTime();
   }
@@ -47,6 +58,11 @@ export default class SpeedReader extends React.Component {
     if (!this.state.countdown) {
       if (nextState.playing && !this.state.playing) this.playSpeedReader();
       else if (!nextState.playing && this.state.playing) this.pauseSpeedReader();
+    }
+
+    if (nextState.speedReaderFinished && !this.state.speedReaderFinished) {
+      this.refs['speed-reader-text'].innerHTML = '';
+      Store.dispatch(stopSpeedReading());
     }
   }
 
@@ -147,9 +163,14 @@ export default class SpeedReader extends React.Component {
       return;
     }
 
+    if (this.state.speedReaderFinished) {
+      this.initSpeedReader();
+    }
+
+
     let playing = !this.state.playing;
     if (!playing) this.renderRemainingTime();
-    this.setState({ playing });
+    this.setState({ playing, speedReaderFinished: false });
   }
 
   nextPara = () => {
@@ -302,8 +323,9 @@ export default class SpeedReader extends React.Component {
       countdown = this.renderCountdown();
     }
 
-    let startText = null;
-    if (!this.state.gotStarted) startText = <div className='get-started'>Adjust your speed, then press Play to get started </div>
+    let helpText = null;
+    if (!this.state.gotStarted) helpText = <div className='help-text'>Adjust your speed, then press Play to get started </div>
+    else if (this.state.speedReaderFinished) helpText = <div className='help-text'>All done!</div>
 
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
@@ -317,7 +339,7 @@ export default class SpeedReader extends React.Component {
           <a href={ this.props.article.url }>View the original article</a>
         </div>
         <div className={ speedReaderClass } ref='speed-reader'>
-          { startText }
+          { helpText }
           <div className='context'> { this.renderContext() }</div>
           <div className='speed-reader-content'>
             <div ref='speed-reader-text'></div>

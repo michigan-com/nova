@@ -4,9 +4,9 @@ import xr from 'xr';
 import assign from 'object-assign';
 
 import { appName, socketUrl } from '../../../config';
-
+import { millisToMinutesAndSeconds } from '../lib/parse';
 import { googleTagEvent, ARTICLE_SELECTED_EVENT, ARTICLE_LOADED_EVENT,
-  ARTICLE_LOAD_FAILED_EVENT, ARTICLE_CLOSED_EVENT } from './tag-manager';
+  ARTICLE_LOAD_FAILED_EVENT, ARTICLE_CLOSED_EVENT, STOP_SPEED_READING_EVENT } from './tag-manager';
 
 export const ARTICLE_SELECTED = 'ARTICLE_SELECTED';
 export const ARTICLE_LOADING = 'ARTICLE_LOADING';
@@ -17,6 +17,7 @@ export const STOP_SPEED_READING = 'STOP_SPEED_READING';
 export const CLOSE_ACTIVE_ARTICLE = 'CLOSE_ACTIVE_ARTICLE';
 
 var articleCache = {};
+var speedReadingStartTime = null;
 
 /**
  * Iterate through the active articles, update the active readers
@@ -103,18 +104,29 @@ export function articleLoaded(article=null) {
 }
 
 export function startSpeedReading() {
+  speedReadingStartTime = new Date();
   return {
     type: START_SPEED_READING
   }
 }
 
 export function stopSpeedReading() {
+  // Do the google tag for tracking speed reading time
+  let stopTime = new Date();
+  let delta = stopTime - speedReadingStartTime;
+  speedReadingStartTime = null;
+
+  console.log(delta);
+  let speedReadingTime = millisToMinutesAndSeconds(delta);
+  googleTagEvent(STOP_SPEED_READING_EVENT, { speedReadingTime });
+
   return {
     type: STOP_SPEED_READING
   }
 }
 
 export function closeActiveArticle(changeHistory=true) {
+  speedReadingStartTime = null;
   if (changeHistory) History.pushState({}, appName, '/');
   return {
     type: CLOSE_ACTIVE_ARTICLE
@@ -122,6 +134,7 @@ export function closeActiveArticle(changeHistory=true) {
 }
 
 export function articleLoadFailed(articleId=-1) {
+  googleTagEvent(ARTICLE_LOAD_FAILED_EVENT, { articleId });
   return {
     type: ARTICLE_LOAD_FAILED
   }

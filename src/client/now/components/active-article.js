@@ -3,8 +3,8 @@
 import React from 'react';
 
 import Store from '../../store';
+import { closeActiveArticle } from '../../actions/active-article';
 import LoadingImage from './loading-image';
-import ScrollHook from './scroll-hook';
 import SpeedReader from './speed-reader';
 import { toggleClass } from '../../lib/dom';
 
@@ -19,14 +19,6 @@ export default class ActiveArticle extends React.Component {
 
       fadeOutArticle: false
     }
-
-    this.scrollHooks = [new ScrollHook({
-      ref: 'article-content',
-      scrollTopThresholdDown: '10%',
-      scrollTopThresholdUp: '30%',
-      scrollDownHook: () => { /*this.setState({ fadeImageOut: true })*/ }.bind(this),
-      scrollUpHook: () => { /*this.setState({ fadeImageOut: false })*/ }.bind(this),
-    })];
   }
 
   componentWillMount() {
@@ -48,19 +40,6 @@ export default class ActiveArticle extends React.Component {
       setTimeout(() => {
         this.setState({ fadeSpeedReader: false });
       }, 500);
-    }
-  }
-
-  /**
-   * Used to check the scroll at intervals in order to ease animations
-   */
-  checkScroll = () => {
-    let currentTop = window.scrollY;
-    for (let hook of this.scrollHooks) {
-      hook.storeClientTop(currentTop);
-      if (hook.shouldTriggerHook()) {
-        hook.triggerHook();
-      }
     }
   }
 
@@ -87,8 +66,6 @@ export default class ActiveArticle extends React.Component {
     i.onload = () => { this.photoLoaded(); }
     i.src = article.photo.full.url;
   }
-
-  loadSpeedReader() { Store.dispatch(startSpeedReading()); }
 
   closeActiveArticle(e) {
     // TODO
@@ -145,7 +122,7 @@ export default class ActiveArticle extends React.Component {
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
               <div className='current-readers-container'>
-                <span className='readers'>{ `${this.props.readers}` }</span>
+                <span className='readers'>{ `${this.props.readers || '-' }` }</span>
                 <span className='pipe-divider'>|</span>
                 <span>now reading</span>
               </div>
@@ -159,6 +136,12 @@ export default class ActiveArticle extends React.Component {
         </div>
         <SpeedReader article={ article }
             key={ `speed-reader-${article.article_id}` }/>
+        <div className='context-menu'>
+          <div className='menu-button' onClick={ () => { Store.dispatch(closeActiveArticle()); }}>
+            <img src='/img/cards.svg'/>
+            <div className='button-text'>Feed</div>
+          </div>
+        </div>
       </div>
     )
   }

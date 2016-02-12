@@ -48,7 +48,7 @@ router.get('/article/:articleId/', (req, res, next) => {
       title,
       photoUrl,
       description,
-      initialPage: `Article ${article.article_id}: ${article.headline}`
+      initialPage: `Article ${article.article_id}`
     });
   });
 });

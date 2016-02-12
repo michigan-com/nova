@@ -7,8 +7,10 @@ export const ARTICLE_LOADED_EVENT = 'articleLoaded';
 export const ARTICLE_LOAD_FAILED_EVENT = 'articleLoadFailed';
 export const ARTICLE_CLOSED_EVENT = 'articleClosed';
 
-export const SECTION_TOGGLE_EVENT = 'sectionToggle';
+export const START_SPEED_READING_EVENT = 'startSpeedReading';
+export const STOP_SPEED_READING_EVENT = 'stopSpeedReading';
 
+export const SECTION_TOGGLE_EVENT = 'sectionToggle';
 
 /**
  * Trigger a Google Tag Manager event

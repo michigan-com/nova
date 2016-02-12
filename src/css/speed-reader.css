@@ -8,7 +8,7 @@ $speed-control-height: 15vh;
 
 $speed-control-bottom: calc($controls-height * 1.3);
 
-.get-started {
+.help-text {
   position: absolute;
   width: 90%;
   left: 5%;
