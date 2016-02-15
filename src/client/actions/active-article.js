@@ -42,28 +42,28 @@ export function getActiveArticleReaders(articles, state) {
  * @param {Number} articleId - id of the selected article
  */
 function fetchActiveArticle(articleId) {
-    return new Promise((resolve, reject) => {
-      let _renderArticleFromCache = (id) => {
-        let article = articleCache[id];
-        History.pushState({ id }, `${article.headline}`, `/article/${id}/`);
-        resolve(article);
-      }
+  return new Promise((resolve, reject) => {
+    let _renderArticleFromCache = (id) => {
+      let article = articleCache[id];
+      History.pushState({ id }, `${article.headline}`, `/article/${id}/`);
+      resolve(article);
+    }
 
-      if (articleId in articleCache) {
-        // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
-        _renderArticleFromCache(articleId);
-      } else {
-        let url = `${socketUrl}/v1/article/${articleId}/`;
-        xr.get(url)
-          .then((data) => {
-            articleCache[articleId] = data;
-            _renderArticleFromCache(articleId);
-          }, (e) => {
-            console.log(`Failed to fetch article ${socketUrl}/v1/article/${articleId}/`);
-            reject(e);
-        });
-      }
-    });
+    if (articleId in articleCache) {
+      // TODO set some cache threshold. Maybe a cache entry is stale after 24 hours?
+      _renderArticleFromCache(articleId);
+    } else {
+      let url = `${socketUrl}/v1/article/${articleId}/`;
+      xr.get(url)
+        .then((data) => {
+          articleCache[articleId] = data;
+          _renderArticleFromCache(articleId);
+        }, (e) => {
+          console.log(`Failed to fetch article ${socketUrl}/v1/article/${articleId}/`);
+          reject(e);
+      });
+    }
+  });
 }
 
 /**
@@ -112,13 +112,14 @@ export function startSpeedReading() {
 
 export function stopSpeedReading() {
   // Do the google tag for tracking speed reading time
-  let stopTime = new Date();
-  let delta = stopTime - speedReadingStartTime;
-  speedReadingStartTime = null;
+  if (speedReadingStartTime !== null) {
+    let stopTime = new Date();
+    let delta = stopTime - speedReadingStartTime;
+    speedReadingStartTime = null;
 
-  console.log(delta);
-  let speedReadingTime = millisToMinutesAndSeconds(delta);
-  googleTagEvent(STOP_SPEED_READING_EVENT, { speedReadingTime });
+    let speedReadingTime = millisToMinutesAndSeconds(delta);
+    googleTagEvent(STOP_SPEED_READING_EVENT, { speedReadingTime });
+  }
 
   return {
     type: STOP_SPEED_READING

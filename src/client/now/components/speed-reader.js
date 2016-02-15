@@ -335,7 +335,6 @@ export default class SpeedReader extends React.Component {
           <div className='arrow-container'>
             <img src='/img/chevron-down-white.svg' onClick={ () => { this.scrollIntoView(document.body.scrollTop) }.bind(this) }/>
           </div>
-          <a href={ this.props.article.url }>View the original article</a>
         </div>
         <div className={ speedReaderClass } ref='speed-reader'>
           { helpText }

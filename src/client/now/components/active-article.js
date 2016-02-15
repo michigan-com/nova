@@ -128,7 +128,7 @@ export default class ActiveArticle extends React.Component {
               </div>
               <div className='title'>{ article.headline }</div>
               <div className='summary-container'>
-                <div className='summary-title'>Summary</div>
+                <div className='summary-title'>Bot Summary</div>
                 { article.summary.map(this.renderSummarySentence) }
               </div>
             </div>

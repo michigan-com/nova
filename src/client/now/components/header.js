@@ -25,7 +25,7 @@ export default class Header extends React.Component {
         <div id='header'>
           <div className={ siteInfoClass }>
             <div className='info-content'>
-              <div className='close-header' onClick={ () => { Store.dispatch(toggleInfo()); } }>Close</div>
+              <div className='close-header' onClick={ () => { Store.dispatch(toggleInfo()); } }>X</div>
               <p className='info-header'>{ `${this.props.appName} uses artificial intelligence to give you essential news in less time.` }</p>
               <div className='list'>
                 <p>{ `${this.props.appName}'s algorithms surface the most-read Michigan news, in real-time.` }</p>

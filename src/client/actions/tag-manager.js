@@ -20,8 +20,6 @@ export const SECTION_TOGGLE_EVENT = 'sectionToggle';
  */
 export function googleTagEvent(event, eventData={}) {
   let eventObj = assign({}, eventData, { event })
-  console.log('google tag event');
-  console.log(eventObj);
   dataLayer.push(eventObj);
   return;
 }
