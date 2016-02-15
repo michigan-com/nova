@@ -26,22 +26,8 @@ export default class ActiveArticle extends React.Component {
     document.body.scrollTop = 0;
   }
 
-  componentDidMount() {}
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.speedReading && !this.props.speedReading) {
-      this.setState({ fadeSpeedReader: true });
-    } else if (!nextProps.speedReading && this.props.speedReading) {
-      this.setState({ fadeSpeedReader: true});
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.fadeSpeedReader && !prevState.fadeSpeedReader) {
-      setTimeout(() => {
-        this.setState({ fadeSpeedReader: false });
-      }, 500);
-    }
+  componentDidMount() {
+    console.log('active-article-mount');
   }
 
   photoLoaded = () => {
@@ -100,9 +86,7 @@ export default class ActiveArticle extends React.Component {
     let activeArticleContainerClass = 'active-article-container';
     if (this.state.photoLoaded) activeArticleContainerClass += ' photo-loaded';
 
-    if (this.state.fadeSpeedReader) activeArticleContainerClass += ' fade-in-speed-reader';
-    else if (this.props.speedReading) activeArticleContainerClass += ' speed-reading';
-    else if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
+    if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
 
     let article = this.props.article;
     let activeArticleClass = 'active-article';
