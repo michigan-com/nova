@@ -91,8 +91,6 @@ class NowDashboard extends React.Component {
     }
   }
 
-  componentDidMount() { window.addEventListener('scroll', this.checkScroll); }
-
   // Save what articles are currently drawn
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.activeArticleClose && this.state.activeArticleClose) {

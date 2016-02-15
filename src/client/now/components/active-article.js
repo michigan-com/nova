@@ -25,6 +25,7 @@ export default class ActiveArticle extends React.Component {
     this.loadPhoto();
     document.body.scrollTop = 0;
   }
+
   componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
