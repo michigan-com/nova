@@ -44,8 +44,7 @@ export default class SpeedReader extends React.Component {
     });
     this.controller.setArticle({
       headline: this.props.article.headline,
-      //body: this.props.article.body
-      body: 'asdf dfdbg. df fthwgw vf e b yuum u. fgset'
+      body: this.props.article.body
     });
 
     this.renderRemainingTime();
