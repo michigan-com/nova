@@ -47,6 +47,7 @@ function fetchActiveArticle(articleId) {
     let _renderArticleFromCache = (id) => {
       let article = articleCache[id];
       History.pushState({ id }, `${article.headline}`, `/article/${id}/`);
+      ga('send', 'pageview');
       resolve(article);
     }
 
@@ -140,7 +141,10 @@ function _stopSpeedReadingEvent(articleId=-1) {
 }
 
 export function closeActiveArticle(articleId=-1, changeHistory=true) {
-  if (changeHistory) History.pushState({}, appName, '/');
+  if (changeHistory) {
+    History.pushState({}, appName, '/');
+    ga('send', 'pageview');
+  }
 
   // Track the google event for stopping speed reading
   _stopSpeedReadingEvent(articleId);
