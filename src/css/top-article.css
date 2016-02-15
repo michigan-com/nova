@@ -96,6 +96,10 @@ $definition-height: 35px;
   }
 }
 
+.info-tile {
+  cursor: default !important;
+}
+
 /* Pulled out because its used in the definitions at the top of the page */
 .readers-container, .img-container {
   color: $red;

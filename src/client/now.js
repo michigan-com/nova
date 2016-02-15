@@ -11,7 +11,7 @@ import { closeActiveArticle, articleSelected } from './actions/active-article';
 import { gotTopArticles, gotQuickstats } from './actions/article-list';
 import { initDashboard } from './now/dashboard';
 
-const articleIdUrlRegex = /^\/article\/(\d+)\/?$/;
+const articleIdUrlRegex = /\/article\/(\d+)\/?$/;
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -41,9 +41,11 @@ function historyChange(e) {
   let articleIdMatch = articleIdUrlRegex.exec(window.location.pathname);
 
   if (/^\/$/.test(window.location.pathname)) {
-    Store.dispatch(closeActiveArticle(false));
+    let articleIdMatch = articleIdUrlRegex.exec(state.url);
+    if (articleIdMatch) Store.dispatch(closeActiveArticle(articleIdMatch[1], false));
   }
   else if (articleIdMatch) {
-    Store.dispatch(articleSelected(parseInt(articleIdMatch[1])));
+    let articleId = parseInt(articleIdMatch[1]);
+    Store.dispatch(articleSelected(articleId));
   }
 }

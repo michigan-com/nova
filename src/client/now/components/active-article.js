@@ -70,7 +70,7 @@ export default class ActiveArticle extends React.Component {
   closeActiveArticle(e) {
     // TODO
     this.setState({ fadeOutArticle: true });
-    setTimeout(() => { Store.dispatch(closeActiveArticle()); }, 500);
+    setTimeout(() => { Store.dispatch(closeActiveArticle(this.props.article.article_id)); }, 500);
   }
 
   getBackgroundStyle() {
@@ -137,7 +137,7 @@ export default class ActiveArticle extends React.Component {
         <SpeedReader article={ article }
             key={ `speed-reader-${article.article_id}` }/>
         <div className='context-menu'>
-          <div className='menu-button' onClick={ () => { Store.dispatch(closeActiveArticle()); }}>
+          <div className='menu-button' onClick={ () => { this.closeActiveArticle(); }}>
             <img src='/img/cards.svg'/>
             <div className='button-text'>Feed</div>
           </div>

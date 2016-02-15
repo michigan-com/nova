@@ -8,7 +8,7 @@ import { sectionSelect } from '../../actions/filters';
 // This ended up being much less complicated than initially anticipated
 export default class SectionFilter extends React.Component {
 
-  toggleFilter = () => { Store.dispatch(sectionSelect(this.props.name)); }
+  toggleFilter = () => { Store.dispatch(sectionSelect(this.props.name, this.props.active)); }
 
   render() {
     let sectionFilterClass = `section-filter ${this.props.name}`;

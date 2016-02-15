@@ -4,7 +4,7 @@ import React from 'react';
 import { SimpleReader } from 'reeeeeader';
 
 import Store from '../../store';
-import { stopSpeedReading } from '../../actions/active-article';
+import { startSpeedReading, stopSpeedReading } from '../../actions/active-article';
 
 export default class SpeedReader extends React.Component {
   constructor(props) {
@@ -142,11 +142,19 @@ export default class SpeedReader extends React.Component {
 
   playSpeedReader = () => {
     if (!this.controller) return;
+
+    let article = this.props.article;
+    Store.dispatch(startSpeedReading(article.article_id));
+
     this.controller.resume();
   }
 
   pauseSpeedReader = () => {
     if (!this.controller) return;
+
+    let article = this.props.article;
+    Store.dispatch(stopSpeedReading(article.article_id));
+
     this.controller.pause();
   }
 

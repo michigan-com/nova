@@ -2,6 +2,8 @@
 
 import Cookies from 'cookies-js';
 
+import { googleTagEvent, SECTION_TOGGLE_EVENT } from './tag-manager';
+
 export const SECTION_SELECT = 'SECTION_SELECT';
 
 export const SPORTS = 'sports';
@@ -42,7 +44,15 @@ export function writeSectionCookie(sectionState=DEFAULT_SECTIONS) {
   Cookies.set(SECTION_COOKIE, JSON.stringify(sectionState));
 }
 
-export function sectionSelect(sectionName='') {
+/**
+ * Action to take when a section filter is clicked
+ *
+ * @param {String} sectionName - Section in question
+ * @param {Boolean} previousState - Current filter state. The filter's new state
+ *  will be !previousState
+ */
+export function sectionSelect(sectionName='', previousState=false) {
+  googleTagEvent(SECTION_TOGGLE_EVENT, { sectionName, showArticles: !previousState });
   return {
     type: SECTION_SELECT,
     value: sectionName

@@ -6,7 +6,8 @@ import assign from 'object-assign';
 import { appName, socketUrl } from '../../../config';
 import { millisToMinutesAndSeconds } from '../lib/parse';
 import { googleTagEvent, ARTICLE_SELECTED_EVENT, ARTICLE_LOADED_EVENT,
-  ARTICLE_LOAD_FAILED_EVENT, ARTICLE_CLOSED_EVENT, STOP_SPEED_READING_EVENT } from './tag-manager';
+  ARTICLE_LOAD_FAILED_EVENT, ARTICLE_CLOSED_EVENT, START_SPEED_READING_EVENT,
+  STOP_SPEED_READING_EVENT } from './tag-manager';
 
 export const ARTICLE_SELECTED = 'ARTICLE_SELECTED';
 export const ARTICLE_LOADING = 'ARTICLE_LOADING';
@@ -103,32 +104,48 @@ export function articleLoaded(article=null) {
   }
 }
 
-export function startSpeedReading() {
+export function startSpeedReading(articleId=-1) {
   speedReadingStartTime = new Date();
+  googleTagEvent(START_SPEED_READING_EVENT, { articleId });
   return {
     type: START_SPEED_READING
   }
 }
 
-export function stopSpeedReading() {
+export function stopSpeedReading(articleId=-1) {
   // Do the google tag for tracking speed reading time
-  if (speedReadingStartTime !== null) {
-    let stopTime = new Date();
-    let delta = stopTime - speedReadingStartTime;
-    speedReadingStartTime = null;
-
-    let speedReadingTime = millisToMinutesAndSeconds(delta);
-    googleTagEvent(STOP_SPEED_READING_EVENT, { speedReadingTime });
-  }
+  _stopSpeedReadingEvent(articleId);
 
   return {
     type: STOP_SPEED_READING
   }
 }
 
-export function closeActiveArticle(changeHistory=true) {
+/**
+ * Used to trigger the stopSpeedReading event in Google Tag Manager. Triggered
+ * when a user "pauses" speed reading, or closes an article
+ *
+ * @param {Number} articleId - Active article ID
+ */
+function _stopSpeedReadingEvent(articleId=-1) {
+  if (speedReadingStartTime !== null) {
+    let stopTime = new Date();
+    let delta = stopTime - speedReadingStartTime;
+    speedReadingStartTime = null;
+
+    let speedReadingTime = millisToMinutesAndSeconds(delta);
+    googleTagEvent(STOP_SPEED_READING_EVENT, { articleId, speedReadingTime });
+  }
   speedReadingStartTime = null;
+}
+
+export function closeActiveArticle(articleId=-1, changeHistory=true) {
   if (changeHistory) History.pushState({}, appName, '/');
+
+  // Track the google event for stopping speed reading
+  _stopSpeedReadingEvent(articleId);
+  googleTagEvent(ARTICLE_CLOSED_EVENT, { articleId })
+
   return {
     type: CLOSE_ACTIVE_ARTICLE
   }
