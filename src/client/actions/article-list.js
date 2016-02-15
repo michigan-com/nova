@@ -14,7 +14,7 @@ export const INFO_BLURBS = [
   <div>{ `Using ${appName}'s Speed Reader, you can read an entire article in a fraction of the time! `}</div>,
   <div>On an iPhone? Save our site to your home screen using the <img src='/img/share-button.svg'/> button</div>,
   <div>Our bots summarize news articles around the clock.</div>,
-  <div>{${appName} was built for busy people — more news, in less time.}</div>,
+  <div>{ `${appName} was built for busy people — more news, in less time. `}</div>,
   <div>Out of articles? Don't worry! This list updates every 10 seconds, check back for more later!</div>,
   <div>Did you know? The average adult reads 250 to 300 words per minute.</div>,
   <div>Speed-reading tip: To read faster, try to not voice the words in your head.</div>,
