@@ -31,7 +31,7 @@ function init() {
 
   // See if we have an ?articleId= url param
   let match = articleIdUrlRegex.exec(window.location.pathname);
-  if (match) Store.dispatch(articleSelected(parseInt(match[1])));
+  if (match) Store.dispatch(articleSelected(parseInt(match[1]), 0, false));
 }
 
 function historyChange(e) {

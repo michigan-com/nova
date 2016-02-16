@@ -41,13 +41,23 @@ export function getActiveArticleReaders(articles, state) {
  * Hit the api at ${socketUrl} and fetch the article. Promised based.
  *
  * @param {Number} articleId - id of the selected article
+ * @param {Boolean} historyUpdate - If true, will update browser history/send
+ *    Google Analytics event
  */
-function fetchActiveArticle(articleId) {
+export function fetchActiveArticle(articleId, historyUpdate=true) {
   return new Promise((resolve, reject) => {
     let _renderArticleFromCache = (id) => {
       let article = articleCache[id];
-      History.pushState({ id }, `${article.headline}`, `/article/${id}/`);
-      ga('send', 'pageview');
+      let url = `/article/${id}/`;
+
+      if (historyUpdate) {
+        History.pushState({ id }, article.headline, url);
+        ga('send', {
+          hitType: 'pageview',
+          page: url,
+          title: article.headline
+        });
+      }
       resolve(article);
     }
 
@@ -75,13 +85,15 @@ function fetchActiveArticle(articleId) {
  * @param {Number} articleId - ID of the selected article, will be used to look up in api
  * @param {Number} readers - Init the active article with the readers, so we dont have
  *  to wait for the next socket update
+ * @param {Boolean} historyUpdate - If true, will update browser history/send
+ *    Google Analytics event
  */
-export function articleSelected(articleId=-1, readers=0) {
+export function articleSelected(articleId=-1, readers=0, historyUpdate=true) {
   googleTagEvent(ARTICLE_SELECTED_EVENT, { articleId } )
   return async dispatch => {
     dispatch(articleLoading(readers));
     try {
-      let article = await fetchActiveArticle(articleId);
+      let article = await fetchActiveArticle(articleId, historyUpdate);
       dispatch(articleLoaded(article));
     } catch (e) {
       console.log(e);
@@ -141,10 +153,7 @@ function _stopSpeedReadingEvent(articleId=-1) {
 }
 
 export function closeActiveArticle(articleId=-1, changeHistory=true) {
-  if (changeHistory) {
-    History.pushState({}, appName, '/');
-    ga('send', 'pageview');
-  }
+  if (changeHistory) History.pushState({}, appName, '/');
 
   // Track the google event for stopping speed reading
   _stopSpeedReadingEvent(articleId);
