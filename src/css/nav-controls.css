@@ -1,5 +1,7 @@
 @import './base';
 
+$context-menu-height: calc($controls-height * .8);
+
 .context-menu {
   width: 100%;
   position: fixed;
@@ -8,7 +10,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: $controls-height;
+  height: $context-menu-height;
   z-index: calc($active-article-z-index + 2);
   background-color: #f2f2f2;
   box-shadow: 0px 1px 10px -1px black;
@@ -26,8 +28,8 @@
     align-items: center;
 
     img {
-      height: calc($controls-height * .5);
-      width: calc($controls-height * .5);
+      height: calc($context-menu-height * .5);
+      width: calc($context-menu-height * .5);
     }
 
     .button-text {
