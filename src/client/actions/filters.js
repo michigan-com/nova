@@ -2,7 +2,7 @@
 
 import Cookies from 'cookies-js';
 
-import { googleTagEvent, SECTION_TOGGLE_EVENT } from './tag-manager';
+import { gaEvent } from './ga';
 
 export const SECTION_SELECT = 'SECTION_SELECT';
 
@@ -10,6 +10,8 @@ export const SPORTS = 'sports';
 export const BUSINESS = 'business';
 export const LOCAL = 'local';
 export const SECTION_OPTIONS = [SPORTS, BUSINESS, LOCAL];
+
+const SECTION_FILTER_GA_EVENT_CATEGORY = 'sectionFilter';
 
 var SECTION_COOKIE = 'sections';
 
@@ -52,7 +54,12 @@ export function writeSectionCookie(sectionState=DEFAULT_SECTIONS) {
  *  will be !previousState
  */
 export function sectionSelect(sectionName='', previousState=false) {
-  googleTagEvent(SECTION_TOGGLE_EVENT, { sectionName, showArticles: !previousState });
+  let newState = !previousState;
+  gaEvent({
+    eventCategory: SECTION_FILTER_GA_EVENT_CATEGORY,
+    eventAction: newState ? 'show' : 'hide',
+    eventLabel: sectionName
+  });
   return {
     type: SECTION_SELECT,
     value: sectionName

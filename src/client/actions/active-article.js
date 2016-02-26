@@ -5,9 +5,7 @@ import assign from 'object-assign';
 
 import { appName, socketUrl } from '../../../config';
 import { millisToMinutesAndSeconds } from '../lib/parse';
-import { googleTagEvent, ARTICLE_SELECTED_EVENT, ARTICLE_LOADED_EVENT,
-  ARTICLE_LOAD_FAILED_EVENT, ARTICLE_CLOSED_EVENT, START_SPEED_READING_EVENT,
-  STOP_SPEED_READING_EVENT } from './tag-manager';
+import { gaEvent } from './ga';
 
 export const ARTICLE_SELECTED = 'ARTICLE_SELECTED';
 export const ARTICLE_LOADING = 'ARTICLE_LOADING';
@@ -16,6 +14,9 @@ export const ARTICLE_LOAD_FAILED  = 'ARTICLE_LOAD_FAILED ';
 export const START_SPEED_READING = 'START_SPEED_READING';
 export const STOP_SPEED_READING = 'STOP_SPEED_READING';
 export const CLOSE_ACTIVE_ARTICLE = 'CLOSE_ACTIVE_ARTICLE';
+
+const ARTICLE_GA_EVENT_CATEGORY = 'article';
+const SPEED_READER_GA_EVENT_CATEGORY = 'speedReader';
 
 var articleCache = {};
 var speedReadingStartTime = null;
@@ -89,7 +90,13 @@ export function fetchActiveArticle(articleId, historyUpdate=true) {
  *    Google Analytics event
  */
 export function articleSelected(articleId=-1, readers=0, historyUpdate=true) {
-  googleTagEvent(ARTICLE_SELECTED_EVENT, { articleId } )
+  // Trigger the GA event first
+  gaEvent({
+    eventCategory: ARTICLE_GA_EVENT_CATEGORY,
+    eventAction: 'selected',
+    eventLabel: articleId
+  });
+
   return async dispatch => {
     dispatch(articleLoading(readers));
     try {
@@ -110,7 +117,11 @@ export function articleLoading(readers=0) {
 }
 
 export function articleLoaded(article=null) {
-  googleTagEvent(ARTICLE_LOADED_EVENT, { articleId: article.article_id });
+  gaEvent({
+    eventCategory: ARTICLE_GA_EVENT_CATEGORY,
+    eventAction: 'loaded',
+    eventLabel: article.article_id
+  });
   return {
     type: ARTICLE_LOADED,
     value: article
@@ -119,7 +130,11 @@ export function articleLoaded(article=null) {
 
 export function startSpeedReading(articleId=-1) {
   speedReadingStartTime = new Date();
-  googleTagEvent(START_SPEED_READING_EVENT, { articleId });
+  gaEvent({
+    eventCategory: SPEED_READER_GA_EVENT_CATEGORY,
+    eventAction: 'start',
+    eventLabel: articleId
+  });
   return {
     type: START_SPEED_READING
   }
@@ -128,7 +143,6 @@ export function startSpeedReading(articleId=-1) {
 export function stopSpeedReading(articleId=-1) {
   // Do the google tag for tracking speed reading time
   _stopSpeedReadingEvent(articleId);
-
   return {
     type: STOP_SPEED_READING
   }
@@ -147,7 +161,12 @@ function _stopSpeedReadingEvent(articleId=-1) {
     speedReadingStartTime = null;
 
     let speedReadingTime = millisToMinutesAndSeconds(delta);
-    googleTagEvent(STOP_SPEED_READING_EVENT, { articleId, speedReadingTime });
+    gaEvent({
+      eventCategory: SPEED_READER_GA_EVENT_CATEGORY,
+      eventAction: 'stop',
+      eventLabel: articleId,
+      eventLabel: speedReadingTime
+    });
   }
   speedReadingStartTime = null;
 }
@@ -157,7 +176,11 @@ export function closeActiveArticle(articleId=-1, changeHistory=true) {
 
   // Track the google event for stopping speed reading
   _stopSpeedReadingEvent(articleId);
-  googleTagEvent(ARTICLE_CLOSED_EVENT, { articleId })
+  gaEvent({
+    eventCategory: ARTICLE_GA_EVENT_CATEGORY,
+    eventAction: 'close',
+    eventLabel: articleId
+  })
 
   return {
     type: CLOSE_ACTIVE_ARTICLE
@@ -165,7 +188,11 @@ export function closeActiveArticle(articleId=-1, changeHistory=true) {
 }
 
 export function articleLoadFailed(articleId=-1) {
-  googleTagEvent(ARTICLE_LOAD_FAILED_EVENT, { articleId });
+  gaEvent({
+    eventCategory: ARTICLE_GA_EVENT_CATEGORY,
+    eventAction: 'load-failed',
+    eventLabel: articleId
+  });
   return {
     type: ARTICLE_LOAD_FAILED
   }
