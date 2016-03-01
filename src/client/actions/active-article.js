@@ -172,7 +172,14 @@ function _stopSpeedReadingEvent(articleId=-1) {
 }
 
 export function closeActiveArticle(articleId=-1, changeHistory=true) {
-  if (changeHistory) History.pushState({}, appName, '/');
+  if (changeHistory) {
+    History.pushState({}, appName, '/');
+    ga('send', {
+      hitType: 'pageview',
+      page: '/',
+      title: appName
+    });
+  }
 
   // Track the google event for stopping speed reading
   _stopSpeedReadingEvent(articleId);
