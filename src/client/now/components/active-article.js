@@ -99,6 +99,8 @@ export default class ActiveArticle extends React.Component {
       articleContentClass += ' fade-in';
     }
 
+    let summary = article.summary || [];
+
     let speedReaderContainerClass = 'speed-reader-container';
     return (
       <div className={ activeArticleContainerClass } >
@@ -114,7 +116,7 @@ export default class ActiveArticle extends React.Component {
               <div className='title'>{ article.headline }</div>
               <div className='summary-container'>
                 <div className='summary-title'>Bot Summary</div>
-                { article.summary.map(this.renderSummarySentence) }
+                { summary.map(this.renderSummarySentence) }
               </div>
             </div>
           </div>
