@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { TOP_ARTICLE_STYLE, getTopArticleStyle } from './top-article';
+import { brandIcon } from '../../../../config';
 
 const INLINE = 'inline';
 const LARGE = 'large';
@@ -24,7 +25,7 @@ export default class InfoTile extends React.Component {
     return (
       <div className={ `info-tile ${INLINE}` } style={ style }>
         <div className='img-container'>
-          <img src='/img/rabbit-speech.svg'/>
+          <img src={ `/img/${brandIcon}/info-card-image.svg` }/>
         </div>
         <div className='text-container'>
           { this.props.infoText }

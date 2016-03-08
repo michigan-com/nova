@@ -12,7 +12,7 @@ export const TOGGLE_INFO = 'TOGGLE_INFO';
 
 export const INFO_BLURBS = [
   <div>{ `Using ${appName}'s Speed Reader, you can read an entire article in a fraction of the time! `}</div>,
-  <div>On an iPhone? Save our site to your home screen using the <img src='/img/share-button.svg'/> button</div>,
+  <div>On an iPhone? Save us to your home screen using the <img src='/img/share-button.svg'/> button</div>,
   <div>Our bots summarize news articles around the clock.</div>,
   <div>Try this: Tap on any headline to read a summary of the news article.</div>,
   <div>{ `${appName} was built for busy people — more news, in less time. `}</div>,

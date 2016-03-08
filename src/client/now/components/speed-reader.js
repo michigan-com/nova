@@ -5,6 +5,7 @@ import { SimpleReader } from 'reeeeeader';
 
 import Store from '../../store';
 import { startSpeedReading, stopSpeedReading } from '../../actions/active-article';
+import { brandIcon } from '../../../../config';
 
 export default class SpeedReader extends React.Component {
   constructor(props) {
@@ -239,7 +240,7 @@ export default class SpeedReader extends React.Component {
     if (!this.state.gotStarted) {
       return (
         <div className='countdown-container'>
-          <div className='get-started'>Click Play to get started!</div>
+          <div className='get-started'>Click Play to get started</div>
         </div>
       )
     }
@@ -339,7 +340,7 @@ export default class SpeedReader extends React.Component {
     return (
       <div className='speed-reader-container'>
         <div className='keep-scrolling'>
-          <img className='speed-rabbit' src='/img/speed-rabbit.svg'/>
+          <img className='speed-rabbit' src={ `/img/${brandIcon}/speed-reader-image.svg` }/>
           <div className='text-box'>Keep scrolling to speed read this article in <span ref='total-time'></span>!</div>
           <div className='arrow-container'>
             <img src='/img/chevron-down-white.svg' onClick={ () => { this.scrollIntoView(document.body.scrollTop) }.bind(this) }/>

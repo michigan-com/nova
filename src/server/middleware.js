@@ -19,9 +19,10 @@ export default function configureMiddleware(app) {
     app.use(morgan());
   }
 
-  let faviconFile = `${__dirname}/../public/${Config.favicon || 'favicon.ico'}`;
-  console.log(faviconFile)
-  app.use(favicon(faviconFile));
+  let faviconFile = 'favicon.ico';
+  if (Config.brandIcon) faviconFile = `favicon-${Config.brandIcon}.ico`;
+  console.log(faviconFile);
+  app.use(favicon(`${__dirname}/../public/${faviconFile}`));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
@@ -31,7 +32,7 @@ export default function configureMiddleware(app) {
   // Store locals for templates
   app.use((req, res, next) => {
     res.locals.googleAnalyticsId = Config.googleAnalyticsId;
-    res.locals.appName = Config.appName;
+    res.locals.brandIcon = Config.brandIcon || 'rabbit';
     next();
   });
 }

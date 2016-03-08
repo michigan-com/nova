@@ -98,6 +98,9 @@ $definition-height: 35px;
 
 .info-tile {
   cursor: default !important;
+  border: 5px solid #e14e48;
+  border-top: 0;
+  border-bottom: 0;
 }
 
 /* Pulled out because its used in the definitions at the top of the page */

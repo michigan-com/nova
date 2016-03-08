@@ -117,7 +117,7 @@ class NowDashboard extends React.Component {
     for (let index = 0; index < this.props.topArticles.length; index++) {
       let article = this.props.topArticles[index];
 
-      if (rank === 4) {
+      if (rank === 3) {
         topArticles.push(
           <InfoTile type='inline' rank={ rank } infoText={ this.props.infoText } key={ 'info-tile-1' }/>
         )
