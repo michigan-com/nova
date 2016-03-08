@@ -233,7 +233,7 @@ export default class SpeedReader extends React.Component {
     // Remaining time
     ref = this.refs['time-remaining'];
     if (!ref) return;
-    ref.innerHTML = `${minutes}:${seconds} remaining`;
+    ref.innerHTML = `${minutes}:${seconds >= 10 ? seconds : '0' + seconds} remaining`;
   }
 
   renderCountdown() {
@@ -334,7 +334,15 @@ export default class SpeedReader extends React.Component {
 
     let helpText = null;
     if (!this.state.gotStarted) helpText = <div className='help-text'>Adjust your speed, then press Play to get started </div>
-    else if (this.state.speedReaderFinished) helpText = <div className='help-text'>All done!</div>
+    else if (this.state.speedReaderFinished) {
+      helpText = (
+        <div className='help-text'>All done
+          <div className='done-image'>
+            <img src={ `/img/${brandIcon}/speed-reader-image.svg` }/>
+          </div>
+        </div>
+      )
+    }
 
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
