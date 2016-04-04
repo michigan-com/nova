@@ -33,7 +33,7 @@ export default class Header extends React.Component {
                 <p>The speed reader enables you to absorb the full story in a fraction of the normal time.</p>
               </div>
               <p className='feedback'>Feedback? We'd love to hear it.</p>
-              <a href='#' id='email-us'>Email Us</a>
+              <a href='mailto:bots@detroitnow.io' id='email-us'>Email Us</a>
             </div>
           </div>
           <div className='header-info'>
