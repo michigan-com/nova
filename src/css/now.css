@@ -11,7 +11,6 @@
 body {
   font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
-  background-color: #eee;
 }
 
 .dashboard-container {
@@ -109,7 +108,7 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   z-index: $header-z-index;
-  background-color: color($red lightness(70%));
+  background-color: $red;
 
   .close-header {
     background-color: $red;
