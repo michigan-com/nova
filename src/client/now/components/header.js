@@ -15,7 +15,7 @@ export default class Header extends React.Component {
 
   render() {
     let readers = '';
-    if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} readers`;
+    if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} now reading`;
 
     let siteInfoClass = 'site-info';
     if (this.props.showInfo) siteInfoClass += ' show';
@@ -39,8 +39,7 @@ export default class Header extends React.Component {
           <div className='header-info'>
             <div id='page-header'>{ this.props.appName }</div>
             <div id='readers'>
-              <div id='glasses'><img src='/img/glasses.svg'/></div>
-              <div id='numbers'>{ readers }</div>
+              <div id='numbers'>{ `${readers}` }</div>
             </div>
             <div id='info' onClick={ () => { Store.dispatch(toggleInfo()); } }>
               <span className='info-button'>i</span>

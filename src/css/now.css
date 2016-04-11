@@ -11,7 +11,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
-  background-color: white;
+  background-color: #eee;
 }
 
 .dashboard-container {
@@ -31,15 +31,64 @@ body {
     }
   }
 
+  .definition-container, .top-articles-container  {
+    width: 75%;
+    margin: 0 auto;
+    position: relative;
+
+    @media (max-width: $screen-sm) {
+      padding: 0;
+    }
+  }
+
+  .definition-container {
+    opacity: 1;
+    transition: opacity 250ms linear;
+    background: white;
+
+    @media (max-width: $screen-sm) {
+      width: 100%;
+    }
+
+    .definitions {
+      height: $definition-height;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .articles, .readers-container {
+      font-size: 12px !important;
+      line-height: 15px !important;
+      height: 15px !important;
+    }
+
+    .articles {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    .readers {
+      color: black !important;
+      align-items: flex-end !important;
+      margin-right: 10px;
+      font-size: inherit;
+    }
+  }
 
   .top-articles-container {
+    min-height: 100vh;
     position: relative;
+    background: white;
     display: block;
-    width: 100%;
     margin-bottom: 10px;
 
     @media (max-width: $screen-sm) {
-
+      width: 100%;
     }
 
     .loading {
@@ -60,6 +109,7 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   z-index: $header-z-index;
+  background-color: color($red lightness(70%));
 
   .close-header {
     background-color: $red;
@@ -153,16 +203,20 @@ body {
   .header-info {
     background-color: $red;
     color: white;
-    width: 100%;
+    margin: 0 auto;
+    width: 75%;
     display: flex;
     flex-direction: row;
     align-items: center;
     z-index: $header-z-index;
-    box-shadow: 0px 4px 6px 0px rgba(0,0,0,0.20);
     height: $header-height-lg;
+    padding: 0% 5%;
 
     @media (max-width: $screen-sm) {
       height: $header-height-sm;
+      width: 100%;
+      padding: 0%;
+      padding: 0%;
     }
   }
 
@@ -172,7 +226,7 @@ body {
     font-weight: bold;
     font-family: 'Open Sans';
     font-weight: 800;
-    width: 70%;
+    width: 50%;
     font-size: 26px;
     line-height: 30px;
     margin-left: 13px;
@@ -192,34 +246,19 @@ body {
     font-size: 14px;
     line-height: 17px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     padding: 10px;
     font-family: 'Open Sans';
     font-weight: normal;
     text-transform: uppercase;
     text-transform: center;
-    width: 25%;
+    width: 45%;
     padding: 0;
+    text-align: right;
 
     @media (min-width: $screen-md) {
-      width: 15%;
-    }
-
-    #glasses {
-      width: 50px;
-      margin-right: 15px;
-      display: inline-block;
-      text-align: left;
-      color: $blue;
-
-      @media (max-width: $screen-sm) {
-        display: none;
-      }
-
-      img {
-        width: 100%;
-      }
+      /*width: 15%;*/
     }
 
     #numbers {
@@ -265,8 +304,6 @@ body {
   flex-direction: column;
   align-items: stretch;
   height: $filter-height;
-  background-color: #f2f2f2;
-  box-shadow: 0px -2px 6px 0px rgba(0,0,0,0.20);
   transition: bottom 250ms linear;
 
   &, & * {
@@ -280,15 +317,22 @@ body {
   }
 
   .filters {
+    background-color: #f2f2f2;
+    box-shadow: 0px -2px 6px 0px rgba(0,0,0,0.20);
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 100%;
+    width: 55%;
+    margin: 0 auto;
     padding: 0;
     height: 100%;
     top: 0;
     left: 0;
     transition: top 500ms ease-in;
+
+    @media (max-width: $screen-sm) {
+      width: 100%;
+    }
   }
 }
 
@@ -372,7 +416,7 @@ body {
   align-items: center;
   width: 50%;
   height: 100%;
-  margin: 10% auto;
+  margin: 0 auto;
   opacity: 1;
   transition: opacity 500ms linear;
 
@@ -416,3 +460,5 @@ body {
     }
   }
 }
+
+

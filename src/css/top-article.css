@@ -46,10 +46,8 @@ $definition-height: 35px;
 
 
   /* Desktop, etc */
-  @media (min-width: $screen-md) {
+  @media (min-width: $screen-sm) {
     height: $article-height-lg;
-    width: 70%;
-    margin: 0 15%;
   }
 }
 
@@ -74,9 +72,6 @@ $definition-height: 35px;
     opacity: 1;
     transition: opacity 200ms linear;
   }
-
-
-
 
   &.clicked {
     .headline {
@@ -130,6 +125,10 @@ $definition-height: 35px;
     font-family: 'Open Sans';
     font-weight: 300;
     font-size: 20px;
+
+    @media (min-width: $screen-md) {
+      font-size: 35px;
+    }
   }
 }
 
@@ -148,38 +147,7 @@ $definition-height: 35px;
 
   @media (min-width: $screen-md) {
     padding: 20px;
-    font-size: calc($article-height * .4);
-  }
-}
-
-.definitions {
-  height: $definition-height;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  width: 90%;
-  margin: 0 auto;
-  opacity: 1;
-  transition: opacity 250ms linear;
-
-  .articles, .readers-container {
-    font-size: 12px !important;
-    line-height: 15px !important;
-    height: 15px !important;
-  }
-
-  .articles {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: 10px;
-  }
-
-  .readers {
-    color: black !important;
-    align-items: flex-end !important;
-    margin-right: 10px;
-    font-size: inherit;
+    font-size: calc($article-height * .3);
   }
 }
 

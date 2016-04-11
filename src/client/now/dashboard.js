@@ -175,9 +175,11 @@ class NowDashboard extends React.Component {
           <Header readers={ this.props.readers }
             showInfo={ this.props.showInfo }
             appName={ appName }/>
-          <div className='definitions'>
-            <div className='readers-container'><div className='readers'>readers</div></div>
-            <div className='articles'>article</div>
+          <div className='definition-container'>
+            <div className='definitions'>
+              <div className='readers-container'><div className='readers'>readers</div></div>
+              <div className='articles'>article</div>
+            </div>
           </div>
           <div className={ topArticlesContainerClass } style={ style }>
             { topArticles }

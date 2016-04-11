@@ -34,7 +34,7 @@
     "morgan": "~1.5.1",
     "object-assign": "^4.0.1",
     "postcss-calc": "^5.0.0",
-    "postcss-color-function": "^2.0.0",
+    "postcss-color-function": "^2.0.1",
     "postcss-extend": "^1.0.1",
     "postcss-import": "^7.1.3",
     "postcss-inline-comment": "^2.0.0",
