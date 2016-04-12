@@ -17,8 +17,8 @@ $context-menu-height: calc($controls-height * .8);
   cursor: pointer;
 
   @media (min-width: $screen-md) {
-    width: 75%;
-    left: 12.5%;
+    width: 50%;
+    left: 25%;
   }
 
   .menu-button {
