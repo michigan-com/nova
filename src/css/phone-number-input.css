@@ -114,8 +114,9 @@ $reveal-button-font-size: 20px;
   margin: 30px;
 
   .phone-number-input {
-    font-size: 15px;
-    line-height: 20px;
+    font-size: 17px;
+    line-height: 30px;
+    height: 30px;
     border: 1px solid transparent;
     border-bottom: 1px solid $blue;
     width: 50%;

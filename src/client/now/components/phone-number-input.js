@@ -3,6 +3,7 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import uaParser from 'ua-parser-js';
+import xr from 'xr';
 
 import Store from '../../store';
 import { showInput, dismissInput } from '../../actions/phone-number';
@@ -16,7 +17,8 @@ export default class PhoneNumberInput extends React.Component {
     this.state = {
       buttonPress: false,
       error: '',
-      sendingMessage: false
+      sendingMessage: false,
+      messageSent: false
     }
   }
 
@@ -47,12 +49,33 @@ export default class PhoneNumberInput extends React.Component {
 
     if (phoneNumber.length != 10) {
       return this.setState({ error: 'Please include area code and phone number (10 numbers total)' })
+    } else if (isNaN(phoneNumber)) {
+      return this.setState({ error: 'Only numbers, please' });
     }
 
     this.setState({
       error: '',
       sendingMessage: true
     });
+
+    xr.post('/text-mobile-link/', { phoneNumber }).then(
+      (resp) => {
+        this.setState({
+          error: '',
+          sendingMessage: false,
+          messageSent: true,
+        });
+
+        setTimeout(() => { Store.dispatch(dismissInput()); }, 2000);
+      },
+      (err) => {
+        let resp = JSON.parse(err.response);
+
+        this.setState({
+          error: resp.error
+        });
+      }
+    )
 
   }
 
@@ -75,6 +98,9 @@ export default class PhoneNumberInput extends React.Component {
       if (this.state.sendingMessage) {
         submitClass += ' disabled';
         submitValue = 'Texting...'
+      } else if (this.state.messageSent) {
+        submitClass += ' disabled';
+        submitValue = 'Sent!';
       }
       content = (
         <div className='phone-number-form'>
