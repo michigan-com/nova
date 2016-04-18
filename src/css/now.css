@@ -267,6 +267,7 @@ body {
       color: color(white a(70%));
 
       @media (max-width: $screen-sm) {
+        font-size: 10px;
         width: 100%;
       }
     }

@@ -61,7 +61,7 @@ export function saveArticleIdsToCookie(articleIds) {
   }
 
   let cookieVal = ids.join(',');
-  Cookies.set(ARTICLEID_COOKIE, cookieVal);
+  Cookies.set(ARTICLEID_COOKIE, cookieVal, { expires: Infinity });
 }
 
 

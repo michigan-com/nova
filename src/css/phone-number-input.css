@@ -8,6 +8,7 @@ $reveal-button-font-size: 20px;
   width: 60%;
   bottom: -25vh;
   height: 25vh;
+  min-height: 200px;
   padding: 1vh;
   z-index: calc($header-z-index - 1);
   background-color: white;
@@ -72,6 +73,14 @@ $reveal-button-font-size: 20px;
       background-color: $blue;
       color: white;
     }
+  }
+
+  .never-again {
+    color: $blue;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 15px;
+    display: block;
   }
 }
 

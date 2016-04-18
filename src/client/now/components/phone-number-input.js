@@ -6,7 +6,7 @@ import uaParser from 'ua-parser-js';
 import xr from 'xr';
 
 import Store from '../../store';
-import { showInput, dismissInput } from '../../actions/phone-number';
+import { showInput, dismissInput, hideInputForever } from '../../actions/phone-number';
 
 export default class PhoneNumberInput extends React.Component {
   constructor(props) {
@@ -37,7 +37,7 @@ export default class PhoneNumberInput extends React.Component {
    */
   parseUaString() {
     let uaResult = uaParser();
-    return typeof uaResult.device.type === 'undefined';
+    return typeof uaResult.device.type === 'undefined' && this.props.showInput;
   }
 
   submitNumber(e) {
@@ -87,6 +87,12 @@ export default class PhoneNumberInput extends React.Component {
     this.setState({ buttonPress: true });
   }
 
+  hideForever(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    Store.dispatch(hideInputForever());
+  }
+
   renderContent() {
     let content = null;
     if (this.state.buttonPress) {
@@ -117,6 +123,7 @@ export default class PhoneNumberInput extends React.Component {
         <div className='reveal-form'>
           <h2>We tailored this experience for mobile phones.</h2>
           <div className='reveal-button' onClick={ this.buttonPress.bind(this) }>Text This Link</div>
+          <a className='never-again' href='#' onClick={ this.hideForever.bind(this) }>Never show me again</a>
         </div>
       );
     }

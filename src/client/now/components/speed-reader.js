@@ -387,9 +387,14 @@ class SpeedControl extends React.Component {
 
   componentDidMount() {
     this.parentNode = this.refs['speed-control'].parentNode;
-    this.parentNode.scrollLeft = this.props.speed;
+
+    let scrollLeft = this.props.speed;
+    console.log(scrollLeft);
+    this.parentNode.scrollLeft = scrollLeft;
     this.parentNode.addEventListener('scroll', this.updateSpeed);
     this.setState({ drawBars: true });
+
+    window.addEventListener('resize', () => { this.setState({ drawBars: true }); })
   }
 
   componentWillUnmount() {
@@ -427,7 +432,11 @@ class SpeedControl extends React.Component {
     let speedControlClass = 'speed-control';
     if (this.state.drawBars) speedControlClass += ' draw';
 
-    let style = { width: `${SpeedControl.maxSpeed + window.innerWidth}px` }
+    let width = SpeedControl.maxSpeed;
+    if (window.innerWidth > 768) width += (window.innerWidth * .75);
+    else width += window.innerWidth;
+
+    let style = { width: `${width}px` }
     return (
       <div className='speed-control-container'>
         <div className={ speedControlClass } ref='speed-control' style={ style }>
