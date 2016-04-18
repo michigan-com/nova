@@ -66,7 +66,7 @@ export default class PhoneNumberInput extends React.Component {
           messageSent: true,
         });
 
-        setTimeout(() => { Store.dispatch(dismissInput()); }, 2000);
+        setTimeout(() => { Store.dispatch(hideInputForever()); }, 2000);
       },
       (err) => {
         let resp = JSON.parse(err.response);
