@@ -43,7 +43,7 @@ function defaultSections() {
 }
 
 export function writeSectionCookie(sectionState=DEFAULT_SECTIONS) {
-  Cookies.set(SECTION_COOKIE, JSON.stringify(sectionState));
+  Cookies.set(SECTION_COOKIE, JSON.stringify(sectionState), { expires: Infinity });
 }
 
 /**

@@ -4,6 +4,7 @@
 @import './active-article';
 @import './nav-controls';
 @import './top-article';
+@import './phone-number-input';
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
@@ -31,7 +32,7 @@ body {
   }
 
   .definition-container, .top-articles-container  {
-    width: 75%;
+    width: 50%;
     margin: 0 auto;
     position: relative;
 
@@ -266,6 +267,7 @@ body {
       color: color(white a(70%));
 
       @media (max-width: $screen-sm) {
+        font-size: 10px;
         width: 100%;
       }
     }
@@ -321,7 +323,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 75%;
+    width: 50%;
     margin: 0 auto;
     padding: 0;
     height: 100%;

@@ -1,7 +1,7 @@
 'use strict';
 
 import io from 'socket.io-client';
-// import Polyfill from 'babel-polyfill';
+
 /** Browser history stuff */
 require('historyjs/scripts/bundled/html4+html5/native.history.js');
 

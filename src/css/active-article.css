@@ -7,7 +7,7 @@ body.photo-loading {
 }
 
 .active-article-container {
-  width: 75%;
+  width: 100%;
   margin: 0 auto;
   z-index: $active-article-z-index;
   align-items: center;
@@ -27,7 +27,7 @@ body.photo-loading {
       background-size: auto 100%;
       opacity: 1;
 
-      @media (min-width: $screen-md) {
+      @media (min-width: $screen-sm) {
         background-size: 75% auto;
       }
     }
@@ -87,8 +87,9 @@ body.photo-loading {
   background-color: transparent;
   transition: background-size 400ms linear;
 
-  @media (min-width: $screen-md) {
+  @media (min-width: $screen-sm) {
     padding-top: calc($active-article-top-padding * 1.2);
+    width: 75%;
   }
 
   &.fade-out {

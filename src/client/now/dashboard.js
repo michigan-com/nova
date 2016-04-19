@@ -10,6 +10,7 @@ import ActiveArticle from './components/active-article';
 import SectionFilters from './filters';
 import LoadingImage from './components/loading-image';
 import Header from './components/header';
+import PhoneInput from './components/phone-number-input';
 
 import { appName } from '../../../config';
 
@@ -185,6 +186,7 @@ class NowDashboard extends React.Component {
             { topArticles }
           </div>
           <SectionFilters sections={ this.props.sections } activeSectionIndex={ this.props.activeSectionIndex }/>
+          <PhoneInput showInput={ this.props.showInput } dismissInput={ this.props.dismissInput }/>
         </div>
       )
     }
@@ -219,6 +221,11 @@ function drawDashboard(state=DEFAULT_STATE) {
 
       // Info Stuff
       infoText={ state.ArticleList.infoBlurbs[state.ArticleList.blurbIndex] }
+
+      // Phone number input
+      showInput={ state.PhoneNumber.showInput }
+      dismissInput={ state.PhoneNumber.dismissInput }
+
 
       key='now-dashboard'/>,
     document.getElementById('now')

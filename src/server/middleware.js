@@ -21,7 +21,6 @@ export default function configureMiddleware(app) {
 
   let faviconFile = 'favicon.ico';
   if (Config.brandIcon) faviconFile = `favicon-${Config.brandIcon}.ico`;
-  console.log(faviconFile);
   app.use(favicon(`${__dirname}/../public/${faviconFile}`));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
