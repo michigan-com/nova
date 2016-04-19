@@ -18,7 +18,8 @@ export default class PhoneNumberInput extends React.Component {
       buttonPress: false,
       error: '',
       sendingMessage: false,
-      messageSent: false
+      messageSent: false,
+      phoneNumber: ''
     }
   }
 
@@ -26,6 +27,12 @@ export default class PhoneNumberInput extends React.Component {
     if (this.shouldShowInput) {
       //setTimeout(() => { Store.dispatch(showInput()); }, 2500);
       Store.dispatch(showInput());
+    }
+  }
+
+  componentDidUpdate(lastProps, lastState) {
+    if (this.state.buttonPress && !lastState.buttonPress) {
+      findDOMNode(this.refs['phone-number']).focus();
     }
   }
 
@@ -44,8 +51,7 @@ export default class PhoneNumberInput extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    let phoneNumberInput = findDOMNode(this.refs['phone-number']);
-    let phoneNumber = `${phoneNumberInput.value}`;
+    let phoneNumber = this.state.phoneNumber;
 
     if (phoneNumber.length != 10) {
       return this.setState({ error: 'Please include area code and phone number (10 numbers total)' })
@@ -77,6 +83,28 @@ export default class PhoneNumberInput extends React.Component {
       }
     )
 
+  }
+
+  checkKeyValue(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    let keyCode = e.which || e.keyCode;
+    if ((keyCode > 57 || keyCode < 48) && keyCode !== 8) {
+      this.setState(this.state);
+      return;
+    }
+
+    let newState = { ...this.state }
+    let newVal = String.fromCharCode(keyCode);
+    let oldNumber = this.state.phoneNumber
+
+    if (keyCode == 8) {
+      newState.phoneNumber = oldNumber.slice(0, oldNumber.length - 1)
+    } else if (oldNumber.length < 10) {
+      newState.phoneNumber += newVal;
+    }
+    this.setState(newState);
   }
 
   dismissInput() {
@@ -111,7 +139,12 @@ export default class PhoneNumberInput extends React.Component {
       content = (
         <div className='phone-number-form'>
           <form onSubmit={ this.submitNumber.bind(this) }>
-            <input type='number' ref='phone-number' className={ phoneNumberInputClass } placeholder='(313) 555-0123'/>
+            <input type='text'
+              ref='phone-number'
+              className={ phoneNumberInputClass }
+              placeholder='3135550123'
+              value={ this.state.phoneNumber }
+              onKeyDown={ this.checkKeyValue.bind(this) }/>
             <div className='errors'>{ this.state.error }</div>
             <input type='submit' className={ submitClass } value={ submitValue }/>
             <div className='info-text'>We will never spam or share your number.</div>
@@ -121,8 +154,9 @@ export default class PhoneNumberInput extends React.Component {
     } else {
       content = (
         <div className='reveal-form'>
-          <h2>We tailored this experience for mobile phones.</h2>
-          <div className='reveal-button' onClick={ this.buttonPress.bind(this) }>Text This Link</div>
+          <h3>We tailored this experience for mobile phones.</h3>
+          <h3>Can we text you a link?</h3>
+          <div className='reveal-button' onClick={ this.buttonPress.bind(this) }>Click to enter your number</div>
           <a className='never-again' href='#' onClick={ this.hideForever.bind(this) }>Never show me again</a>
         </div>
       );
