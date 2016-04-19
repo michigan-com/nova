@@ -8,19 +8,21 @@ import routes from './routes';
 
 var BASE_DIR = path.dirname(__dirname);
 
-var app = express();
-export default app;
+export function createApp() {
+  var app = express();
 
-configureViewEngine(app);
-configureMiddleware(app);
-configureRoutes(app);
+  configureViewEngine(app);
+  configureMiddleware(app);
+  configureRoutes(app);
 
-function configureRoutes(app) {
-  app.use('/', routes);
-}
+  function configureRoutes(app) {
+    app.use('/', routes);
+  }
 
-function configureViewEngine(app) {
-  app.set('views', path.join(BASE_DIR, 'views'));
-  app.set('view engine', 'jade');
-  if (app.get('env') == 'development') app.locals.pretty = true;
+  function configureViewEngine(app) {
+    app.set('views', path.join(BASE_DIR, 'views'));
+    app.set('view engine', 'jade');
+    if (app.get('env') == 'development') app.locals.pretty = true;
+  }
+  return app
 }

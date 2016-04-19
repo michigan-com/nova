@@ -51,9 +51,9 @@ export default class TopArticle extends React.Component {
 
     // TODO this should maybe be handled by the store, so we're not waiting
     // on the animation and THEN the fetching of the data in sequence
-    setTimeout(() => {
+    setTimeout((() => {
       this.setSelfAsActive();
-    }.bind(this), 750)
+    }).bind(this), 750)
   }
 
   render() {

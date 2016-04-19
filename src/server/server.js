@@ -1,13 +1,17 @@
 'use strict';
 
 import debug from 'debug';
-var logger = debug('app:status');
 
 import { createApp } from './app';
+import dbConnect from './util/db';
+
+var logger = debug('app:server');
 
 // Connect to the db then start the app
 async function startServer() {
-  let db = await dbConnect(process.env.DB_URI);
+  logger("start server")
+  let db = await dbConnect(process.env.MONGO_URI);
+  logger("DB Connected")
 
   var app = createApp(db);
   var port = normalizePort(process.env.NODE_PORT || '3000');

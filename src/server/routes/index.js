@@ -5,7 +5,7 @@ import debug from 'debug';
 import request from 'request';
 import twilio from 'twilio';
 
-import Config from '../config';
+import Config from '../../config';
 
 var logger = debug('app:routes');
 var router = express.Router();

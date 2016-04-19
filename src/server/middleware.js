@@ -1,7 +1,6 @@
 'use strict';
 
 import path from 'path';
-import morgan from 'morgan';
 import express from 'express';
 import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
@@ -13,10 +12,8 @@ var BASE_DIR = path.dirname(__dirname);
 
 export default function configureMiddleware(app) {
   if (app.get('env') == 'development') {
-    app.use(morgan('dev'));
     app.use(errorhandler());
   } else if (process.env.LOG_REQUEST) {
-    app.use(morgan());
   }
 
   let faviconFile = 'favicon.ico';

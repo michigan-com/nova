@@ -1,0 +1,19 @@
+
+{
+  "use": [
+        "autoprefixer",
+        "postcss-import",
+        "postcss-mixins",
+        "postcss-simple-vars",
+        "postcss-nested",
+        "postcss-inline-comment",
+        "postcss-calc",
+        "postcss-extend",
+        "postcss-color-function"],
+  "dir": "public/css",
+  "local-plugins": true,
+  "map": true,
+  "autoprefixer": {
+    "browsers": "last 2 versions"
+  }
+}
