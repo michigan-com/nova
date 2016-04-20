@@ -67,8 +67,6 @@ router.post('/text-mobile-link/', (req, res, next) => {
     return next();
   }
 
-
-
   twilioClient.sendMessage({
     to: `+1${phoneNumber}`,
     from: '+13133297340',

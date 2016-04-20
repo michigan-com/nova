@@ -7,8 +7,7 @@ $reveal-button-font-size: 20px;
   left: 20%;
   width: 60%;
   bottom: -25vh;
-  height: 25vh;
-  min-height: 200px;
+  height: 30vh;
   padding: 1vh;
   z-index: calc($header-z-index - 1);
   background-color: white;
@@ -35,7 +34,7 @@ $reveal-button-font-size: 20px;
   }
 
   &.dismiss {
-    bottom: -25vh;
+    bottom: -30vh;
   }
 }
 
@@ -43,7 +42,7 @@ $reveal-button-font-size: 20px;
   width: 100%;
   height: 100%;
 
-  h2 {
+  h3 {
     text-align: center;
     color: $blue;
     width: 75%;

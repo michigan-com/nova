@@ -28,7 +28,7 @@ body.photo-loading {
       opacity: 1;
 
       @media (min-width: $screen-sm) {
-        background-size: 75% auto;
+        background-size: auto 100%;
       }
     }
 
@@ -69,12 +69,8 @@ body.photo-loading {
     width: 100%;
     z-index: $active-image-z-index;
     transition: all 500ms linear;
-    background-size: auto 75%;
+    background-size: auto 100%;
     opacity: 0;
-
-    @media (min-width: $screen-md) {
-      background-size: 75% auto;
-    }
   }
 }
 
