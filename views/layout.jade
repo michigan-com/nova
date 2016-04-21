@@ -8,6 +8,7 @@ html(lang="en")
   body
     block content
     block js
+    input(type='hidden', name='_csrf', id='_csrf', value='#{csrfToken}')
 
     include ./ga
 

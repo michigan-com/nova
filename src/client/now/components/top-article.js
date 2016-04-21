@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import Store from '../../store';
-import { articleSelected } from '../../actions/active-article';
+import Store from '../store';
+import { articleSelected } from '../actions/active-article';
 
 export const TOP_ARTICLE_STYLE = {
   height: 100,

@@ -4,7 +4,7 @@ import React from 'react';
 import Cookies from 'cookies-js';
 
 import { getRandomInt } from '../lib/random';
-import { appName } from '../../../config';
+import { appName } from '../../../../config';
 
 export const GOT_TOP_ARTICLES = 'GOT_TOP_ARTICLES';
 export const GOT_QUICKSTATS = 'GOT_QUICKSTATS';

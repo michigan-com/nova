@@ -3,7 +3,7 @@
 import xr from 'xr';
 import assign from 'object-assign';
 
-import { appName, socketUrl } from '../../../config';
+import { appName, socketUrl } from '../../../../config';
 import { millisToMinutesAndSeconds } from '../lib/parse';
 import { gaEvent } from './ga';
 

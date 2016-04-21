@@ -5,8 +5,8 @@ import { findDOMNode } from 'react-dom';
 import uaParser from 'ua-parser-js';
 import xr from 'xr';
 
-import Store from '../../store';
-import { showInput, dismissInput, hideInputForever } from '../../actions/phone-number';
+import Store from '../store';
+import { showInput, dismissInput, hideInputForever } from '../actions/phone-number';
 
 export default class PhoneNumberInput extends React.Component {
   constructor(props) {
@@ -83,14 +83,15 @@ export default class PhoneNumberInput extends React.Component {
         });
       }
     )
-
   }
 
   checkKeyValue(e) {
+    let keyCode = e.which || e.keyCode;
+    if (keyCode === 13) return;
+
     e.stopPropagation();
     e.preventDefault();
 
-    let keyCode = e.which || e.keyCode;
     if ((keyCode > 57 || keyCode < 48) && keyCode !== 8) {
       this.setState(this.state);
       return;

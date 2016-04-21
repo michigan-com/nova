@@ -4,6 +4,7 @@ import debug from 'debug';
 
 import twilio from './twilio';
 import now from './now';
+import login from './login';
 
 var logger = debug('app:routes');
 
@@ -12,4 +13,5 @@ export default function registerRoutes(app) {
   // Register all the routes
   now(app);
   twilio(app);
+  login(app);
 }

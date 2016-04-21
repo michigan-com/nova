@@ -3,8 +3,8 @@
 import React from 'react';
 import { SimpleReader } from 'reeeeeader';
 
-import Store from '../../store';
-import { startSpeedReading, stopSpeedReading } from '../../actions/active-article';
+import Store from '../store';
+import { startSpeedReading, stopSpeedReading } from '../actions/active-article';
 import { brandIcon } from '../../../../config';
 
 export default class SpeedReader extends React.Component {

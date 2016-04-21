@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import Store from '../../store';
-import { toggleInfo } from '../../actions/article-list';
+import Store from '../store';
+import { toggleInfo } from '../actions/article-list';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript

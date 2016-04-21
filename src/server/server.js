@@ -42,4 +42,8 @@ function normalizePort(val) {
   return false;
 }
 
-startServer();
+startServer().catch((e) => {
+  console.error(e);
+  console.error(e.stack);
+});
+
