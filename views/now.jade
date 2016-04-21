@@ -6,5 +6,7 @@ block css
 block content
   #now
 
+  input(type='hidden', name='_csrf', id='_csrf', value='#{csrfToken}')
+
 block js
   script(src='/js/now.js')

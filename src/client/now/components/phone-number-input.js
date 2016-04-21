@@ -51,6 +51,7 @@ export default class PhoneNumberInput extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
+    let _csrf = document.getElementById('_csrf').value;
     let phoneNumber = this.state.phoneNumber;
 
     if (phoneNumber.length != 10) {
@@ -64,7 +65,7 @@ export default class PhoneNumberInput extends React.Component {
       sendingMessage: true
     });
 
-    xr.post('/text-mobile-link/', { phoneNumber }).then(
+    xr.post('/text-mobile-link/', { phoneNumber, _csrf }).then(
       (resp) => {
         this.setState({
           error: '',

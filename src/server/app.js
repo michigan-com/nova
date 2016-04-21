@@ -8,15 +8,16 @@ import routes from './routes';
 
 var BASE_DIR = path.dirname(__dirname);
 
-export function createApp() {
+export function createApp(db) {
   var app = express();
+  app.set('db', db);
 
   configureViewEngine(app);
   configureMiddleware(app);
   configureRoutes(app);
 
   function configureRoutes(app) {
-    app.use('/', routes);
+    routes(app);
   }
 
   function configureViewEngine(app) {
