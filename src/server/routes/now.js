@@ -15,7 +15,7 @@ export default function registerRoutes(app) {
     res.render('now', {
       title: Config.appName,
       initialPage: 'list-view',
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
     });
   });
 
@@ -50,7 +50,7 @@ export default function registerRoutes(app) {
         photoUrl,
         description,
         initialPage: `Article ${article.article_id}`,
-        csrfToken: req.csrfToken()
+        csrfToken: req.csrfToken(),
       });
     });
   });

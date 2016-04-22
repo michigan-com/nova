@@ -12,6 +12,25 @@ function formatNumber(num) {
 }
 
 export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.userAuthenticated =  !!USER_ID;
+  }
+
+  renderLoginButton() {
+    let loginContent = null;
+    if (this.userAuthenticated) {
+      loginContent = <a href='/logout/'>Logout</a>
+    } else {
+      loginContent = <a href='/login/'>Join</a>
+    }
+
+    return (
+      <div className='user-area'>
+        { loginContent }
+      </div>
+    )
+  }
 
   render() {
     let readers = '';
@@ -41,9 +60,7 @@ export default class Header extends React.Component {
             <div id='readers'>
               <div id='numbers'>{ `${readers}` }</div>
             </div>
-            <div id='info' onClick={ () => { Store.dispatch(toggleInfo()); } }>
-              <span className='info-button'>i</span>
-            </div>
+            { this.renderLoginButton() }
           </div>
         </div>
       </div>

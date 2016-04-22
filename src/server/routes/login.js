@@ -20,7 +20,8 @@ export default function registerRoutes(app) {
   router.get('/login/', csrfProtection, (req, res, next) => {
     if (req.user) return res.redirect('/');
     res.render('login', {
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
+      message: req.flash('error')
     });
   });
 
@@ -55,11 +56,14 @@ export default function registerRoutes(app) {
     });
   });
 
-  router.post('/login/', csrfProtection, passport.authenticate('local', {
-    failureRedirect: '/login/',
-    failureFlash: 'Code does not match'
-  }), (req, res, next) => {
-    res.redirect('/');
+  router.post('/login/', csrfProtection, (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err || !user) return res.status(401).json({ error: 'Invalid code' });
+      req.logIn(user, (err) => {
+        if (err) return res.status(401).json({ error: err });
+        return res.status(200).json({ success: 'true' });
+      })
+    })(req, res, next);
   });
 
   app.use('/', router);

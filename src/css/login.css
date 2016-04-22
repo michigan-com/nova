@@ -1,0 +1,78 @@
+@import './base';
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background-color: $red;
+  height: 50px;
+
+  .app-name {
+    font-size: 35px;
+    line-height: 50px;
+    height: 50px;
+    text-align: center;
+    color: white;
+    width: 100%;
+    font-family: 'Open Sans';
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+}
+
+.login-form-container {
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 50px;
+  padding: 20px;
+
+  @media (max-width: $screen-sm) {
+    width: 100%;
+  }
+
+  h2 {
+    text-align: center;
+  }
+}
+
+
+input[type=text] {
+  width: 75%;
+  margin: 15px auto;
+  display: block;
+  font-size: 20px;
+  line-height: 30px;
+  height: 30px;
+
+  &.error {
+    border: 1px solid $red;
+  }
+}
+
+input[type=submit] {
+  appearance: none;
+  background-color: $red;
+  color: white;
+  font-size: 20px;
+  line-height: 30px;
+  height: 30px;
+  width: 50%;
+  border: none;
+  padding: 0;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: background-color 200ms linear;
+
+  &:hover {
+    background-color: color($red blackness(20%));
+  }
+}
+
+.error-messages {
+  color: $red;
+  font-size: 12px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}

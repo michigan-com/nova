@@ -4,6 +4,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import xr from 'xr';
 
+import { appName } from '../../config';
+
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +21,6 @@ class LoginForm extends React.Component {
   }
 
   submitForm(e) {
-    if (this.state.phoneNumber && this.state.code) return;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -38,7 +38,7 @@ class LoginForm extends React.Component {
       // Generate the code
       xr.post('/generate-login-code/', { phoneNumber, _csrf}).then(
         (resp) => {
-          this.setState({ phoneNumberSent: true });
+          this.setState({ phoneNumberSent: true, error: '' });
         },
         (err) => {
           let resp = JSON.parse(err.response);
@@ -51,10 +51,10 @@ class LoginForm extends React.Component {
 
       xr.post('/login/', {phoneNumber, code, _csrf }).then(
         (resp) => {
-          console.log('success');
+          window.location = window.location.origin;
         },
         (err) => {
-          console.log(`error: ${err}`)
+          this.setState({ error: 'Invalid code, please try again' });
         }
       )
     }
@@ -109,14 +109,15 @@ class LoginForm extends React.Component {
 
   renderFormContent() {
     let formContent = null;
+    let inputClass = 'input';
+    if (this.state.error) inputClass += ' error';
 
     if (this.state.phoneNumberSent) {
       formContent = (
         <div className='form-content'>
           <p>Great! We just texted you a 6 digit code, enter that in here and you'll be all set</p>
-          <input type='hidden' name='phoneNumber' value={ this.state.phoneNumber }/>
-          <input type='hidden' name='_csrf' value={ this._csrf }/>
           <input type='text'
+            className={ inputClass }
             name='code'
             ref='code'
             value={ this.state.code }
@@ -129,8 +130,9 @@ class LoginForm extends React.Component {
       formContent = (
         <div className='form-content'>
           <p>Detroit Now is so mobile friendly, logging you in is as easy as sending a text message</p>
-          <p>Input your phone number, and we'll send you a short code to make sure you actually are who you say you are, and we'll keep you logged in forever!</p>
+          <p>Input your phone number, and we'll send you a short code to make sure you actually are who you say you are, and we'll keep you logged in forever! (on this device, at least)</p>
             <input type='text'
+              className={ inputClass }
               name='phoneNumber'
               ref='phoneNumber'
               value={ this.state.phoneNumber }
@@ -141,13 +143,18 @@ class LoginForm extends React.Component {
     }
 
     return (
-      <div className='login-form-container'>
-        <h2>We do logins a little differently.</h2>
-        { this.state.error }
-        <form action='/login/' method='POST' ref='phoneNumberForm' onSubmit={ this.submitForm.bind(this) }>
-          { formContent }
-          <input type='submit' value='Submit' />
-        </form>
+      <div>
+        <div className='header'>
+          <div className='app-name'>{ appName }</div>
+        </div>
+        <div className='login-form-container'>
+          <h2>We do logins a little differently.</h2>
+          <form action='/login/' method='POST' ref='phoneNumberForm' onSubmit={ this.submitForm.bind(this) }>
+            { formContent }
+            <div className='error-messages'>{ this.state.error }</div>
+            <input type='submit' value='Submit' />
+          </form>
+        </div>
       </div>
     )
   }

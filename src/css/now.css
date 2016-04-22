@@ -8,8 +8,8 @@
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-
 body {
+  min-height: 100%;
   font-family: 'Open Sans', sans-serif;
   overflow-x: hidden;
 }
@@ -110,6 +110,7 @@ body {
   flex-wrap: wrap;
   z-index: $header-z-index;
   background-color: $red;
+  padding: 0px 15px;
 
   .close-header {
     background-color: $red;
@@ -229,7 +230,6 @@ body {
     width: 50%;
     font-size: 26px;
     line-height: 30px;
-    margin-left: 13px;
     min-width: 200px;
 
     @media (min-width: $screen-md) {
@@ -247,7 +247,7 @@ body {
     line-height: 17px;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
     padding: 10px;
     font-family: 'Open Sans';
     font-weight: normal;
@@ -276,7 +276,7 @@ body {
   #info {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
     margin-right: 15px;
     width: 5%;
 
@@ -294,6 +294,18 @@ body {
     }
   }
 
+  .user-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 5px;
+
+    a {
+      text-decoration: underline;
+      color: white;
+      font-size: 15px;
+    }
+  }
 }
 
 .filters-container {

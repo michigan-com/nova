@@ -46,6 +46,7 @@ export default function configureMiddleware(app) {
   app.use((req, res, next) => {
     res.locals.googleAnalyticsId = Config.googleAnalyticsId;
     res.locals.brandIcon = Config.brandIcon || 'rabbit';
+    res.locals.userId = req.user ? req.user._id : '';
     next();
   });
 }
