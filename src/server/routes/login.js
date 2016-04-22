@@ -18,9 +18,16 @@ export default function registerRoutes(app) {
   let twilioClient = twilio();
 
   router.get('/login/', csrfProtection, (req, res, next) => {
+    if (req.user) return res.redirect('/');
     res.render('login', {
       csrfToken: req.csrfToken()
     });
+  });
+
+  router.get('/logout/', (req, res, next) => {
+    req.logout();
+    req.flash('info', 'You have been logged out');
+    res.redirect('/');
   });
 
   router.post('/generate-login-code/', csrfProtection, (req, res, next) => {

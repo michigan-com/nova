@@ -44,12 +44,9 @@ export default function createPassport(app) {
 
   async function checkLogin(phoneNumber, code, done) {
     let user = await User.find({ phoneNumber }).limit(1).next();
-
     if (!user || !passwordMatch(code, user.code)) {
-      logger(`login unsuccesful`)
       return done(null, false);
     }
-    logger('successful login!');
     return done(null, user);
   }
 

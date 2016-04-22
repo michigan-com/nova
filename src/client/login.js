@@ -14,9 +14,13 @@ class LoginForm extends React.Component {
       code: '',
       error: '',
     }
+
+    this._csrf = document.getElementById('_csrf').value;
   }
 
   submitForm(e) {
+    if (this.state.phoneNumber && this.state.code) return;
+
     e.stopPropagation();
     e.preventDefault();
 
@@ -110,6 +114,8 @@ class LoginForm extends React.Component {
       formContent = (
         <div className='form-content'>
           <p>Great! We just texted you a 6 digit code, enter that in here and you'll be all set</p>
+          <input type='hidden' name='phoneNumber' value={ this.state.phoneNumber }/>
+          <input type='hidden' name='_csrf' value={ this._csrf }/>
           <input type='text'
             name='code'
             ref='code'
@@ -155,8 +161,11 @@ class LoginForm extends React.Component {
   }
 }
 
-render(
-  <LoginForm/>,
-  document.getElementById('login-form')
-)
+document.addEventListener('DOMContentLoaded', () => {
+  render(
+    <LoginForm/>,
+    document.getElementById('login-form')
+  );
+
+})
 
