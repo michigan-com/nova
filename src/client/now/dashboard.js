@@ -186,7 +186,6 @@ class NowDashboard extends React.Component {
             { topArticles }
           </div>
           <SectionFilters sections={ this.props.sections } activeSectionIndex={ this.props.activeSectionIndex }/>
-          <PhoneInput showInput={ this.props.showInput } dismissInput={ this.props.dismissInput }/>
         </div>
       )
     }
