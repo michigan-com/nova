@@ -47,6 +47,7 @@ export default function configureMiddleware(app) {
     res.locals.googleAnalyticsId = Config.googleAnalyticsId;
     res.locals.brandIcon = Config.brandIcon || 'rabbit';
     res.locals.userId = req.user ? req.user._id : '';
+    res.locals.config = { ...Config };
     next();
   });
 }

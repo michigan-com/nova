@@ -19,6 +19,7 @@ export default function registerRoutes(app) {
     });
   });
 
+
   router.get('/article/:articleId/', csrfProtection, (req, res, next) => {
     let articleId = req.params.articleId;
     if (isNaN(articleId)) {
@@ -53,6 +54,10 @@ export default function registerRoutes(app) {
         csrfToken: req.csrfToken(),
       });
     });
+  });
+
+  router.get('/pricing/', (req, res, next) => {
+    res.render('pricing');
   });
 
   app.use('/', router);

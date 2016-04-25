@@ -1,0 +1,55 @@
+@import ./subpage;
+
+#pricing-container {
+  width: 100%;
+  padding: 20px;
+}
+
+#pricing {
+  width: 75%;
+  margin: 0 auto;
+  font-family: 'Open Sans';
+
+  thead {
+    font-size: 30px;
+    font-weight: 600;
+    color: $red;
+  }
+
+  tbody {
+    font-size: 20px;
+
+    @media (max-width: $screen-sm) {
+      font-size: 15px;
+    }
+
+    td {
+      border-bottom: 2px solid $red;
+    }
+  }
+
+  td {
+    text-align: center;
+    padding: 10px;
+
+    a {
+      text-decoration: underline;
+      color: black;
+    }
+  }
+
+  .name {
+    width: 40%;
+  }
+
+  .plan {
+    width: 60%;
+  }
+
+  @media (max-width: $screen-sm)  {
+    width: 90%;
+  }
+}
+
+
+

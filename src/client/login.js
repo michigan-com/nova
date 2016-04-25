@@ -116,6 +116,7 @@ class LoginForm extends React.Component {
       formContent = (
         <div className='form-content'>
           <p>Great! We just texted you a 6 digit code, enter that in here and you'll be all set</p>
+          <p>Phone number: <strong>{ this.state.phoneNumber }</strong></p>
           <input type='text'
             className={ inputClass }
             name='code'
@@ -129,24 +130,21 @@ class LoginForm extends React.Component {
     } else {
       formContent = (
         <div className='form-content'>
-          <p>Detroit Now is so mobile friendly, logging you in is as easy as sending a text message</p>
-          <p>Input your phone number, and we'll send you a short code to make sure you actually are who you say you are, and we'll keep you logged in forever! (on this device, at least)</p>
-            <input type='text'
-              className={ inputClass }
-              name='phoneNumber'
-              ref='phoneNumber'
-              value={ this.state.phoneNumber }
-              onKeyDown={ this.checkPhoneNumber.bind(this) }
-              placeholder='3135550123'/>
+          <p>Join the Detroit Now squad for access to more features.</p>
+          <p>Enter your phone number to join. It's free! We'll text you a verification code just to make sure it's you.</p>
+          <input type='text'
+            className={ inputClass }
+            name='phoneNumber'
+            ref='phoneNumber'
+            value={ this.state.phoneNumber }
+            onKeyDown={ this.checkPhoneNumber.bind(this) }
+            placeholder='3135550123'/>
         </div>
       )
     }
 
     return (
       <div>
-        <div className='header'>
-          <div className='app-name'>{ appName }</div>
-        </div>
         <div className='login-form-container'>
           <h2>We do logins a little differently.</h2>
           <form action='/login/' method='POST' ref='phoneNumberForm' onSubmit={ this.submitForm.bind(this) }>
@@ -155,6 +153,7 @@ class LoginForm extends React.Component {
             <input type='submit' value='Submit' />
           </form>
         </div>
+        <a className='tell-me-more' href='/pricing/'>Tell me more about these features</a>
       </div>
     )
   }
@@ -173,6 +172,5 @@ document.addEventListener('DOMContentLoaded', () => {
     <LoginForm/>,
     document.getElementById('login-form')
   );
-
-})
+});
 
