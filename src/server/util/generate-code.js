@@ -8,8 +8,7 @@ function generateRandomNumber(min, max) {
 }
 
 export default function generateCode() {
-  let firstNumber = generateRandomNumber(100, 1000);
-  let secondNumber = generateRandomNumber(100, 1000);
+  let code = generateRandomNumber(1000, 10000);
 
-  return `${firstNumber}${secondNumber}`;
+  return `${code}`;
 }

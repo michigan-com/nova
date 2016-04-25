@@ -123,7 +123,7 @@ class LoginForm extends React.Component {
             ref='code'
             value={ this.state.code }
             onKeyDown={ this.checkCode.bind(this) }
-            placeholder='123456'/>
+            placeholder='1234'/>
         </div>
       )
 
