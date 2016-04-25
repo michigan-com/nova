@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import uaParser from 'ua-parser-js';
 
 import Store, { DEFAULT_STATE } from '../store';
 import InfoTile from './components/info-tile';
@@ -42,12 +43,25 @@ class NowDashboard extends React.Component {
 
     window.onresize = this.resize;
 
+    this.onDesktop = this.parseUaString();
+
     this.state = {
       articlesLoading: true,
       windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall,
       showInfo: false,
       activeArticleClose: false
     }
+  }
+
+  /**
+   *  Determins if we need to show a input box for phone numbers. If on desktop,
+   *  show the input. Else, don't show input
+   *
+   *  @return {Boolean} True if we're to show the input, false otherwise
+   */
+  parseUaString() {
+    let uaResult = uaParser();
+    return typeof uaResult.device.type === 'undefined';
   }
 
   resize = () => {
@@ -123,6 +137,11 @@ class NowDashboard extends React.Component {
           <InfoTile type='inline' rank={ rank } infoText={ this.props.infoText } key={ 'info-tile-1' }/>
         )
         rank += 1;
+      } else if (rank === 6 && this.onDesktop && this.props.showInput ) {
+        topArticles.push(
+          <PhoneInput rank={ rank } key='phone-input-tile'/>
+        )
+        rank += 2;
       }
 
       topArticles.push(
@@ -139,8 +158,16 @@ class NowDashboard extends React.Component {
     // Have to draw in the same order every time, so sort by article ID before rendering
     // Rank positioning is done within <TopArticle/> Component
     topArticles.sort((a,b) => {
-      if (!b.props.article) return -1;
-      else if (!a.props.article) return 1;
+      // These if statements are for info tiles
+      if (!b.props.article && !a.props.article) {
+        return b.props.rank - a.props.rank;
+      }
+      else if (!b.props.article) {
+        return 1;
+      }
+      else if (!a.props.article) {
+        return -1;
+      }
       return b.props.article.article_id - a.props.article.article_id
     });
 
@@ -166,7 +193,7 @@ class NowDashboard extends React.Component {
       let topArticles = this.renderArticles();
       let style = {};
       let dashboardContainerClass = 'dashboard-container';
-      if (topArticles.length) style.height = topArticles.length * (getTopArticleHeight() + 10); // Height * padding
+      if (topArticles.length) style.height = (topArticles.length + 1) * (getTopArticleHeight() + 10); // Height * padding
       else dashboardContainerClass += ' articles-loading';
 
       let topArticlesContainerClass = 'top-articles-container';

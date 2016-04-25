@@ -10,23 +10,18 @@ export const GOT_TOP_ARTICLES = 'GOT_TOP_ARTICLES';
 export const GOT_QUICKSTATS = 'GOT_QUICKSTATS';
 export const TOGGLE_INFO = 'TOGGLE_INFO';
 
-export const INFO_BLURBS = [
-  <a href='http://games.michigan.com/tiger-tiles' target='_blank'><div>
-  Excited for Opening Day? Tap here to play Tiger Tiles.
-  </div></a>
-];
-// export const INFO_BLURBS = [
-//   <div>{ `Using ${appName}'s Speed Reader, you can read an entire article in a fraction of the time! `}</div>,
-//   <div>On an iPhone? Save us to your home screen using the <img src='/img/share-button.svg'/> button</div>,
-//   <div>Our bots summarize news articles around the clock.</div>,
-//   <div>Try this: Tap on any headline to read a summary of the news article.</div>,
-//   <div>{ `${appName} was built for busy people — more news, in less time. `}</div>,
-//   <div>Out of articles? Don't worry! This list updates every 10 seconds, check back for more later!</div>,
-//   <div>Did you know? The average adult reads 250 to 300 words per minute.</div>,
-//   <div>Speed-reading tip: To read faster, try to not voice the words in your head.</div>,
-//   <div>Max Speed Reading speed is 1000 WPM, can you go faster than that?</div>,
-//   <div>Filters at the bottom of the page eliminate articles by category.</div>
-// ];
+ export const INFO_BLURBS = [
+   <div>{ `Using ${appName}'s Speed Reader, you can read an entire article in a fraction of the time! `}</div>,
+   <div>On an iPhone? Save us to your home screen using the <img src='/img/share-button.svg'/> button</div>,
+   <div>Our bots summarize news articles around the clock.</div>,
+   <div>Try this: Tap on any headline to read a summary of the news article.</div>,
+   <div>{ `${appName} was built for busy people — more news, in less time. `}</div>,
+   <div>Out of articles? Don't worry! This list updates every 10 seconds, check back for more later!</div>,
+   <div>Did you know? The average adult reads 250 to 300 words per minute.</div>,
+   <div>Speed-reading tip: To read faster, try to not voice the words in your head.</div>,
+   <div>Max Speed Reading speed is 1000 WPM, can you go faster than that?</div>,
+   <div>Filters at the bottom of the page eliminate articles by category.</div>
+ ];
 
 const ARTICLEID_COOKIE = 'articleIds';
 /**

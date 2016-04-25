@@ -3,7 +3,7 @@
 
 $definition-height: 35px;
 
-.top-article-container, .info-tile-container {
+.top-article-container, .info-tile-container, .phone-number-input-container {
   position: absolute;
   width: 90%;
   margin-left: 5%;
@@ -51,7 +51,7 @@ $definition-height: 35px;
   }
 }
 
-.top-article, .info-tile {
+.top-article, .info-tile, .phone-number-input-content {
   @extend smack;
   width: 100%;
   top: 0%;

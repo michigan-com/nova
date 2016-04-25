@@ -3,191 +3,111 @@
 $reveal-button-font-size: 20px;
 
 .phone-number-input-container {
-  position: fixed;
-  left: 20%;
-  width: 60%;
-  bottom: -25vh;
-  height: 30vh;
-  padding: 1vh;
-  z-index: calc($header-z-index - 1);
-  background-color: white;
-  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  transition: bottom 200ms linear;
-
-
-  @media (max-height: 400px) {
-    min-height: 150px;
-    bottom: -150px;
-
-    &.dismiss {
-      bottom: -150px !important;
-    }
-  }
-
-  @media (max-width: $screen-sm) {
-    width: 100%;
-    left: 0;
-  }
-
-  &.show {
-    bottom: 0;
-  }
-
-  &.dismiss {
-    bottom: -30vh;
-  }
 }
 
 .phone-number-input-content {
   width: 100%;
   height: 100%;
+  padding: 10px 20px;
+  font-family: 'Open Sans';
+  background-color: $blue !important;
+  cursor: default !important;
 
-  h3 {
-    text-align: center;
-    color: $blue;
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .reveal-button {
-    border: 1px solid $blue;
-    color: $blue;
-    background-color: white;
-    text-align: center;
-    font-size: $reveal-button-font-size;
-    line-height: calc($reveal-button-font-size * 1.5);
-    height: calc($reveal-button-font-size * 1.5);
-    width: 44%;
-    margin: 0 auto;
-    font-weight: bold;
-    transition: all 150ms linear;
-    cursor: pointer;
-
-    @media (max-width: $screen-sm) {
-      width: 50%;
-    }
-
-    &:hover {
-      background-color: $blue;
-      color: white;
-    }
-  }
-
-  .never-again {
-    color: $blue;
-    text-align: center;
-    font-size: 12px;
-    margin-top: 15px;
-    display: block;
-  }
-}
-
-
-.dismiss-input {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  border: 1px solid $blue;
-  color: $blue;
-  background: white;
-  z-index: 1;
-  transition: all 150ms linear;
-  cursor: pointer;
-
-  &:after {
-    content: "X";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
+  form {
     width: 100%;
-    line-height: 40px;
-    text-align: center;
-    color: inherit;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
   }
 
-  &:hover {
-    background: $blue;
-    color: white;
+  .form-content {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .blurb {
+      color: white;
+      font-size: 20px;
+      width: 100%;
+      margin: 10px 0;
+
+      @media (max-width: $screen-md) {
+        font-size: 12px;
+      }
+
+    }
   }
-}
 
-.phone-number-form {
-  width: 100%;
-  text-align: center;
-  margin: 30px;
+  .form-submit {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-  .phone-number-input {
-    font-size: 17px;
-    line-height: 30px;
-    height: 30px;
-    border: 1px solid transparent;
-    border-bottom: 1px solid $blue;
-    width: 50%;
-    margin: 0 auto;
-
-    &, &:focus {
+    .submit {
+      margin: 0 auto;
       appearance: none;
-      outline: none;
-    }
+      background-color: white;
+      color: $blue;
+      border: 1px solid transparent;
+      font-size: 30px;
+      height: 40px;
+      width: 75%;
+      transition: all 200ms linear;
+      cursor: pointer;
+      width: 100%;
 
-    &.error {
-      border: 1px solid $red !important;
-    }
+      @media (max-width: $screen-md) {
+        font-size: 20px;
+        height: 30px;
+      }
 
-    &:before {
-      content: "Mobile Phone Number";
-      font-size: 15px;
-      top: -30px;
-      position: absolute;
-      left: 0;
+      &:hover {
+        color: white;
+        background-color: $blue;
+        border: 1px solid white;
+      }
+
+      &.disabled {
+        opacity: .6;
+      }
     }
   }
 
   .errors {
     color: $red;
-    font-size: 10px;
-    height: 12px;
-    line-height: 12px;
   }
-
-  .submit {
-    display: block;
-    width: 33%;
-    margin: 10px auto;
-    appearance: none;
-    border: 1px solid $blue;
-    color: $blue;
-    background: white;
-    font-size: 15px;
-    line-height: 25px;
-    text-align: center;
-    max-width: 150px;
-    cursor: pointer;
-    transition: all 150ms linear;
-
-    &:hover {
-      color: white;
-      background: $blue;
-    }
-
-    &.disabled {
-      opacity: .7;
-    }
-
-
-    @media (max-width: $screen-sm) {
-      width: 55%;
-    }
-  }
-
-  .info-text {
-    color: $blue;
-    font-size: 12px;
-  }
-
 }
+
+.phone-number-input {
+  background: transparent;
+  color: white;
+  border: none;
+  border-bottom: 1px solid white;
+  width: 100%;
+  font-size: 20px;
+  height: 30px;
+  outline: none;
+
+  &.error {
+    border: 1px solid $red;
+  }
+
+  &:before {
+    content: "Mobile Phone";
+    position: absolute;
+    font-size: 12px;
+    top: -15px;
+    left: 0;
+    color: white;
+  }
+
+  &:after {
+    content: "We will never spam or share your number";
+    font-size: 10px;
+    bottom: -15px;
+    color: white;
+  }
+}
+
