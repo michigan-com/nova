@@ -1,6 +1,6 @@
 'use strict';
 
-import { DEFAULT_PHONE_NUMBER_STATE, SHOW_INPUT, DISMISS_INPUT } from '../../actions/phone-number';
+import { DEFAULT_PHONE_NUMBER_STATE, EXPAND_INPUT, SHOW_INPUT, DISMISS_INPUT } from '../../actions/phone-number';
 
 export default function(state=DEFAULT_PHONE_NUMBER_STATE, action) {
   switch(action.type) {
@@ -8,6 +8,8 @@ export default function(state=DEFAULT_PHONE_NUMBER_STATE, action) {
       return { ...state, showInput: true };
     case DISMISS_INPUT:
       return { ...state, dismissInput: true };
+    case EXPAND_INPUT:
+      return { ...state, expandInput: true };
   }
   return { ...state };
 }

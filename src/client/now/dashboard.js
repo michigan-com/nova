@@ -137,11 +137,13 @@ class NowDashboard extends React.Component {
           <InfoTile type='inline' rank={ rank } infoText={ this.props.infoText } key={ 'info-tile-1' }/>
         )
         rank += 1;
-      } else if (rank === 6 && this.onDesktop && this.props.showInput ) {
+      } else if (rank === 6 && this.onDesktop && this.props.showInput && !this.props.dismissInput) {
         topArticles.push(
-          <PhoneInput rank={ rank } key='phone-input-tile'/>
+          <PhoneInput rank={ rank } expandInput={ this.props.expandInput } key='phone-input-tile'/>
         )
-        rank += 2;
+
+        if (this.props.expandInput) rank += 2;
+        else rank += 1;
       }
 
       topArticles.push(
@@ -251,7 +253,7 @@ function drawDashboard(state=DEFAULT_STATE) {
       // Phone number input
       showInput={ state.PhoneNumber.showInput }
       dismissInput={ state.PhoneNumber.dismissInput }
-
+      expandInput={ state.PhoneNumber.expandInput }
 
       key='now-dashboard'/>,
     document.getElementById('now')

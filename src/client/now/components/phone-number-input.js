@@ -5,7 +5,7 @@ import { findDOMNode } from 'react-dom';
 import xr from 'xr';
 
 import Store from '../../store';
-import { showInput, dismissInput, hideInputForever } from '../../actions/phone-number';
+import { showInput, dismissInput, hideInputForever, expandInput } from '../../actions/phone-number';
 import { getTopArticleStyle } from './top-article';
 
 export default class PhoneNumberInput extends React.Component {
@@ -13,7 +13,6 @@ export default class PhoneNumberInput extends React.Component {
     super(props);
 
     this.state = {
-      showForm: false,
       error: '',
       sendingMessage: false,
       messageSent: false,
@@ -29,7 +28,7 @@ export default class PhoneNumberInput extends React.Component {
   }
 
   componentDidUpdate(lastProps, lastState) {
-    if (this.state.showForm && !lastState.showForm) {
+    if (this.props.expandInput && !lastProps.expandInput) {
       findDOMNode(this.refs['phone-number']).focus();
     }
   }
@@ -38,8 +37,8 @@ export default class PhoneNumberInput extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!this.state.showForm) {
-      return this.setState({ showForm: true });
+    if (!this.props.expandInput) {
+      return Store.dispatch(expandInput());
     }
 
     let phoneNumber = this.state.phoneNumber;
@@ -102,10 +101,6 @@ export default class PhoneNumberInput extends React.Component {
     Store.dispatch(dismissInput());
   }
 
-  showForm(e) {
-    this.setState({ showForm: true });
-  }
-
   hideForever(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -117,7 +112,7 @@ export default class PhoneNumberInput extends React.Component {
     let submitClass = 'submit';
     let submitValue = 'Text Me';
 
-    if (!this.state.showForm) submitValue = 'Sure!';
+    if (!this.props.expandInput) submitValue = 'Sure!';
     if (this.state.sendingMessage) {
       submitClass += ' disabled';
       submitValue = 'Texting...'
@@ -126,7 +121,7 @@ export default class PhoneNumberInput extends React.Component {
       submitValue = 'Sent!';
     }
 
-    if (this.state.showForm) {
+    if (this.props.expandInput) {
       let phoneNumberInputClass = 'phone-number-input';
       if (this.state.error) phoneNumberInputClass += ' error';
 
@@ -144,18 +139,21 @@ export default class PhoneNumberInput extends React.Component {
       );
     }
 
+    let formContentClass = 'form-content';
+    if (this.props.expandInput) formContentClass += ' expand';
+
     let style = {};
     style.animationDelay = `${this.props.rank * 50}ms`;
     return (
       <div className='phone-number-input-content' style={ style }>
         <form onSubmit={ this.submitNumber.bind(this) }>
-          <div className='form-content'>
+          <div className={ formContentClass }>
             { content }
             <p className='blurb'>We will never spam or share your number.</p>
             <div className='errors'>{ this.state.error }</div>
           </div>
           <div className='form-submit'>
-            <input type='submit' className={ submitClass } value={ submitValue }/>
+            <input type='submit' className={ submitClass } value={ submitValue } onClick={ this.submitNumber.bind(this)  }/>
           </div>
         </form>
       </div>
@@ -166,7 +164,7 @@ export default class PhoneNumberInput extends React.Component {
     let className = 'phone-number-input-container';
 
     let style = getTopArticleStyle(this.props.rank);
-    style.height *= 2;
+    if (this.props.expandInput) style.height *= 2;
     return (
       <div className={ className } style={ style }>
         { this.renderContent() }
