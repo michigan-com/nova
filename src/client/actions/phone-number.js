@@ -28,7 +28,7 @@ export function dismissInput() {
 }
 
 export function hideInputForever() {
-  //setHideInputCookie();
+  setHideInputCookie();
   return { type: DISMISS_INPUT  }
 }
 
@@ -37,8 +37,7 @@ export function expandInput() {
 }
 
 export const DEFAULT_PHONE_NUMBER_STATE = {
-  //showInput: !getHideInputCookie(),
-  showInput: true,
+  showInput: !getHideInputCookie(),
   expandInput: false,
   dismissInput: false
 }
