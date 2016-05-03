@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import Store from '../../store';
-import { toggleInfo } from '../../actions/article-list';
+import Store from '../store';
+import { toggleInfo } from '../actions/article-list';
 
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
@@ -12,6 +12,25 @@ function formatNumber(num) {
 }
 
 export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.userAuthenticated =  !!USER_ID;
+  }
+
+  renderLoginButton() {
+    let loginContent = null;
+    if (this.userAuthenticated) {
+      loginContent = <a href='/logout/'>Logout</a>
+    } else {
+      loginContent = <a href='/login/'>Join</a>
+    }
+
+    return (
+      <div className='user-area'>
+        { loginContent }
+      </div>
+    )
+  }
 
   render() {
     let readers = '';

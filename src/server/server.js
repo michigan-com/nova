@@ -1,21 +1,39 @@
 'use strict';
 
 import debug from 'debug';
-var logger = debug('app:status');
 
-import app from './app';
+import { createApp } from './app';
+import dbConnect from './util/db';
 
-var port = normalizePort(process.env.NODE_PORT || '3000');
-app.set('port', port);
+var logger = debug('app:server');
 
-logger(`Environment: ${app.get('env')}`);
-var server = app.listen(port, '0.0.0.0', function(err) {
-  if (err) throw new Error(err);
+// Connect to the db then start the app
+async function startServer() {
+  let db = await dbConnect(process.env.MONGO_URI);
 
-  let host = this.address();
-  logger(`Started on ${host.address}:${host.port}`);
-});
-export default server;
+  // Create the app
+  var app = createApp(db, true);
+  var port = normalizePort(process.env.NODE_PORT || '3000');
+  app.set('port', port);
+
+  logger(`[SERVER] Environment: ${app.get('env')}`);
+  var server = app.listen(port, '0.0.0.0', function(err) {
+    if (err) throw new Error(err);
+
+    let host = this.address();
+    logger(`[SERVER] Started on ${host.address}:${host.port}`);
+  });
+
+  server.on('close', function() {
+    logger("[SERVER] Closed nodejs application ...");
+    db.close();
+  });
+
+  process.on('SIGTERM', function () {
+    db.close();
+    server.close();
+  });
+}
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -23,4 +41,9 @@ function normalizePort(val) {
   if (port >= 0) return port;
   return false;
 }
+
+startServer().catch((e) => {
+  console.error(e);
+  console.error(e.stack);
+});
 

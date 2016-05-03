@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import SectionFilter from './components/section-filter';
+import SectionFilter from './section-filter';
 
 export default class SectionFilters extends React.Component {
   static FILTER_HEIGHT = 65

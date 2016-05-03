@@ -1,0 +1,24 @@
+extends ./subpage
+
+block subpage-content
+  #pricing-container
+    table#pricing
+      thead.table-header
+        tr
+          td.name Plan
+          td.features Features
+      tbody
+        tr.plan
+          td.name Free
+          td.features Full Headline Stream + National / International News + All Filters
+        tr.plan
+          td.name .99/mo.
+          td.features
+            a(href='/login/') Join to see available features
+        tr.plan
+          td.name 4.99/mo
+          td.features
+            a(href='/login/') Join to see available features
+
+block css
+  link(href='/css/pricing.css', rel='stylesheet')

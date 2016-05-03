@@ -27,7 +27,11 @@ $reveal-button-font-size: 20px;
     align-items: flex-start;
 
     &.expand {
-      padding: 10% 20px;
+      padding: 5% 20px;
+
+      @media (max-width: $screen-md) {
+          padding: 5% 10px;
+      }
     }
 
     .blurb {
@@ -81,6 +85,7 @@ $reveal-button-font-size: 20px;
 
   .errors {
     color: $red;
+    font-size: 12px;
   }
 }
 
@@ -114,4 +119,3 @@ $reveal-button-font-size: 20px;
     color: white;
   }
 }
-

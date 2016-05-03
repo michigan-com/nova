@@ -2,11 +2,11 @@
 
 import React from 'react';
 
-import Store from '../../store';
-import { closeActiveArticle } from '../../actions/active-article';
+import Store from '../store';
+import { closeActiveArticle } from '../actions/active-article';
 import LoadingImage from './loading-image';
 import SpeedReader from './speed-reader';
-import { toggleClass } from '../../lib/dom';
+import { toggleClass } from '../lib/dom';
 
 export default class ActiveArticle extends React.Component {
   constructor(props) {

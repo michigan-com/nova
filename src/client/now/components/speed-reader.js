@@ -3,8 +3,8 @@
 import React from 'react';
 import { SimpleReader } from 'reeeeeader';
 
-import Store from '../../store';
-import { startSpeedReading, stopSpeedReading } from '../../actions/active-article';
+import Store from '../store';
+import { startSpeedReading, stopSpeedReading } from '../actions/active-article';
 import { brandIcon } from '../../../../config';
 
 export default class SpeedReader extends React.Component {
@@ -39,9 +39,9 @@ export default class SpeedReader extends React.Component {
   initSpeedReader() {
     this.controller = new SimpleReader(this.refs['speed-reader-text'], {
       onComplete: () => {
-        setTimeout( () => {
+        setTimeout((() => {
           this.setState({ speedReaderFinished: true, playing: false });
-        }.bind(this), 250);
+        }).bind(this), 250);
       }
     });
     this.controller.setArticle({
@@ -117,18 +117,18 @@ export default class SpeedReader extends React.Component {
         state.countdown = true;
       }
 
-      setTimeout(() => {
+      setTimeout((() => {
         this.setState(state);
-      }.bind(this), 650);
+      }).bind(this), 650);
       return
     }
 
     let newScrollTop = body.scrollTop + step;
     body.scrollTop = newScrollTop;
     setTimeout(((newScrollTop) => {
-      return () => {
+      return (() => {
         this.scrollIntoView(newScrollTop, autoplay);
-      }.bind(this)
+      }).bind(this)
     })(newScrollTop), 10);
   }
 
@@ -351,7 +351,7 @@ export default class SpeedReader extends React.Component {
           <img className='speed-rabbit' src={ `/img/${brandIcon}/speed-reader-image.svg` }/>
           <div className='text-box'>Keep scrolling to speed read this article in <span ref='total-time'></span></div>
           <div className='arrow-container'>
-            <img src='/img/chevron-down-white.svg' onClick={ () => { this.scrollIntoView(document.body.scrollTop) }.bind(this) }/>
+            <img src='/img/chevron-down-white.svg' onClick={ (() => { this.scrollIntoView(document.body.scrollTop) }).bind(this) }/>
           </div>
         </div>
         <div className={ speedReaderClass } ref='speed-reader'>

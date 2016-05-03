@@ -2,8 +2,8 @@
 
 import React from 'react';
 
-import Store from '../../store';
-import { sectionSelect } from '../../actions/filters';
+import Store from '../store';
+import { sectionSelect } from '../actions/filters';
 
 // This ended up being much less complicated than initially anticipated
 export default class SectionFilter extends React.Component {

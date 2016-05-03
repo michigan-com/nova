@@ -4,11 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import uaParser from 'ua-parser-js';
 
-import Store, { DEFAULT_STATE } from '../store';
+import Store, { DEFAULT_STATE } from './store';
 import InfoTile from './components/info-tile';
 import TopArticle, { getTopArticleHeight } from './components/top-article';
 import ActiveArticle from './components/active-article';
-import SectionFilters from './filters';
+import SectionFilters from './components/filters';
 import LoadingImage from './components/loading-image';
 import Header from './components/header';
 import PhoneInput from './components/phone-number-input';

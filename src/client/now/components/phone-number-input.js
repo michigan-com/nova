@@ -4,8 +4,8 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import xr from 'xr';
 
-import Store from '../../store';
-import { showInput, dismissInput, hideInputForever, expandInput } from '../../actions/phone-number';
+import Store from '../store';
+import { showInput, dismissInput, hideInputForever, expandInput } from '../actions/phone-number';
 import { getTopArticleStyle } from './top-article';
 
 export default class PhoneNumberInput extends React.Component {
@@ -41,6 +41,7 @@ export default class PhoneNumberInput extends React.Component {
       return Store.dispatch(expandInput());
     }
 
+    let _csrf = document.getElementById('_csrf').value;
     let phoneNumber = this.state.phoneNumber;
 
     if (phoneNumber.length != 10) {
@@ -54,7 +55,7 @@ export default class PhoneNumberInput extends React.Component {
       sendingMessage: true
     });
 
-    xr.post('/text-mobile-link/', { phoneNumber }).then(
+    xr.post('/text-mobile-link/', { phoneNumber, _csrf }).then(
       (resp) => {
         this.setState({
           error: '',
@@ -72,14 +73,15 @@ export default class PhoneNumberInput extends React.Component {
         });
       }
     )
-
   }
 
   checkKeyValue(e) {
+    let keyCode = e.which || e.keyCode;
+    if (keyCode === 13) return;
+
     e.stopPropagation();
     e.preventDefault();
 
-    let keyCode = e.which || e.keyCode;
     if ((keyCode > 57 || keyCode < 48) && keyCode !== 8) {
       this.setState(this.state);
       return;
@@ -148,9 +150,9 @@ export default class PhoneNumberInput extends React.Component {
       <div className='phone-number-input-content' style={ style }>
         <form onSubmit={ this.submitNumber.bind(this) }>
           <div className={ formContentClass }>
+            <div className='errors'>{ this.state.error || ' '}</div>
             { content }
             <p className='blurb'>We will never spam or share your number.</p>
-            <div className='errors'>{ this.state.error }</div>
           </div>
           <div className='form-submit'>
             <input type='submit' className={ submitClass } value={ submitValue } onClick={ this.submitNumber.bind(this)  }/>
