@@ -1,5 +1,5 @@
 @import 'base';
-@import './animations/smack';
+@import '../animations/smack';
 
 $definition-height: 35px;
 

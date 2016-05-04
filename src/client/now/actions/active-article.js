@@ -4,7 +4,7 @@ import xr from 'xr';
 import assign from 'object-assign';
 
 import { appName, socketUrl } from '../../../../config';
-import { millisToMinutesAndSeconds } from '../lib/parse';
+import { millisToMinutesAndSeconds } from '../../lib/parse';
 import { gaEvent } from './ga';
 
 export const ARTICLE_SELECTED = 'ARTICLE_SELECTED';

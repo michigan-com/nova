@@ -14,11 +14,16 @@ export default function registerRoutes(app) {
   router.get('/', csrfProtection, (req, res, next) => {
     res.render('now', {
       title: Config.appName,
-      initialPage: 'list-view',
       csrfToken: req.csrfToken(),
     });
   });
 
+  // TODO login required
+  router.get('/stream/', (req, res, next) => {
+    res.render('stream', {
+      title: Config.appName
+    });
+  });
 
   router.get('/article/:articleId/', csrfProtection, (req, res, next) => {
     let articleId = req.params.articleId;
@@ -50,7 +55,6 @@ export default function registerRoutes(app) {
         title,
         photoUrl,
         description,
-        initialPage: `Article ${article.article_id}`,
         csrfToken: req.csrfToken(),
       });
     });

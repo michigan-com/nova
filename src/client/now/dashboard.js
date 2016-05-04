@@ -10,7 +10,7 @@ import InfoTile from './components/info-tile';
 import TopArticle, { getTopArticleHeight } from './components/top-article';
 import ActiveArticle from '../components/active-article';
 import SectionFilters from './components/filters';
-import LoadingImage from './components/loading-image';
+import LoadingImage from '../components/loading-image';
 import Header from './components/header';
 import PhoneInput from './components/phone-number-input';
 

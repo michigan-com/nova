@@ -1,0 +1,38 @@
+@import './components/loading-image';
+
+.stream-article{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .image-container {
+    width: 25%;
+    height: 100%;
+
+    .image {
+      height: 100%;
+      background-size: auto 100%;
+      background-repeat: no-repeat;
+      background-position: top;
+    }
+  }
+
+  .headline-container {
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+
+    .headline {
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .published-time {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      color: grey;
+    }
+  }
+}
