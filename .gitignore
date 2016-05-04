@@ -36,3 +36,4 @@ out.txt
 *.swp
 *.DS_STORE
 env.sh
+.env

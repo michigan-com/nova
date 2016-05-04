@@ -3,9 +3,7 @@
 import React from 'react';
 import { SimpleReader } from 'reeeeeader';
 
-import Store from '../store';
-import { startSpeedReading, stopSpeedReading } from '../actions/active-article';
-import { brandIcon } from '../../../../config';
+import { brandIcon } from '../../../config';
 
 export default class SpeedReader extends React.Component {
   constructor(props) {
@@ -22,12 +20,6 @@ export default class SpeedReader extends React.Component {
     this.countdownTime = 3;
     this.controller = null;
     this.countdownTimeout = undefined;
-  }
-
-  closeSpeedReader = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setTimeout(() => { Store.dispatch(stopSpeedReading()); }, 500);
   }
 
   componentDidMount() {
@@ -63,7 +55,6 @@ export default class SpeedReader extends React.Component {
 
     if (nextState.speedReaderFinished && !this.state.speedReaderFinished) {
       this.refs['speed-reader-text'].innerHTML = '';
-      Store.dispatch(stopSpeedReading());
     }
   }
 
@@ -146,7 +137,7 @@ export default class SpeedReader extends React.Component {
     if (!this.controller) return;
 
     let article = this.props.article;
-    Store.dispatch(startSpeedReading(article.article_id));
+    this.props.startSpeedReading(article.article_id);
 
     this.controller.resume();
   }
@@ -155,7 +146,7 @@ export default class SpeedReader extends React.Component {
     if (!this.controller) return;
 
     let article = this.props.article;
-    Store.dispatch(stopSpeedReading(article.article_id));
+    this.props.stopSpeedReading(article.article_id);
 
     this.controller.pause();
   }
@@ -445,4 +436,10 @@ class SpeedControl extends React.Component {
       </div>
     )
   }
+}
+
+SpeedReader.defaultProps = {
+    article: null,
+    startSpeedReading: () => {},
+    stopSpeedReading: () => {},
 }

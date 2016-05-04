@@ -2,11 +2,7 @@
 
 import React from 'react';
 
-import Store from '../store';
-import { closeActiveArticle } from '../actions/active-article';
-import LoadingImage from './loading-image';
 import SpeedReader from './speed-reader';
-import { toggleClass } from '../lib/dom';
 
 export default class ActiveArticle extends React.Component {
   constructor(props) {
@@ -57,7 +53,7 @@ export default class ActiveArticle extends React.Component {
   closeActiveArticle(e) {
     // TODO
     this.setState({ fadeOutArticle: true });
-    setTimeout(() => { Store.dispatch(closeActiveArticle(this.props.article.article_id)); }, 500);
+    setTimeout(() => { this.props.closeActiveArticle(this.props.article.article_id) }, 500);
   }
 
   getBackgroundStyle() {
@@ -122,6 +118,8 @@ export default class ActiveArticle extends React.Component {
           </div>
         </div>
         <SpeedReader article={ article }
+            startSpeedReading={ this.props.startSpeedReading }
+            stopSpeedReading={ this.props.stopSpeedReading }
             key={ `speed-reader-${article.article_id}` }/>
         <div className='context-menu'>
           <div className='menu-button' onClick={ () => { this.closeActiveArticle(); }}>
@@ -133,4 +131,3 @@ export default class ActiveArticle extends React.Component {
     )
   }
 }
-

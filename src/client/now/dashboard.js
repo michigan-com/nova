@@ -5,9 +5,10 @@ import ReactDOM from 'react-dom';
 import uaParser from 'ua-parser-js';
 
 import Store, { DEFAULT_STATE } from './store';
+import { closeActiveArticle, startSpeedReading, stopSpeedReading } from './actions/active-article';
 import InfoTile from './components/info-tile';
 import TopArticle, { getTopArticleHeight } from './components/top-article';
-import ActiveArticle from './components/active-article';
+import ActiveArticle from '../components/active-article';
 import SectionFilters from './components/filters';
 import LoadingImage from './components/loading-image';
 import Header from './components/header';
@@ -116,6 +117,19 @@ class NowDashboard extends React.Component {
     }
   }
 
+  /** Store events that need to be passed down to children */
+  closeActiveArticle(article_id) {
+    Store.dispatch(closeActiveArticle(article_id));
+  }
+
+  startSpeedReading(article_id) {
+    Store.dispatch(startSpeedReading(article_id));
+  }
+
+  stopSpeedReading(article_id) {
+    Store.dispatch(stopSpeedReading(article_id));
+  }
+
   renderArticles() {
     if (this.state.articlesLoading || !this.props.topArticles.length) {
       let className = 'loading-image-container';
@@ -191,7 +205,10 @@ class NowDashboard extends React.Component {
           <div className='dashboard-container'>
             <ActiveArticle article={ this.props.activeArticle }
                   readers={ this.props.activeArticleReaders }
-                  speedReading={ this.props.speedReading }/>
+                  speedReading={ this.props.speedReading }
+                  closeActiveArticle={ this.closeActiveArticle }
+                  startSpeedReading={ this.startSpeedReading }
+                  stopSpeedReading={ this.stopSpeedReading }/>
           </div>
         )
     } else {
