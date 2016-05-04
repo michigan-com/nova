@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import Infinite from 'react-infinite';
 
 import LoadingImage from '../components/loading-image';
 import StreamArticle from './components/stream-article';
@@ -48,7 +49,9 @@ export default class Dashboard extends React.Component {
 
     return (
       <div className='articles'>
-        { articleComponents }
+        <Infinite containerHeight= { articleComponents.length * 75 } elementHeight={ 75 }>
+          { articleComponents }
+        </Infinite>
       </div>
     )
   }
