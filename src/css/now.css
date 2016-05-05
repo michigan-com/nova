@@ -4,6 +4,9 @@
 @import './components/nav-controls';
 @import './components/top-article';
 @import './components/phone-number-input';
+@import './components/header';
+@import './components/loading-image';
+
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
@@ -19,14 +22,6 @@ body {
   &.articles-loading {
     .definitions {
       opacity: 0;
-    }
-  }
-
-  .header-container {
-    height: $header-height-lg;
-
-    @media (max-width: $screen-sm) {
-      height: $header-height-sm;
     }
   }
 
@@ -95,214 +90,6 @@ body {
       flex-direction: column;
       text-align: center;
       padding-top: 20%;
-    }
-  }
-}
-
-#header {
-  position: fixed;
-  width: 100%;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  flex-direction: row;
-  flex-wrap: wrap;
-  z-index: $header-z-index;
-  background-color: $red;
-  padding: 0px 15px;
-
-  .close-header {
-    background-color: $red;
-    color: white;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    line-height: 25px;
-    padding: 0px 20px;
-    cursor: pointer;
-    display: none;
-    border: 1px solid transparent;
-    transition: all 250ms linear;
-
-    &:hover {
-      border: 1px solid $red;
-      color: 1px solid $red;
-      background-color: transparent;
-    }
-  }
-
-  .site-info {
-    height: 0px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: black;
-    background-color: #31363a;
-    overflow: hidden;
-    transition: height 400ms ease-out;
-    z-index: $header-z-index;
-
-    &.show {
-      height: 50vh;
-
-      .close-header {
-        display: block;
-      }
-
-      @media (max-width: $screen-sm) {
-        height: 70vh;
-      }
-    }
-
-    .info-content {
-      margin: 0 auto;
-      height: 100%;
-      align-items: center;
-      padding: 20px 15%;
-      overflow: scroll;
-      color: white;
-
-      .info-header {
-        font-size: 22px;
-        line-height: calc(22px * 1.4);
-        font-weight: 600;
-        font-family: 'Open Sans';
-      }
-
-      .list p {
-        margin: 10px 0;
-      }
-
-      .feedback {
-        text-align: center;
-      }
-    }
-
-    #email-us {
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 45px;
-      height: 45px;
-      width: 40%;
-      display: block;
-      background-color: #71BF44;
-      text-align: center;
-      text-decoration: none;
-      color: white;
-      z-index: $header-z-index;
-      border-radius: 5%;
-      margin: 0 auto;
-
-      &:hover {
-
-      }
-    }
-  }
-
-  .header-info {
-    background-color: $red;
-    color: white;
-    margin: 0 auto;
-    width: 75%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    z-index: $header-z-index;
-    height: $header-height-lg;
-    padding: 0% 5%;
-
-    @media (max-width: $screen-sm) {
-      height: $header-height-sm;
-      width: 100%;
-      padding: 0%;
-      padding: 0%;
-    }
-  }
-
-  #page-header {
-    text-transform: uppercase;
-    color: white;
-    font-weight: bold;
-    font-family: 'Open Sans';
-    font-weight: 800;
-    width: 50%;
-    font-size: 26px;
-    line-height: 30px;
-    min-width: 200px;
-
-    @media (min-width: $screen-md) {
-      width: 70%;
-      margin-left: 20px;
-      text-align: left;
-      font-size: 30px;
-      line-height: 50px;
-    }
-  }
-
-  #readers {
-    color: $blue;
-    font-size: 14px;
-    line-height: 17px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    font-family: 'Open Sans';
-    font-weight: normal;
-    text-transform: uppercase;
-    text-transform: center;
-    width: 45%;
-    padding: 0;
-    text-align: right;
-
-    @media (min-width: $screen-md) {
-      /*width: 15%;*/
-    }
-
-    #numbers {
-      display: inline-block;
-      text-align: center;
-      color: color(white a(70%));
-
-      @media (max-width: $screen-sm) {
-        font-size: 10px;
-        width: 100%;
-      }
-    }
-  }
-
-  #info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 15px;
-    width: 5%;
-
-    .info-button {
-      width: 18px;
-      height: 18px;
-      line-height: 17px;
-      font-size: 13px;
-      border-radius: 50%;
-      background-color: color(white a(40%));
-      color: black;
-      text-align: center;
-      cursor: pointer;
-      font-family: 'Lora';
-    }
-  }
-
-  .user-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 5px;
-
-    a {
-      text-decoration: underline;
-      color: white;
-      font-size: 15px;
     }
   }
 }

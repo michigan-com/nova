@@ -11,7 +11,7 @@ import TopArticle, { getTopArticleHeight } from './components/top-article';
 import ActiveArticle from '../components/active-article';
 import SectionFilters from './components/filters';
 import LoadingImage from '../components/loading-image';
-import Header from './components/header';
+import Header from '../components/header';
 import PhoneInput from './components/phone-number-input';
 
 import { appName } from '../../../config';
@@ -222,9 +222,7 @@ class NowDashboard extends React.Component {
       if (this.state.activeArticleClose) topArticlesContainerClass += ' active-article-close';
       dashboardContents = (
         <div className={ dashboardContainerClass }>
-          <Header readers={ this.props.readers }
-            showInfo={ this.props.showInfo }
-            appName={ appName }/>
+          <Header readers={ this.props.readers } appName={ appName }/>
           <div className='definition-container'>
             <div className='definitions'>
               <div className='readers-container'><div className='readers'>readers</div></div>

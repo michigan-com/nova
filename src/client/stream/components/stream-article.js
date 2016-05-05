@@ -1,24 +1,27 @@
 'use strict';
 
 import React from 'react';
+import moment from 'moment';
 
 export default class StreamArticle extends React.Component {
   getArticleStyle() {
-    return {
-      height: '75px'
-    }
+    let article = this.props.article;
+    let rank = this.props.rank
+    let style = {
+      height: '75px',
+      animationDelay: `${rank * 50}ms`
+    };
+
+    return style
   }
 
   renderImage() {
     let article = this.props.article;
-    if (article.photo === null) return null;
+    let style = {};
+    if (article.photo != null) style.backgroundImage = `url(${article.photo.thumbnail.url})`;
 
-    let style = {
-      backgroundImage: `url(${article.photo.thumbnail.url})`
-    }
     return (
-      <div className='image-container'>
-        <div className='image' style={ style }></div>
+      <div className='photo-container' style={ style }>
       </div>
     )
   }
@@ -29,18 +32,19 @@ export default class StreamArticle extends React.Component {
     return (
       <div className='headline-container'>
         <div className='headline'>{ article.headline }</div>
-        <div className='published-time'>{ article.created_at }</div>
+         <div className='published-time'>{ moment(article.created_at).format('MMMM Do YYYY, h:mm a')}</div>
       </div>
     )
   }
 
   render() {
-    console.log(this.props);
     let style = this.getArticleStyle();
     return (
-      <div className='stream-article' style={ style }>
-        { this.renderImage() }
-        { this.renderHeadline() }
+      <div className='stream-article-container'>
+        <div className='stream-article' style={ style }>
+          { this.renderImage() }
+          { this.renderHeadline() }
+        </div>
       </div>
     )
   }

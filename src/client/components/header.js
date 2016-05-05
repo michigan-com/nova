@@ -2,9 +2,6 @@
 
 import React from 'react';
 
-import Store from '../store';
-import { toggleInfo } from '../actions/article-list';
-
 // Format thousands numbers
 // http://blog.tompawlak.org/number-currency-formatting-javascript
 function formatNumber(num) {
@@ -14,7 +11,16 @@ function formatNumber(num) {
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.userAuthenticated =  !!USER_ID;
+    this.userAuthenticated = USER_ID ? !!USER_ID : false;
+
+    this.state = {
+      showInfo: false
+    }
+  }
+
+  toggleInfo() {
+    let showInfo = !this.state.showInfo;
+    this.setState({ showInfo });
   }
 
   renderLoginButton() {
@@ -37,14 +43,14 @@ export default class Header extends React.Component {
     if (this.props.readers > 0) readers = `${formatNumber(this.props.readers)} now reading`;
 
     let siteInfoClass = 'site-info';
-    if (this.props.showInfo) siteInfoClass += ' show';
+    if (this.state.showInfo) siteInfoClass += ' show';
 
     return(
       <div className='header-container'>
         <div id='header'>
           <div className={ siteInfoClass }>
             <div className='info-content'>
-              <div className='close-header' onClick={ () => { Store.dispatch(toggleInfo()); } }>X</div>
+              <div className='close-header' onClick={ this.toggleInfo.bind(this) }>X</div>
               <p className='info-header'>{ `${this.props.appName} uses artificial intelligence to give you essential news in less time.` }</p>
               <div className='list'>
                 <p>{ `${this.props.appName}'s algorithms surface the most-read Michigan news, in real-time.` }</p>
@@ -60,7 +66,7 @@ export default class Header extends React.Component {
             <div id='readers'>
               <div id='numbers'>{ `${readers}` }</div>
             </div>
-            <div id='info' onClick={ () => { Store.dispatch(toggleInfo()); } }>
+            <div id='info' onClick={ this.toggleInfo.bind(this) } >
               <span className='info-button'>i</span>
             </div>
           </div>

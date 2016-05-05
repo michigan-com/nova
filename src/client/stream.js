@@ -17,18 +17,20 @@ function renderDashboard() {
   )
 }
 
-(() => {
+document.addEventListener('DOMContentLoaded', init);
+function init() {
   renderDashboard();
   Store.subscribe(renderDashboard);
 
   let yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(0, 0, 0, 0);
-  console.log(yesterday);
   xr.get(`${Config.socketUrl}/v1/article/?fromDate=${yesterday}`)
     .then((resp) => {
-      Store.dispatch(articlesFetched(resp));
+
+      let articles = resp.sort( (a, b) => { return (new Date(b.created_at)) - (new Date(a.created_at)); });
+      Store.dispatch(articlesFetched(articles));
     }, (err) => {
       console.log('something went wrong');
     });
-})();
+}

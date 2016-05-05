@@ -10,5 +10,6 @@ export function articlesFetched(articles=[]) {
 }
 
 export const DEFAULT_STATE = {
-  articles: []
+  articles: [],
+  activeArticle: -1
 }
