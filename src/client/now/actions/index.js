@@ -2,7 +2,6 @@
 
 import assign from 'object-assign';
 
-import { DEFAULT_ARTICLE } from './active-article';
 import { DEFAULT_ARTICLE_LIST } from './article-list';
 import { DEFAULT_FILTERS } from './filters';
 

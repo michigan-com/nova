@@ -5,7 +5,7 @@ import assign from 'object-assign';
 import { GOT_TOP_ARTICLES, GOT_QUICKSTATS, DEFAULT_ARTICLE_LIST, TOGGLE_INFO,
   sortTopArticles, saveArticleIdsToCookie } from '../../actions/article-list';
 import { DEFAULT_SECTIONS, SECTION_SELECT, writeSectionCookie} from '../../actions/filters';
-import { ARTICLE_LOADED, CLOSE_ACTIVE_ARTICLE } from '../../actions/active-article';
+import { ARTICLE_LOADED, CLOSE_ACTIVE_ARTICLE } from '../../../common/actions/active-article';
 import { getRandomInt } from '../../../lib/random';
 
 const DEFAULT_STATE = assign({}, DEFAULT_ARTICLE_LIST, DEFAULT_SECTIONS);
@@ -45,6 +45,13 @@ export default function(state=DEFAULT_STATE, action) {
     case CLOSE_ACTIVE_ARTICLE:
       let blurbIndex = getRandomInt(0, state.infoBlurbs.length - 1);
       return assign({}, state, { blurbIndex });
+    case GOT_TOP_ARTICLES:
+      if (!state.activeArticle || state.articleLoading) return state;
+      let articles = action.value;
+      activeArticleReaders = getActiveArticleReaders(articles, state);
+      if (activeArticleReaders >= 0) {
+        return assign({}, state, { activeArticleReaders });
+      }
 
   }
   return state;

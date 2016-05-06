@@ -5,8 +5,11 @@ import { findDOMNode } from 'react-dom';
 import Infinite from 'react-infinite';
 import moment from 'moment';
 
-import Header from '../components/header';
-import LoadingImage from '../components/loading-image';
+import Store from './store';
+import { closeActiveArticle, startSpeedReading, stopSpeedReading } from '../common/actions/active-article';
+import Header from '../common/components/header';
+import ActiveArticle from '../common/components/active-article';
+import LoadingImage from '../common/components/loading-image';
 import StreamArticle from './components/stream-article';
 import Config from '../../../config';
 
@@ -17,22 +20,37 @@ export default class Dashboard extends React.Component {
     this.state = {
       articlesLoaded: false,
       fadeOutLoading: false,
-      timeFrame: ''
+      timeFrame: '',
     }
+
+    this.lastScrollTop = document.body.scrollTop;
 
     this.articleList = null;
   }
 
+  registerScrollHandlers() {
+    let list = findDOMNode(this.articleList);
+    window.addEventListener('scroll', this.checkScroll);
+  }
+
+  unregisterScrollHandlers() {
+    let list = findDOMNode(this.articleList);
+    window.removeEventListener('scroll', this.checkScroll);
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.articlesLoaded && !prevState.articlesLoaded) {
-      let list = findDOMNode(this.articleList);
-      window.addEventListener('scroll', this.checkScroll.bind(this));
+    if (this.state.articlesLoaded && !prevState.articlesLoaded) this.registerScrollHandlers()
+
+    let prevActiveArticle = prevProps.store.ActiveArticle.activeArticle;
+    let thisActiveArticle = this.props.store.ActiveArticle.activeArticle
+    if ( !thisActiveArticle && !!prevActiveArticle) {
+      document.body.scrollTop = this.lastScrollTop;
+      this.registerScrollHandlers();
     }
   }
 
   componentWillUnmount() {
-    let list = findDOMNode(this.articleList);
-    window.removeEventListener('scroll', this.checkScroll.bind(this));
+    this.unregisterScrollHandlers();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,16 +62,37 @@ export default class Dashboard extends React.Component {
         this.setState({ articlesLoaded: true });
       }, 500);
     }
+
+    let nextActiveArticle = nextProps.store.ActiveArticle.activeArticle;
+    let thisActiveArticle = this.props.store.ActiveArticle.activeArticle
+    if (!thisActiveArticle && !!nextActiveArticle) {
+      this.lastScrollTop = window.scrollY;
+      this.unregisterScrollHandlers();
+    }
   }
 
-  checkScroll() {
+  compone
+
+  /** Store events that need to be passed down to children */
+  closeActiveArticle(article_id) {
+    Store.dispatch(closeActiveArticle(article_id));
+  }
+
+  startSpeedReading(article_id) {
+    Store.dispatch(startSpeedReading(article_id));
+  }
+
+  stopSpeedReading(article_id) {
+    Store.dispatch(stopSpeedReading(article_id));
+  }
+
+  checkScroll = () => {
     let articles = this.props.store.Articles.articles;
     if (!articles.length) return;
 
     let list = findDOMNode(this.articleList);
     let percentScrolled = window.scrollY / list.clientHeight;
     let articleIndex = Math.round(articles.length * percentScrolled);
-    console.log(`${window.scrollY} / ${list.clientHeight}`);
     this.setTimeFrame(articles[articleIndex]);
   }
 
@@ -119,6 +158,21 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
+    let store = this.props.store;
+    let activeArticle = store.ActiveArticle.activeArticle;
+    if (activeArticle != null) {
+      return (
+        <div className='stream'>
+          <ActiveArticle article={ activeArticle }
+            readers={ 0 }
+            speedReading={ store.ActiveArticle.speedReading }
+            closeActiveArticle={ this.closeActiveArticle }
+            startSpeedReading={ this.startSpeedReading }
+            stopSpeedReading={ this.stopSpeedReading }/>
+        </div>
+      )
+    }
+
     return (
       <div className='stream'>
         <Header appName={ Config.appName }/>

@@ -3,12 +3,14 @@
 import React from 'react';
 
 import SpeedReader from './speed-reader';
+import LoadingImage from './loading-image';
 
 export default class ActiveArticle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       photoLoaded: false,
+      fadeInPhoto: false,
       fadeImageOut: false,
       fadeInContent: false,
       fadeSpeedReader: false,
@@ -23,17 +25,18 @@ export default class ActiveArticle extends React.Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({ fadeInContent: true });
+    }, 1000);
     console.log('active-article-mount');
   }
 
   photoLoaded = () => {
-    setTimeout(() => {
-      this.setState({ photoLoaded: true });
-    }, 500);
+    this.setState({ photoLoaded: true });
 
     setTimeout(() => {
-      this.setState({ fadeInContent: true });
-    }, 1000);
+      this.setState({ fadeInPhoto: true });
+    }, 500);
   }
 
   loadPhoto() {
@@ -62,7 +65,7 @@ export default class ActiveArticle extends React.Component {
 
     document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
 
-    if (this.state.photoLoaded && !!article.photo) {
+    if (this.state.photoLoaded && this.state.fadeInPhoto && !!article.photo) {
       style.backgroundImage = `url(${article.photo.full.url})`;
     }
     return style;
@@ -78,9 +81,27 @@ export default class ActiveArticle extends React.Component {
     )
   }
 
+  renderReaders() {
+    if (!this.props.readers) return <div className='current-readers-container'></div>
+
+    return (
+      <div className='current-readers-container'>
+        <span className='readers'>{ `${this.props.readers || '-' }` }</span>
+        <span className='pipe-divider'>|</span>
+        <span>now reading</span>
+      </div>
+    )
+  }
+
   render() {
     let activeArticleContainerClass = 'active-article-container';
-    if (this.state.photoLoaded) activeArticleContainerClass += ' photo-loaded';
+    let loadingImage = null;
+    if (this.state.fadeInPhoto) activeArticleContainerClass += ' photo-loaded';
+    else loadingImage = <LoadingImage blurbs={ ['Loading image...']}/>
+
+    let articleImageClass = 'article-image'
+    if (this.state.fadeInPhoto) articleImageClass += ' fade-in';
+    else if (this.state.photoLoaded && !this.state.fadeInPhoto) articleImageClass += ' fade-out';
 
     if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
 
@@ -101,14 +122,10 @@ export default class ActiveArticle extends React.Component {
     return (
       <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
-          <div className='article-image' style={ this.getBackgroundStyle() }></div>
+          <div className={ articleImageClass } style={ this.getBackgroundStyle() }>{ loadingImage }</div>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
-              <div className='current-readers-container'>
-                <span className='readers'>{ `${this.props.readers || '-' }` }</span>
-                <span className='pipe-divider'>|</span>
-                <span>now reading</span>
-              </div>
+              { this.renderReaders() }
               <div className='title'>{ article.headline }</div>
               <div className='summary-container'>
                 <div className='summary-title'>Bot Summary</div>

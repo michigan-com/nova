@@ -27,7 +27,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 90%;
+  width: 100%;
 
   .blurb-container {
     display: flex;

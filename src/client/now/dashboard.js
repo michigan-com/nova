@@ -5,13 +5,13 @@ import ReactDOM from 'react-dom';
 import uaParser from 'ua-parser-js';
 
 import Store, { DEFAULT_STATE } from './store';
-import { closeActiveArticle, startSpeedReading, stopSpeedReading } from './actions/active-article';
+import { closeActiveArticle, startSpeedReading, stopSpeedReading } from '../common/actions/active-article';
 import InfoTile from './components/info-tile';
 import TopArticle, { getTopArticleHeight } from './components/top-article';
-import ActiveArticle from '../components/active-article';
+import ActiveArticle from '../common/components/active-article';
+import LoadingImage from '../common/components/loading-image';
+import Header from '../common/components/header';
 import SectionFilters from './components/filters';
-import LoadingImage from '../components/loading-image';
-import Header from '../components/header';
 import PhoneInput from './components/phone-number-input';
 
 import { appName } from '../../../config';
@@ -90,6 +90,7 @@ class NowDashboard extends React.Component {
     // So we don't lose our place in the list
     //if ((nextProps.activeArticle && !this.props.activeArticle)) {
     if(nextProps.articleLoading && !this.props.articleLoading) {
+
       this.lastScrollTop = document.body.scrollTop;
       document.body.scrollTop = 0;
     }
@@ -250,6 +251,18 @@ function initDashboard() {
 }
 
 function drawDashboard(state=DEFAULT_STATE) {
+  let activeArticleReaders = 0;
+  if (state.ActiveArticle.activeArticle != null) {
+    let activeArticle = state.ActiveArticle.activeArticle;
+    for (let article of state.ArticleList.topArticles) {
+      if (activeArticle.article_id === article.article_id &&
+          activeArticle.source === article.source) {
+        activeArticleReaders = article.visits;
+        break;
+      }
+    }
+  }
+
   ReactDOM.render(
     <NowDashboard
       // Article list
@@ -262,7 +275,7 @@ function drawDashboard(state=DEFAULT_STATE) {
       // Active Article
       activeArticle={ state.ActiveArticle.activeArticle }
       speedReading={ state.ActiveArticle.speedReading }
-      activeArticleReaders={ state.ActiveArticle.activeArticleReaders }
+      activeArticleReaders={ activeArticleReaders }
       articleLoading={ state.ActiveArticle.articleLoading }
 
       // Info Stuff

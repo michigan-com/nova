@@ -2,6 +2,7 @@
 @import './components/loading-image';
 @import './animations/smack';
 @import './components/header';
+@import './components/active-article';
 
 .articles {
 }

@@ -7,11 +7,10 @@ require('historyjs/scripts/bundled/html4+html5/native.history.js');
 
 import Config from '../../config';
 import Store from './now/store';
-import { closeActiveArticle, articleSelected } from './now/actions/active-article';
+import { closeActiveArticle, articleSelected } from './common/actions/active-article';
 import { gotTopArticles, gotQuickstats } from './now/actions/article-list';
 import { initDashboard } from './now/dashboard';
-
-const articleIdUrlRegex = /\/article\/(\d+)\/?$/;
+import { articleIdUrlRegex } from './lib/parse';
 
 document.addEventListener('DOMContentLoaded', init);
 

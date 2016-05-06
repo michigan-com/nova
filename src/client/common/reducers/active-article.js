@@ -5,8 +5,7 @@ import assign from 'object-assign';
 
 import { ARTICLE_SELECTED, ARTICLE_LOADING, ARTICLE_LOADED, START_SPEED_READING,
   STOP_SPEED_READING, CLOSE_ACTIVE_ARTICLE, DEFAULT_ARTICLE, ARTICLE_LOAD_FAILED,
-  getActiveArticleReaders } from '../../actions/active-article';
-import { GOT_TOP_ARTICLES } from '../../actions/article-list';
+  getActiveArticleReaders } from '../actions/active-article';
 
 export default function (state=DEFAULT_ARTICLE, action) {
   let articleLoading, activeArticle, speedReading, activeArticleReaders;
@@ -31,13 +30,6 @@ export default function (state=DEFAULT_ARTICLE, action) {
     case STOP_SPEED_READING:
       speedReading = false;
       return assign({}, state, { speedReading });
-    case GOT_TOP_ARTICLES:
-      if (!state.activeArticle || state.articleLoading) return state;
-      let articles = action.value;
-      activeArticleReaders = getActiveArticleReaders(articles, state);
-      if (activeArticleReaders >= 0) {
-        return assign({}, state, { activeArticleReaders });
-      }
   }
   return state;
 }

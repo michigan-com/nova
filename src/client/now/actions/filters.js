@@ -2,7 +2,7 @@
 
 import Cookies from 'cookies-js';
 
-import { gaEvent } from './ga';
+import { gaEvent } from '../../common/actions/ga';
 
 export const SECTION_SELECT = 'SECTION_SELECT';
 

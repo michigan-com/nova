@@ -108,5 +108,6 @@ export const DEFAULT_ARTICLE_LIST = {
   clickedArticles: new Set(getArticleIdsFromCookie()),
   showInfo: false,
   infoBlurbs: INFO_BLURBS,
-  blurbIndex: getRandomInt(0, INFO_BLURBS.length - 1)
+  blurbIndex: getRandomInt(0, INFO_BLURBS.length - 1),
+  activeArticleReaders: 0
 }

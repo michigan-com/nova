@@ -3,7 +3,7 @@
 import React from 'react';
 import { SimpleReader } from 'reeeeeader';
 
-import { brandIcon } from '../../../config';
+import { brandIcon } from '../../../../config';
 
 export default class SpeedReader extends React.Component {
   constructor(props) {

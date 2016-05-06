@@ -2,7 +2,7 @@
 
 import { combineReducers } from 'redux';
 
-import ActiveArticle from './active-article';
+import ActiveArticle from '../../../common/reducers/active-article';
 import ArticleList from './article-list';
 import PhoneNumber from './phone-number';
 

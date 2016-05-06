@@ -3,6 +3,9 @@
 import React from 'react';
 import moment from 'moment';
 
+import Store from '../store';
+import { articleSelected } from '../../common/actions/active-article';
+
 export default class StreamArticle extends React.Component {
   getArticleStyle() {
     let article = this.props.article;
@@ -13,6 +16,10 @@ export default class StreamArticle extends React.Component {
     };
 
     return style
+  }
+
+  onClick() {
+    Store.dispatch(articleSelected(this.props.article.article_id));
   }
 
   renderImage() {
@@ -41,7 +48,7 @@ export default class StreamArticle extends React.Component {
     let style = this.getArticleStyle();
     return (
       <div className='stream-article-container'>
-        <div className='stream-article' style={ style }>
+        <div className='stream-article' style={ style } onClick={ this.onClick.bind(this) }>
           { this.renderImage() }
           { this.renderHeadline() }
         </div>

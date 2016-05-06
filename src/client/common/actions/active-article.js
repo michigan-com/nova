@@ -7,6 +7,12 @@ import { appName, socketUrl } from '../../../../config';
 import { millisToMinutesAndSeconds } from '../../lib/parse';
 import { gaEvent } from './ga';
 
+/** Browser history stuff */
+require('historyjs/scripts/bundled/html4+html5/native.history.js');
+
+// So we know what path to push when we go back to the feed
+const ROOT_PATH_NAME = window.location.pathname.indexOf('article') > 0 ? '/' : window.location.pathname;
+
 export const ARTICLE_SELECTED = 'ARTICLE_SELECTED';
 export const ARTICLE_LOADING = 'ARTICLE_LOADING';
 export const ARTICLE_LOADED = 'ARTICLE_LOADED';
@@ -173,10 +179,10 @@ function _stopSpeedReadingEvent(articleId=-1) {
 
 export function closeActiveArticle(articleId=-1, changeHistory=true) {
   if (changeHistory) {
-    History.pushState({}, appName, '/');
+    History.pushState({}, appName, ROOT_PATH_NAME);
     ga('send', {
       hitType: 'pageview',
-      page: '/',
+      page: ROOT_PATH_NAME,
       title: appName
     });
   }
