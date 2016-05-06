@@ -10,7 +10,6 @@ Install
 -------
 
 ```bash
-npm install -g gulp
 npm install
 ```
 
@@ -29,7 +28,13 @@ Dev
 Any changes must be accompanied by:
 
 ```bash
-gulp
+// Individual build steps
+npm run build:css
+npm run build:js
+npm run build:server
+
+// Run all build steps
+npm run build:dev
 ```
 
 If you change any server files then you need to restart the server after `gulp`
@@ -38,7 +43,7 @@ Run
 ---
 
 ```bash
-DEBUG=app:* npm start
+DEBUG=app:* npm run server
 ```
 
 Point browser to: http://localhost:3000
