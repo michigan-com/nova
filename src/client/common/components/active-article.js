@@ -97,7 +97,7 @@ export default class ActiveArticle extends React.Component {
     let activeArticleContainerClass = 'active-article-container';
     let loadingImage = null;
     if (this.state.fadeInPhoto) activeArticleContainerClass += ' photo-loaded';
-    else loadingImage = <LoadingImage blurbs={ ['Loading image...']}/>
+    else loadingImage = <LoadingImage blurbs={ [] }/>
 
     let articleImageClass = 'article-image'
     if (this.state.fadeInPhoto) articleImageClass += ' fade-in';

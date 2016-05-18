@@ -14,9 +14,12 @@ export default class LoadingImage extends React.Component {
   constructor(props) {
     super(props);
 
+    let blurbIndex = -1;
+    if (this.props.blurbs.length) blurbIndex = getRandomInt(0, this.props.blurbs.length - 1);
+
     this.state = {
       pulsingIndex: -1,
-      blurbIndex: getRandomInt(0, this.props.blurbs.length - 1)
+      blurbIndex
     }
   }
 
@@ -49,6 +52,12 @@ export default class LoadingImage extends React.Component {
       bars.push(<div className={ className } key={ `bar-${i}` }></div>)
     }
     return bars;
+  }
+
+  renderBlurb() {
+    if (this.state.blurbIndex < 0 || this.state.blurbIndex >= this.props.blurbs.length) return null;
+
+    return this.props.blurbs[this.state.blurbIndex]
   }
 
   render() {
