@@ -2,6 +2,7 @@ doctype html
 html(lang="en")
   head
     include ./components/meta
+    include ./components/jaco
 
     title= title
     block css
@@ -11,4 +12,3 @@ html(lang="en")
     input(type='hidden', name='_csrf', id='_csrf', value='#{csrfToken}')
 
     include ./components/ga
-    include ./components/jaco
