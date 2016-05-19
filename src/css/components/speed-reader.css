@@ -152,6 +152,9 @@ $speed-control-bottom: calc($controls-height * 1.3);
       height: 100px;
       padding: 0;
 
+      &.hide {
+        opacity: 0;
+      }
     }
 
     .progress-container {
@@ -352,8 +355,12 @@ $speed-control-bottom: calc($controls-height * 1.3);
 
 .michspeed-lhs {
   display: inline-block;
-  width: 47.5%;
+  width: 49.5%;
   text-align: right;
+
+  @media (max-width: $screen-sm) {
+    width: 47.5%;
+  }
 }
 
 .michspeed-word, .countdown-content {

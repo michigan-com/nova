@@ -45,6 +45,7 @@ export default class SpeedReader extends React.Component {
       onComplete: () => {
         setTimeout((() => {
           this.setState({ speedReaderFinished: true, playing: false });
+          this.renderRemainingTime();
         }).bind(this), 250);
       },
       onNewWord: () => {
@@ -366,6 +367,9 @@ export default class SpeedReader extends React.Component {
       countdown = this.renderCountdown();
     }
 
+    let speedReaderTextClass = 'speed-reader-text';
+    if (this.state.speedReaderFinished) speedReaderTextClass += ' hide';
+
     let helpText = null;
     if (!this.state.gotStarted) helpText = <div className='help-text'>Adjust your speed, then press Play to get started </div>
     else if (this.state.speedReaderFinished) {
@@ -393,7 +397,7 @@ export default class SpeedReader extends React.Component {
           <div className='context'> { this.renderContext() }</div>
           <div className='speed-reader-content'>
             { this.renderProgressCircle() }
-            <div id='speed-reader-text' ref='speed-reader-text'></div>
+            <div class={ speedReaderTextClass } id='speed-reader-text' ref='speed-reader-text'></div>
             { countdown }
           </div>
           <div className='speed-reader-controls'>
