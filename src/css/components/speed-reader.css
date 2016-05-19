@@ -6,6 +6,8 @@ $speed-reader-font-size: 30px;
 $controls-height: 65px;
 $speed-control-height: 15vh;
 
+$progress-bar-height: 10px;
+
 $speed-control-bottom: calc($controls-height * 1.3);
 
 .help-text {
@@ -54,8 +56,13 @@ $speed-control-bottom: calc($controls-height * 1.3);
   }
 
   &.countdown {
+
     .michspeed-lhs, .michspeed-orp, .michspeed-right, .michspeed-suffix {
       opacity: 0;
+    }
+
+    .speed-controls .button-container .fa {
+      background: white !important;
     }
   }
 
@@ -177,10 +184,9 @@ $speed-control-bottom: calc($controls-height * 1.3);
 }
 
 .speed-controls {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   width: 100%;
+  position: relative;
+  height: 50px;
 
   &.not-started {
     .para {
@@ -188,6 +194,28 @@ $speed-control-bottom: calc($controls-height * 1.3);
     }
   }
 
+  .progress-bar {
+    position: absolute;
+    top: -10%;
+    left: 0;
+    height: 120%;
+    width: 0%;
+    background-color: #eee;
+    z-index: 1;
+    transition: width 150ms linear;
+  }
+
+  .controls-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
   .button-container {
     width: 50%;
@@ -215,7 +243,7 @@ $speed-control-bottom: calc($controls-height * 1.3);
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: white;
+        background-color: transparent;
         border-radius: 50%;
         cursor: pointer;
         transition: opacity 250ms linear;
@@ -439,3 +467,28 @@ $speed-control-bottom: calc($controls-height * 1.3);
   }
 }
 
+.progress-bar-container {
+  width: 100%;
+
+  .progress-bar {
+    margin: 0 auto;
+    width: 90%;
+    box-shadow: inset 1px 1px 3px 0px rgba(0,0,0,0.15);
+    height: $progress-bar-height;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    background: #eee;
+
+    .progress-bar-bar {
+      background-color: $red;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      transition: width 50ms linear;
+    }
+  }
+
+}

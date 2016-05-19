@@ -15,11 +15,24 @@ export default class SpeedReader extends React.Component {
       speedReaderFinished: false,
       countdown: true,
       countdownIndex: null,
+      wordUpdate: 0
     }
 
     this.countdownTime = 3;
     this.controller = null;
     this.countdownTimeout = undefined;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // Hacky....
+    // Don't update the speed reader unnecessarily
+    if (JSON.stringify(this.state) === JSON.stringify(nextState) &&
+        JSON.stringify(this.props) === JSON.stringify(nextProps)) {
+      console.log('component shouldnt update');
+      return false;
+    }
+
+    return true;
   }
 
   componentDidMount() {
@@ -34,13 +47,16 @@ export default class SpeedReader extends React.Component {
         setTimeout((() => {
           this.setState({ speedReaderFinished: true, playing: false });
         }).bind(this), 250);
+      },
+      onNewWord: () => {
+        let wordUpdate = this.state.wordUpdate + 1;
+        this.setState({ wordUpdate });
       }
     });
     this.controller.setArticle({
       headline: this.props.article.headline,
       body: this.props.article.body
     });
-
     this.renderRemainingTime();
   }
 
@@ -205,6 +221,7 @@ export default class SpeedReader extends React.Component {
   renderRemainingTime = () => {
     let ref = null;
     let remainingTime = this.controller.getRemainingTime();
+    console.log(this.controller.getRemainingPercentage());
     let remainingTimeSplit = remainingTime.split(':');
     let minutes = parseInt(remainingTimeSplit[0]);
     let seconds = parseInt(remainingTimeSplit[1]);
@@ -225,6 +242,10 @@ export default class SpeedReader extends React.Component {
     ref = this.refs['time-remaining'];
     if (!ref) return;
     ref.innerHTML = `${minutes}:${seconds >= 10 ? seconds : '0' + seconds} remaining`;
+  }
+
+  renderProgressBarProgress() {
+
   }
 
   renderCountdown() {
@@ -285,16 +306,23 @@ export default class SpeedReader extends React.Component {
     let controlClass = 'speed-controls';
     if (!this.state.gotStarted) controlClass += ' not-started';
 
+    let width = '0%';
+    if (this.controller !== null) width = `${this.controller.getRemainingPercentage()}%`;
+    let style = { width };
+
     return(
       <div className={ controlClass }>
-        <div className='para prev'><i onClick={ this.prevPara } className='fa fa-angle-left'></i></div>
-        <div className='button-container'>
-          <div className='button' onClick={ this.togglePlay }>
-            <i className='fa fa-play'></i>
-            <i className='fa fa-pause'></i>
+        <div className='progress-bar' style={ style }></div>
+        <div className='controls-container'>
+          <div className='para prev'><i onClick={ this.prevPara } className='fa fa-angle-left'></i></div>
+          <div className='button-container'>
+            <div className='button' onClick={ this.togglePlay }>
+              <i className='fa fa-play'></i>
+              <i className='fa fa-pause'></i>
+            </div>
           </div>
+          <div className='para next'><i onClick={ this.nextPara } className='fa fa-angle-right'></i></div>
         </div>
-        <div className='para next'><i onClick={ this.nextPara } className='fa fa-angle-right'></i></div>
       </div>
     )
   }
@@ -309,6 +337,22 @@ export default class SpeedReader extends React.Component {
       <div className='speed'>
         <div className='center-bar'><i className='fa fa-caret-down'></i></div>
         { speedControl }
+      </div>
+    )
+  }
+
+  renderProgressBar() {
+    if (!this.state.gotStarted || this.state.countdown) return null;
+
+    return null;
+
+    let width = `${this.controller.getRemainingPercentage()}%`;
+    let style = { width };
+    return (
+      <div className='progress-bar-container'>
+        <div className='progress-bar'>
+          <div className='progress-bar-bar' style={ style }></div>
+        </div>
       </div>
     )
   }
@@ -347,6 +391,7 @@ export default class SpeedReader extends React.Component {
         </div>
         <div className={ speedReaderClass } ref='speed-reader'>
           { helpText }
+          { this.renderProgressBar() }
           <div className='context'> { this.renderContext() }</div>
           <div className='speed-reader-content'>
             <div ref='speed-reader-text'></div>
