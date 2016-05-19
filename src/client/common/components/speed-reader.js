@@ -397,9 +397,9 @@ export default class SpeedReader extends React.Component {
             { countdown }
           </div>
           <div className='speed-reader-controls'>
+            <div className='time-remaining' ref='time-remaining'></div>
             { this.renderControls() }
             <div className='wpm' ref='wpm'></div>
-            <div className='time-remaining' ref='time-remaining'></div>
           </div>
           { this.renderSpeedControl() }
         </div>
