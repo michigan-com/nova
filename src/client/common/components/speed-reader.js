@@ -244,10 +244,6 @@ export default class SpeedReader extends React.Component {
     ref.innerHTML = `${minutes}:${seconds >= 10 ? seconds : '0' + seconds} remaining`;
   }
 
-  renderProgressBarProgress() {
-
-  }
-
   renderCountdown() {
     if (!this.state.gotStarted) {
       return (
@@ -306,17 +302,15 @@ export default class SpeedReader extends React.Component {
     let controlClass = 'speed-controls';
     if (!this.state.gotStarted) controlClass += ' not-started';
 
-    let width = '0%';
-    if (this.controller !== null) width = `${this.controller.getRemainingPercentage()}%`;
-    let style = { width };
+    let buttonHeight = 50;
+    let buttonStyle = { height: buttonHeight, width: buttonHeight };
 
     return(
       <div className={ controlClass }>
-        <div className='progress-bar' style={ style }></div>
         <div className='controls-container'>
           <div className='para prev'><i onClick={ this.prevPara } className='fa fa-angle-left'></i></div>
           <div className='button-container'>
-            <div className='button' onClick={ this.togglePlay }>
+            <div className='button' onClick={ this.togglePlay } style={ buttonStyle }>
               <i className='fa fa-play'></i>
               <i className='fa fa-pause'></i>
             </div>
@@ -341,18 +335,24 @@ export default class SpeedReader extends React.Component {
     )
   }
 
-  renderProgressBar() {
-    if (!this.state.gotStarted || this.state.countdown) return null;
+  renderProgressCircle() {
+    let remainingPercent = 100;
+    if (this.controller !== null) remainingPercent = this.controller.getRemainingPercentage();
+    let circleHeight = 200;
+    let radius = circleHeight / 2;
+    let strokeDasharray = Math.PI * (circleHeight * 2);
+    let circumference = strokeDasharray;
+    let strokeDashoffset = strokeDasharray - ((remainingPercent / 200) * circumference);
 
-    return null;
+    let progressStyle  = { strokeDashoffset, strokeDasharray };
+    let progressContainerStyle = { height: circleHeight, top: (circleHeight / -4)  };
 
-    let width = `${this.controller.getRemainingPercentage()}%`;
-    let style = { width };
     return (
-      <div className='progress-bar-container'>
-        <div className='progress-bar'>
-          <div className='progress-bar-bar' style={ style }></div>
-        </div>
+      <div className='progress-container' style={ progressContainerStyle }>
+        <svg className='progress' height={ circleHeight } width={ circleHeight } xmlns="http://www.w3.org/2000/svg">
+          <circle r={ radius } cx={ radius } cy={ radius }
+              fill='transparent' className='progress-circle' style={ progressStyle }></circle>
+        </svg>
       </div>
     )
   }
@@ -379,6 +379,7 @@ export default class SpeedReader extends React.Component {
       )
     }
 
+
     if (!this.state.playing) speedReaderClass += ' paused';
     return (
       <div className='speed-reader-container'>
@@ -391,10 +392,10 @@ export default class SpeedReader extends React.Component {
         </div>
         <div className={ speedReaderClass } ref='speed-reader'>
           { helpText }
-          { this.renderProgressBar() }
           <div className='context'> { this.renderContext() }</div>
           <div className='speed-reader-content'>
-            <div ref='speed-reader-text'></div>
+            { this.renderProgressCircle() }
+            <div id='speed-reader-text' ref='speed-reader-text'></div>
             { countdown }
           </div>
           <div className='speed-reader-controls'>
