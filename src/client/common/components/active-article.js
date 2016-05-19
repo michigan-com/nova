@@ -138,10 +138,10 @@ export default class ActiveArticle extends React.Component {
             startSpeedReading={ this.props.startSpeedReading }
             stopSpeedReading={ this.props.stopSpeedReading }
             key={ `speed-reader-${article.article_id}` }/>
-        <div className='context-menu'>
-          <div className='menu-button' onClick={ () => { this.closeActiveArticle(); }}>
-            <img src='/img/cards.svg'/>
-            <div className='button-text'>Feed</div>
+        <div className='back-button-container'>
+          <div className='back-button' onClick={ () => { this.closeActiveArticle() } }>
+            <i className='fa fa-arrow-left'></i>
+            <div className='text'>Feed</div>
           </div>
         </div>
       </div>

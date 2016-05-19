@@ -28,7 +28,6 @@ export default class SpeedReader extends React.Component {
     // Don't update the speed reader unnecessarily
     if (JSON.stringify(this.state) === JSON.stringify(nextState) &&
         JSON.stringify(this.props) === JSON.stringify(nextProps)) {
-      console.log('component shouldnt update');
       return false;
     }
 
@@ -338,7 +337,7 @@ export default class SpeedReader extends React.Component {
   renderProgressCircle() {
     let remainingPercent = 100;
     if (this.controller !== null) remainingPercent = this.controller.getRemainingPercentage();
-    let circleHeight = 200;
+    let circleHeight = 250;
     let radius = circleHeight / 2;
     let strokeDasharray = Math.PI * (circleHeight * 2);
     let circumference = strokeDasharray;
@@ -378,7 +377,6 @@ export default class SpeedReader extends React.Component {
         </div>
       )
     }
-
 
     if (!this.state.playing) speedReaderClass += ' paused';
     return (

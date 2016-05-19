@@ -39,3 +39,37 @@ $context-menu-height: calc($controls-height * .8);
   }
 }
 
+.back-button-container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100px;
+  height: 50px;
+  padding: 5px 10px;
+  z-index: calc($active-article-z-index + 2);
+
+  .back-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #323232;
+    color: white;
+    border-radius: 20px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+
+    .fa {
+      padding-left: 5px;
+    }
+
+    .text {
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+}
