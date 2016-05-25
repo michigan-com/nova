@@ -3,7 +3,7 @@
 import React from 'react';
 
 import SpeedReader from './speed-reader';
-import LoadingImage from './loading-image';
+
 
 export default class ActiveArticle extends React.Component {
   constructor(props) {
@@ -18,7 +18,9 @@ export default class ActiveArticle extends React.Component {
       fadeOutArticle: false
     }
   }
-
+  componentWillUnmount(){
+    window.removeEventListener('scroll', this.blurPhoto);
+  }
   componentWillMount() {
     this.loadPhoto();
     document.body.scrollTop = 0;
@@ -28,15 +30,23 @@ export default class ActiveArticle extends React.Component {
     setTimeout(() => {
       this.setState({ fadeInContent: true });
     }, 1000);
+
+    window.addEventListener('scroll', this.blurPhoto);
     console.log('active-article-mount');
   }
-
+  blurPhoto = (e) => {
+    if(document.body.scrollTop >= 0){
+      this.setState({ photoBlur: document.body.scrollTop / (window.innerHeight / 10) });
+    } else {
+      this.setState({ photoBlur: 0 });
+    }
+  }
   photoLoaded = () => {
     this.setState({ photoLoaded: true });
 
     setTimeout(() => {
       this.setState({ fadeInPhoto: true });
-    }, 500);
+    }, 300);
   }
 
   loadPhoto() {
@@ -62,7 +72,9 @@ export default class ActiveArticle extends React.Component {
   getBackgroundStyle() {
     let article = this.props.article;
     let style = {}
-
+    style.filter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
+    style.WebkitFilter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
+    style.transform = this.state.photoBlur ? `scale(${1.05 + (this.state.photoBlur / 20)})` : 'scale(1.05)';
     document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
 
     if (this.state.photoLoaded && this.state.fadeInPhoto && !!article.photo) {
@@ -95,9 +107,7 @@ export default class ActiveArticle extends React.Component {
 
   render() {
     let activeArticleContainerClass = 'active-article-container';
-    let loadingImage = null;
     if (this.state.fadeInPhoto) activeArticleContainerClass += ' photo-loaded';
-    else loadingImage = <LoadingImage blurbs={ [] }/>
 
     let articleImageClass = 'article-image'
     if (this.state.fadeInPhoto) articleImageClass += ' fade-in';
@@ -122,7 +132,10 @@ export default class ActiveArticle extends React.Component {
     return (
       <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
-          <div className={ articleImageClass } style={ this.getBackgroundStyle() }>{ loadingImage }</div>
+          <div className='image-wrapper'>
+            <div className={ articleImageClass } style={ this.getBackgroundStyle() }>
+            </div>
+          </div>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
               { this.renderReaders() }
