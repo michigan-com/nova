@@ -108,7 +108,7 @@ export default class SpeedReader extends React.Component {
     let currentScrollTop = body.scrollTop;
 
     // this means the user is trying to scroll up, so just let them already
-    // if (currentScrollTop < lastScrollTop) return;
+    if (currentScrollTop < lastScrollTop - 15) return;
 
     let scrollTopGoal = document.body.clientHeight - window.innerHeight;
     let remaining = scrollTopGoal - currentScrollTop;
