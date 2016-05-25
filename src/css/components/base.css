@@ -48,8 +48,8 @@ $active-article-top-padding: 45vh;
 $summary-font-size: calc((92.5% + 0.5vw) * .8) ;
 
 /* container info */
-$header-height-sm: calc((112.5% + 0.25vw) * 2);
-$header-height-lg: calc((112.5% + 0.25vw) * 3);
+$header-height-sm: 60px;
+$header-height-lg: 100px;
 $header-z-index: calc($active-article-z-index / 2);
 
 $filter-height: 65px;
