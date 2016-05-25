@@ -32,7 +32,6 @@ export default class ActiveArticle extends React.Component {
     }, 1000);
 
     window.addEventListener('scroll', this.blurPhoto);
-    console.log('active-article-mount');
   }
   blurPhoto = (e) => {
     if(document.body.scrollTop >= 0){
@@ -42,24 +41,15 @@ export default class ActiveArticle extends React.Component {
     }
   }
   photoLoaded = () => {
-    this.setState({ photoLoaded: true });
-
-    setTimeout(() => {
-      this.setState({ fadeInPhoto: true });
-    }, 300);
+    this.setState({
+      photoLoaded: true,
+      fadeInPhoto: true
+    });
   }
 
   loadPhoto() {
-    document.body.className = `${document.body.className} photo-loading`;
-    let article = this.props.article;
-    if (!article.photo) {
-      this.photoLoaded();
-      return;
-    }
-
+    let article = this.props.article
     let i = new Image();
-
-    i.onload = () => { this.photoLoaded(); }
     i.src = article.photo.full.url;
   }
 
@@ -76,10 +66,6 @@ export default class ActiveArticle extends React.Component {
     style.WebkitFilter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
     style.transform = this.state.photoBlur ? `scale(${1.05 + (this.state.photoBlur / 20)})` : 'scale(1.05)';
     document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
-
-    if (this.state.photoLoaded && this.state.fadeInPhoto && !!article.photo) {
-      style.backgroundImage = `url(${article.photo.full.url})`;
-    }
     return style;
   }
 
@@ -133,8 +119,8 @@ export default class ActiveArticle extends React.Component {
       <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
           <div className='image-wrapper'>
-            <div className={ articleImageClass } style={ this.getBackgroundStyle() }>
-            </div>
+            <img src={article.photo.full.url} className={ articleImageClass } style={
+              this.getBackgroundStyle() } onLoad={this.photoLoaded.bind(this)} />
           </div>
           <div className='article-content-container' ref='article-content-container'>
             <div className={ articleContentClass } ref='article-content'>
