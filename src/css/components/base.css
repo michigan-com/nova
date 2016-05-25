@@ -29,6 +29,7 @@ $red: #e14e48;
 /* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;
 $screen-sm: 768px;
+$screen-lg: 1490px;
 $notdesktop: new-breakpoint(max-width 991px 12);
 $desktop: new-breakpoint(min-width 992px 12);
 $mobile: new-breakpoint(max-width 768px 12);

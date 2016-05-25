@@ -60,6 +60,7 @@ body.photo-loading {
     position: fixed;
     top: 0;
     left: 0;
+    right:0;
     overflow: hidden;
     height: calc($active-article-top-padding + 5vh);
     width: 100%;
@@ -97,14 +98,20 @@ body.photo-loading {
   background-color: transparent;
   transition: background-size 400ms linear;
 
-  @media (min-width: $screen-md) {
+  @media (min-width: $screen-md) and (max-width: $screen-lg)  {
     width: 75%;
     .image-wrapper {
       width: 75%;
       margin: 0 12.5%;
     }
   }
-
+  @media (min-width: $screen-lg) {
+    max-width: 1120px;
+    .image-wrapper {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+  }
   &.fade-out {
 
     &:before {
