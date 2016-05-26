@@ -101,7 +101,7 @@ body.photo-loading {
   @media (min-width: $screen-md) and (max-width: $screen-lg)  {
     width: 75%;
     .image-wrapper {
-      width: 75%;
+      width: calc(75% - .5px);
       margin: 0 12.5%;
     }
   }

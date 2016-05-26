@@ -405,8 +405,8 @@ export default class SpeedReader extends React.Component {
             { this.renderControls() }
             <div className='wpm' ref='wpm'></div>
           </div>
-          { this.renderSpeedControl() }
         </div>
+        { this.renderSpeedControl() }
       </div>
     )
   }
