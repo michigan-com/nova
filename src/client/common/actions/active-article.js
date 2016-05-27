@@ -5,7 +5,7 @@ import assign from 'object-assign';
 
 import { appName, socketUrl } from '../../../../config';
 import { millisToMinutesAndSeconds } from '../../lib/parse';
-import { gaEvent } from './ga';
+import { gaEvent, gaPageView } from './ga';
 
 /** Browser history stuff */
 require('historyjs/scripts/bundled/html4+html5/native.history.js');
@@ -59,11 +59,7 @@ export function fetchActiveArticle(articleId, historyUpdate=true) {
 
       if (historyUpdate) {
         History.pushState({ id }, article.headline, url);
-        ga('send', {
-          hitType: 'pageview',
-          page: url,
-          title: article.headline
-        });
+        gaPageView(url, article.headline);
       }
       resolve(article);
     }
@@ -180,11 +176,7 @@ function _stopSpeedReadingEvent(articleId=-1) {
 export function closeActiveArticle(articleId=-1, changeHistory=true) {
   if (changeHistory) {
     History.pushState({}, appName, ROOT_PATH_NAME);
-    ga('send', {
-      hitType: 'pageview',
-      page: ROOT_PATH_NAME,
-      title: appName
-    });
+    gaPageView(ROOT_PATH_NAME, appName);
   }
 
   // Track the google event for stopping speed reading
