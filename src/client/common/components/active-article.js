@@ -22,7 +22,7 @@ export default class ActiveArticle extends React.Component {
     window.removeEventListener('scroll', this.blurPhoto);
   }
   componentWillMount() {
-    this.loadPhoto();
+    if(this.props.article.photo !== null) this.loadPhoto();
     document.body.scrollTop = 0;
   }
 
@@ -101,9 +101,13 @@ export default class ActiveArticle extends React.Component {
     if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
 
     let article = this.props.article;
-    let articleUrl = article.photo.small && window.innerWidth < 400 ? article.photo.small.url : article.photo.full.url;
-    let imageWrapperStyle = article.photo.full.width < article.photo.full.height ? { height: '60vh' } : {};
-    imageWrapperStyle.backgroundColor = this.state.photoLoaded ? 'white' : 'inherit';
+    let imageWrapperStyle = {};
+    let articlePhotoUrl = ''
+    if(article.photo !== null) {
+      articlePhotoUrl = article.photo.small && window.innerWidth < 400 ? article.photo.small.url : article.photo.full.url;
+      imageWrapperStyle.height = article.photo.full.width < article.photo.full.height ? '60vh' : '';
+      imageWrapperStyle.backgroundColor = this.state.photoLoaded ? 'white' : 'inherit';
+    }
     let activeArticleClass = 'active-article';
     let articleContentClass = 'article-content';
     if (this.state.fadeImageOut) {
@@ -121,7 +125,7 @@ export default class ActiveArticle extends React.Component {
       <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
           <div className='image-wrapper' style={imageWrapperStyle} >
-            <img src={articleUrl} className={ articleImageClass } style={
+            <img src={articlePhotoUrl} className={ articleImageClass } style={
               this.getBackgroundStyle() } onLoad={this.photoLoaded.bind(this)} />
           </div>
           <div className='article-content-container' ref='article-content-container'>
