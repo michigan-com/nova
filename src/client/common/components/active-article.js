@@ -64,7 +64,7 @@ export default class ActiveArticle extends React.Component {
     let style = {}
     style.filter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
     style.WebkitFilter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
-    style.transform = this.state.photoBlur ? `scale(${1.05 + (this.state.photoBlur / 20)})` : 'scale(1.05)';
+    style.opacity = this.state.photoBlur ? 1 - (this.state.photoBlur / 5) : 1;
     document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
     return style;
   }
@@ -92,9 +92,9 @@ export default class ActiveArticle extends React.Component {
   }
 
   render() {
+    console.log(this.state.photoLoaded)
     let activeArticleContainerClass = 'active-article-container';
     if (this.state.fadeInPhoto) activeArticleContainerClass += ' photo-loaded';
-
     let articleImageClass = 'article-image'
     if (this.state.fadeInPhoto) articleImageClass += ' fade-in';
     else if (this.state.photoLoaded && !this.state.fadeInPhoto) articleImageClass += ' fade-out';
@@ -102,6 +102,9 @@ export default class ActiveArticle extends React.Component {
     if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
 
     let article = this.props.article;
+    let articleUrl = article.photo.small && window.innerWidth < 400 ? article.photo.small.url : article.photo.full.url;
+    let imageWrapperStyle = article.photo.full.width < article.photo.full.height ? { height: '60vh' } : {};
+    imageWrapperStyle.backgroundColor = this.state.photoLoaded ? 'white' : 'inherit';
     let activeArticleClass = 'active-article';
     let articleContentClass = 'article-content';
     if (this.state.fadeImageOut) {
@@ -118,8 +121,8 @@ export default class ActiveArticle extends React.Component {
     return (
       <div className={ activeArticleContainerClass } >
         <div className={ activeArticleClass } ref='active-article'>
-          <div className='image-wrapper'>
-            <img src={article.photo.full.url} className={ articleImageClass } style={
+          <div className='image-wrapper' style={imageWrapperStyle} >
+            <img src={articleUrl} className={ articleImageClass } style={
               this.getBackgroundStyle() } onLoad={this.photoLoaded.bind(this)} />
           </div>
           <div className='article-content-container' ref='article-content-container'>

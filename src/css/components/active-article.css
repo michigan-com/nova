@@ -157,7 +157,6 @@ body.photo-loading {
 
   .readers {
     color: #e14e48;
-    font-size: calc((92.5% + 0.5vw) * .8);
   }
 
 }
