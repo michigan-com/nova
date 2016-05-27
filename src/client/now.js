@@ -25,8 +25,8 @@ function init() {
   let socket = io(Config.socketUrl, {transports: ['websocket', 'xhr-polling']});
   socket.emit('get_popular');
   socket.emit('get_quickstats');
-  socket.on('got_popular', (data) =>  { Store.dispatch(gotTopArticles(data.snapshot.articles)); });
-  socket.on('got_quickstats', (data) => { Store.dispatch(gotQuickstats(data.snapshot.stats)); });
+  // socket.on('got_popular', (data) =>  { Store.dispatch(gotTopArticles(data.snapshot.articles)); });
+  // socket.on('got_quickstats', (data) => { Store.dispatch(gotQuickstats(data.snapshot.stats)); });
 
   // See if we have an ?articleId= url param
   let match = articleIdUrlRegex.exec(window.location.pathname);
