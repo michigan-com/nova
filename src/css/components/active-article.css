@@ -10,7 +10,7 @@ body.photo-loading {
 .active-article-container {
   width: 100%;
   margin: 0 auto;
-  padding-top: calc($active-article-top-padding - 80px);
+  padding-top: calc(var(--active-article-top-padding) - 80px);
   z-index: $active-article-z-index;
   align-items: center;
   color: black;
@@ -63,7 +63,7 @@ body.photo-loading {
     right:0;
     overflow: hidden;
     background-color: #b99796;
-    height: calc($active-article-top-padding + 5vh);
+    height: calc(var(--active-article-top-padding) + 5vh);
     width: 100%;
   }
   .article-image {

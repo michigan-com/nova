@@ -105,7 +105,7 @@ export default class ActiveArticle extends React.Component {
     let articlePhotoUrl = ''
     if(article.photo !== null) {
       articlePhotoUrl = article.photo.small && window.innerWidth < 400 ? article.photo.small.url : article.photo.full.url;
-      imageWrapperStyle.height = article.photo.full.width < article.photo.full.height ? '60vh' : '';
+      imageWrapperStyle.height = article.photo.full.width < article.photo.full.height ? document.documentElement.style.setProperty('--active-article-top-padding','60vh') : document.documentElement.style.setProperty('--active-article-top-padding','35vh');
       imageWrapperStyle.backgroundColor = this.state.photoLoaded ? 'white' : 'inherit';
     }
     let activeArticleClass = 'active-article';

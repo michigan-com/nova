@@ -46,6 +46,7 @@ $context-menu-height: calc($controls-height * .8);
   height: 50px;
   padding: 5px 10px;
   z-index: calc($active-article-z-index + 2);
+  user-select: none;
 
   .back-button {
     display: flex;
