@@ -64,7 +64,7 @@ export default class ActiveArticle extends React.Component {
     let style = {}
     style.filter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
     style.WebkitFilter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
-    style.opacity = this.state.photoBlur ? 1 - (this.state.photoBlur / 5) : 1;
+    if (this.state.photoLoaded) style.opacity = this.state.photoBlur ? 1 - (this.state.photoBlur / 5) : 1;
     document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
     return style;
   }

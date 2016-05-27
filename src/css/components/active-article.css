@@ -145,7 +145,6 @@ body.photo-loading {
 
 .current-readers-container {
   font-size: calc((92.5% + 0.5vw) * .8);
-  align-items: center;
   height: 2em;
   color: black;
   border: none;
@@ -153,6 +152,7 @@ body.photo-loading {
 
   .pipe-divider {
     margin: 0px 10px;
+    font-weight: 500;
   }
 
   .readers {
