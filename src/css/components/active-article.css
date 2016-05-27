@@ -148,6 +148,7 @@ body.photo-loading {
   flex-direction: row;
   font-size: calc($summary-font-size * .7);
   align-items: center;
+  height: 1.4em;
   color: black;
   border: none;
   font-weight: 600;
