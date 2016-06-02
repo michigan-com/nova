@@ -1,3 +1,4 @@
+@import './base';
 
 @-webkit-keyframes line-scale-party {
   0% {
@@ -41,7 +42,7 @@
   -webkit-animation-duration: 1.13s;
           animation-duration: 1.13s; }
 .line-scale-party > div {
-  background-color: #e14e48;
+  background-color: $red;
   width: 4px;
   height: 35px;
   border-radius: 2px;
