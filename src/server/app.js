@@ -6,6 +6,7 @@ import express from 'express';
 import configureMiddleware from './middleware';
 import configureRoutes from './routes';
 import createPassport from './passport';
+import breakingNews from './breaking-news';
 
 var BASE_DIR = path.dirname(__dirname);
 
@@ -17,6 +18,7 @@ export function createApp(db) {
   configureViewEngine(app);
   configureMiddleware(app);
   configureRoutes(app);
+  breakingNews(app);
 
   function configureViewEngine(app) {
     app.set('views', path.join(BASE_DIR, 'views'));
