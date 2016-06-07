@@ -38,10 +38,16 @@ async function ingestBreakingNews(db, articles) {
 function sendBreakingNewsText(article) {
   let phoneNumbers = ['3134210982', '3046408876'];
   let articleUrl = `${Config.appUrl}/article/${article.article_id}/`;
+  let photoUrl = "";
+
+  if (article.photo !== null) {
+    photoUrl = article.photo.full.url
+  }
   for (let number of phoneNumbers) {
     sendMessage(
       number,
-      `Breaking News\n\n${article.headline}\n\n${articleUrl}`
+      `BREAKING: ${article.headline}\n\n${articleUrl}`,
+      photoUrl
     )
   }
 }

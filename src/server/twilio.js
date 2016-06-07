@@ -12,7 +12,7 @@ const logger = debug('app:twilio');
  * @param {String} phoneNumber - 10 digit number, area code + 7 digits
  * @param {String} message to be sent
  */
-export function sendMessage(phoneNumber, message) {
+export function sendMessage(phoneNumber, message, mediaUrl="") {
   return new Promise((resolve, reject) => {
     if (phoneNumber.length != 10) {
       let error = `Invalid phone number, must be exactly 10 characters: ${phoneNumber}`;
@@ -24,6 +24,10 @@ export function sendMessage(phoneNumber, message) {
       from: '+13133297340',
       body: message
     };
+
+    if (mediaUrl != "") {
+      twilioData.mediaUrl = mediaUrl;
+    }
 
     if (process.env.NODE_ENV === "prod") {
       twilioClient.sendMessage(twilioData, (err, responseData) => {
