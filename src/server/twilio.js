@@ -3,6 +3,8 @@
 import debug from 'debug';
 import twilio from 'twilio'
 
+import Config from '../config';
+
 const twilioClient = twilio();
 const logger = debug('app:twilio');
 
@@ -21,7 +23,7 @@ export function sendMessage(phoneNumber, message, mediaUrl="") {
 
     let twilioData = {
       to: `+1${phoneNumber}`,
-      from: '+13133297340',
+      from: `${Config.twilioPhoneNumber}`,
       body: message
     };
 
