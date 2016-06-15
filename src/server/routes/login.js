@@ -35,11 +35,17 @@ export default function registerRoutes(app) {
     async function generateLoginCode(req, res, next) {
       let phoneNumber = req.body.phoneNumber
 
+      if (!isValidPhoneNumber(phoneNumber)) {
+        let error = `Please only input 10 numbers (area code + phone number)`;
+        res.status(442).send({ error });
+        return next();
+      }
+
       let user = await User.find({ phoneNumber }).limit(1).next();
       let code = generateCode();
       let hashedCode = hash(code);
       if (!user) {
-        user = await User.insertOne({ phoneNumber, code: hashedCode });
+        user = await User.insertOne({ phoneNumber, code: hashedCode, breakingNews: true });
       } else {
         await User.update({ phoneNumber }, { $set: { code: hashedCode } });
       }
