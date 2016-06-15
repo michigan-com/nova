@@ -2,16 +2,15 @@
 
 import { Router } from 'express';
 import request from 'request';
-import csrf from 'csurf';
 
 import Config from '../../config';
+import { csrfProtection } from './middleware/csrf';
 
-const csrfProtection = csrf({ cookie: true });
 
 export default function registerRoutes(app) {
   var router = new Router();
 
-  router.get('/', csrfProtection, (req, res, next) => {
+  router.get('/', csrfProtection(app), (req, res, next) => {
     res.render('now', {
       title: Config.appName,
       csrfToken: req.csrfToken(),
@@ -25,7 +24,7 @@ export default function registerRoutes(app) {
     });
   });
 
-  router.get('/article/:articleId/', csrfProtection, (req, res, next) => {
+  router.get('/article/:articleId/', csrfProtection(app), (req, res, next) => {
     let articleId = req.params.articleId;
     if (isNaN(articleId)) {
       res.status(404);

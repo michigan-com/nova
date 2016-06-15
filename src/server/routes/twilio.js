@@ -2,15 +2,14 @@
 
 import { Router } from 'express';
 import debug from 'debug';
-import csrf from 'csurf';
 import twilio from 'twilio';
 
 import { sendMessage } from '../twilio';
 import Config from '../../config';
-import { isValidPhoneNumber } from '../lib/parse';
+import { isValidPhoneNumber } from '../util/parse';
+import { csrfProtection } from './middleware/csrf';
 
 var logger = debug('app:twilio');
-var csrfProtection = csrf({ cookie: true });
 
 const START_BREAKING = 'START BREAKING';
 const STOP_BREAKING = 'STOP BREAKING';
@@ -37,7 +36,7 @@ export default function registerRoutes(app) {
   var db = app.get('db');
   var User = db.collection('User');
 
-  router.post('/text-mobile-link/', csrfProtection, (req, res, next) => {
+  router.post('/text-mobile-link/', csrfProtection(app), (req, res, next) => {
     let phoneNumber = req.body.phoneNumber;
     logger(`sending to ${phoneNumber}`)
     logger(req.body);

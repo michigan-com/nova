@@ -1,14 +1,16 @@
 'use strict';
 
 import { Router } from 'express';
-import csrf from 'csurf';
 import twilio from 'twilio';
+import debug from 'debug';
 
 import generateCode from '../util/generate-code';
 import { hash } from '../util/hash';
 import { sendMessage } from '../twilio';
+import { csrfProtection } from './middleware/csrf';
+import { isValidPhoneNumber } from '../util/parse';
 
-const csrfProtection = csrf({ cookie: true })
+const logger = debug('app:login');
 
 export default function registerRoutes(app) {
   let passport = app.get('passport');
@@ -17,7 +19,7 @@ export default function registerRoutes(app) {
   let router = Router();
   let twilioClient = twilio();
 
-  router.get('/login/', csrfProtection, (req, res, next) => {
+  router.get('/login/', csrfProtection(app), (req, res, next) => {
     if (req.user) return res.redirect('/');
     res.render('login', {
       csrfToken: req.csrfToken(),
@@ -31,7 +33,7 @@ export default function registerRoutes(app) {
     res.redirect('/');
   });
 
-  router.post('/generate-login-code/', csrfProtection, (req, res, next) => {
+  router.post('/generate-login-code/', csrfProtection(app), (req, res, next) => {
     async function generateLoginCode(req, res, next) {
       let phoneNumber = req.body.phoneNumber
 
@@ -45,7 +47,12 @@ export default function registerRoutes(app) {
       let code = generateCode();
       let hashedCode = hash(code);
       if (!user) {
-        user = await User.insertOne({ phoneNumber, code: hashedCode, breakingNews: true });
+        user = await User.insertOne({
+          phoneNumber,
+          code: hashedCode,
+          breakingNewsAlerts: true,
+          onBoardingText: false,
+        });
       } else {
         await User.update({ phoneNumber }, { $set: { code: hashedCode } });
       }
@@ -62,7 +69,7 @@ export default function registerRoutes(app) {
     });
   });
 
-  router.post('/login/', csrfProtection, (req, res, next) => {
+  router.post('/login/', csrfProtection(app), (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
       if (err || !user) return res.status(401).json({ error: 'Invalid code' });
       req.logIn(user, (err) => {

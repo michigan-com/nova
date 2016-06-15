@@ -10,10 +10,11 @@ import breakingNews from './breaking-news';
 
 var BASE_DIR = path.dirname(__dirname);
 
-export function createApp(db) {
+export function createApp(db, enableCsrf=true) {
   var app = express();
   app.set('db', db);
   app.set('passport', createPassport(app));
+  app.set('use csrf', enableCsrf);
 
   configureViewEngine(app);
   configureMiddleware(app);
