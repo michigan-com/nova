@@ -45,8 +45,8 @@ export default function registerRoutes(app) {
    * per twilio docs
    */
   router.post('/handle-text-response/', (req, res, next) => {
-    let phoneNumber = req.body.from;
-    let body = req.body.body;
+    let phoneNumber = req.body.From;
+    let body = req.body.Body;
 
     async function _handleResponse(phoneNumber, body) {
       return await handleResponse(db, phoneNumber, body).catch((e) => { throw new Error(e); });
