@@ -5,7 +5,7 @@ import debug from 'debug';
 import twilio from 'twilio';
 
 import { sendMessage } from '../texting/send-message';
-import { handleResponse } from '../texting/handle-text-response';
+import handleResponse from '../texting/handle-text-response';
 import Config from '../../config';
 import { isValidPhoneNumber } from '../util/parse';
 import { csrfProtection } from './middleware/csrf';
@@ -18,8 +18,6 @@ export default function registerRoutes(app) {
 
   router.post('/text-mobile-link/', csrfProtection(app), (req, res, next) => {
     let phoneNumber = req.body.phoneNumber;
-    logger(`sending to ${phoneNumber}`)
-    logger(req.body);
 
     if (!isValidPhoneNumber(phoneNumber)) {
       let error = `Please only input 10 numbers (area code + phone number)`;
@@ -47,26 +45,27 @@ export default function registerRoutes(app) {
    * per twilio docs
    */
   router.post('/handle-text-response/', (req, res, next) => {
-    async function _handleResponse() {
-      let phoneNumber = req.query.from;
-      let body = req.query.body;
+    let phoneNumber = req.body.from;
+    let body = req.body.body;
 
-      let response = await handleResponse(db, phoneNumber, body).catch((e) => { throw new Error(e); });
-
-      let twilioResp = new twilio.TwimlResponse();
-      twilioResp.message(response, {
-        to: `+1${user.phoneNumber}`,
-        from: Config.twilioPhoneNumber,
-      });
-      res.status(200).type('text/xml').send(response);
-      return next();
+    async function _handleResponse(phoneNumber, body) {
+      return await handleResponse(db, phoneNumber, body).catch((e) => { throw new Error(e); });
     }
 
-    _handleResponse().catch((error) => {
-      logger(`Error handling text response: ${error}`);
-      res.status(500).send({ error: 'Error receiving message' });
-      return next();
-    });
+    function twilioResp(phoneNumber, response) {
+      let twilioResp = new twilio.TwimlResponse();
+      twilioResp.message(response, {
+        to: `+1${phoneNumber}`,
+        from: Config.twilioPhoneNumber,
+      });
+      return res.status(200).type('text/xml').send(twilioResp.toString());
+    }
+
+    _handleResponse(phoneNumber, body)
+      .then((resp) => { twilioResp(phoneNumber, resp); })
+      .catch((error) => {
+        return twilioResp(phoneNumber, 'Looks like we\'re having some trouble handling your message, sorry about that');
+      });
 
   });
 

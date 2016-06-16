@@ -1,13 +1,12 @@
 'use strict';
 
-import { equal } from 'assert';
+import { equal, notEqual } from 'assert';
 
-import handleTextResponse, {
+import handleResponse, {
   START_BREAKING,
   STOP_BREAKING,
   HELP,
   STOP,
-  USER_NOT_REGOGNIZED,
   USER_UNSUBSCRIBED,
   USER_SUBSCRIBED,
   COMMAND_NOT_REGOGNIZED,
@@ -45,12 +44,6 @@ describe('Testing text message handling', () => {
     done();
   }));
 
-  it('Tests texting from an unregistered user', CatchAsync(async (done) => {
-    let resp = await handleTextResponse(db, testPhoneNumber, 'test');
-    equal(resp, USER_NOT_REGOGNIZED, `Should have responded with ${USER_NOT_REGOGNIZED}`);
-    done();
-  }));
-
   it('Tests a bunch of random texts that shouldnt be recognzied', CatchAsync(async (done) => {
     let notRealCommands = [
       'this isnt a command',
@@ -63,18 +56,17 @@ describe('Testing text message handling', () => {
     ];
 
     for (let command of notRealCommands) {
-      let resp = await handleTextResponse(db, testPhoneNumber, command);
+      let resp = await handleResponse(db, testPhoneNumber, command);
       equal(resp, COMMAND_NOT_REGOGNIZED, `Command ${command} should not have been recognized`);
     }
     done();
   }));
 
   it('Tests the help command', CatchAsync(async (done) => {
-    let resp = await handleTextResponse(db, testPhoneNumber, HELP);
+    let resp = await handleResponse(db, testPhoneNumber, HELP);
     equal(resp, HELP_RESPONSE, `Should have responded with help command`);
     done();
   }));
-
 
   it('Tests the stop commands', CatchAsync(async (done) => {
     let stopCommands = [
@@ -83,11 +75,47 @@ describe('Testing text message handling', () => {
     ];
 
     for (let cmd of stopCommands) {
-      let resp = await handleTextResponse(db, testPhoneNumber, cmd);
+      let resp = await handleResponse(db, testPhoneNumber, cmd);
       equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
       let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
       equal(signup, null, `Phone number shouldnt show up in collection`)
     }
+    done();
+  }));
+
+  it('Tests the start commands', CatchAsync(async (done) => {
+    let resp = await handleResponse(db, testPhoneNumber, START_BREAKING);
+    equal(resp, USER_SUBSCRIBED, 'Should have subscribed user');
+    let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
+    notEqual(signup, null, `Should have a valid signup`);
+    done();
+  }));
+
+
+  it('Test subscribing and unsubscribing', CatchAsync(async (done) => {
+    let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
+    equal(signup, null, `Phone number shouldnt show up in collection`)
+
+    let resp = await handleResponse(db, testPhoneNumber, START_BREAKING);
+    equal(resp, USER_SUBSCRIBED, 'Should have subscribed user');
+    signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
+    notEqual(signup, null, `Should have a valid signup`);
+
+    resp = await handleResponse(db, testPhoneNumber, STOP);
+    equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
+    signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
+    equal(signup, null, `Phone number shouldnt show up in collection`)
+
+    resp = await handleResponse(db, testPhoneNumber, START_BREAKING);
+    equal(resp, USER_SUBSCRIBED, 'Should have subscribed user');
+    signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
+    notEqual(signup, null, `Should have a valid signup`);
+
+    resp = await handleResponse(db, testPhoneNumber, STOP_BREAKING);
+    equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
+    signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
+    equal(signup, null, `Phone number shouldnt show up in collection`)
+
     done();
   }));
 

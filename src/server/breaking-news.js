@@ -52,7 +52,7 @@ export async function ingestBreakingNews(db, articles) {
 
 function sendBreakingNewsText(article) {
 
-  // TODO pull this from the User collection
+  // TODO pull this from the BreakingNewsSignup collection
   let phoneNumbers = ['3134210982', '3046408876', '8652193556', '3133386378', '3134620026', '3139805390'];
   let articleUrl = `${Config.appUrl}/article/${article.article_id}/`;
   let photoUrl = "";

@@ -9,9 +9,7 @@ export const STOP_BREAKING = 'STOP BREAKING';
 export const HELP = 'HELP';
 export const STOP = 'STOP';
 
-
 // outgoing Text messages
-export const USER_NOT_REGOGNIZED = `Hi! Thanks for texting ${Config.appName}. We don\'t recognize you as a user in our system, but we\'re glad you got in touch!\n\nCheck us out at ${Config.appUrl}`;
 export const USER_UNSUBSCRIBED = `You have been unsubscribed from breaking news alerts.\n\nRe-subscribe using ${START_BREAKING}`;
 export const USER_SUBSCRIBED = `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${STOP_BREAKING}`;
 export const HELP_RESPONSE = `${START_BREAKING} - activate breaking news alerts\n${STOP_BREAKING} - stop breaking news alerts`;
@@ -44,13 +42,8 @@ export default async function handleResponse(db, fromNumber, message) {
 
   // Check the user
   let phoneNumber = fromNumber.replace(/^\+\d/, '');
-  let user = await User.find({ phoneNumber }).limit(1).next();
-  if (!user) {
-    return USER_NOT_REGOGNIZED;
-  }
 
   let resp = COMMAND_NOT_REGOGNIZED;
-
   if (compareMessages(message, STOP_BREAKING) || compareMessages(message, STOP)) {
     await BreakingNewsSignup.remove({ phoneNumber });
     resp = USER_UNSUBSCRIBED;
