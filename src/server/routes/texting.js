@@ -55,7 +55,7 @@ export default function registerRoutes(app) {
     function twilioResp(phoneNumber, response) {
       let twilioResp = new twilio.TwimlResponse();
       twilioResp.message(response, {
-        to: `+1${phoneNumber}`,
+        to: phoneNumber,
         from: Config.twilioPhoneNumber,
       });
       return res.status(200).type('text/xml').send(twilioResp.toString());

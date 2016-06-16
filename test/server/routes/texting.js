@@ -35,7 +35,7 @@ function confirmResponseMessage(xmlResp, expectedPhoneNumber, expectedText) {
 
 async function testTextResponse(fromNumber, fromMessage, expectedResponse) {
   let phoneNumber = fromNumber;
-  let params = { from: fromNumber, body: fromMessage };
+  let params = { From: `+1${fromNumber}`, Body: fromMessage };
   let res = await testPostRoute(agent, '/handle-text-response/', params, 200);
   equal(res.type, 'text/xml', 'XML response is required');
   await confirmResponseMessage(res.text, phoneNumber, expectedResponse);
