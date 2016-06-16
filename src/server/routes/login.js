@@ -1,12 +1,11 @@
 'use strict';
 
 import { Router } from 'express';
-import twilio from 'twilio';
 import debug from 'debug';
 
 import generateCode from '../util/generate-code';
 import { hash } from '../util/hash';
-import { sendMessage } from '../twilio';
+import { sendMessage } from '../texting/send-message';
 import { csrfProtection } from './middleware/csrf';
 import { isValidPhoneNumber } from '../util/parse';
 
@@ -17,7 +16,6 @@ export default function registerRoutes(app) {
   let db = app.get('db');
   let User = db.collection('User');
   let router = Router();
-  let twilioClient = twilio();
 
   router.get('/login/', csrfProtection(app), (req, res, next) => {
     if (req.user) return res.redirect('/');
@@ -46,16 +44,8 @@ export default function registerRoutes(app) {
       let user = await User.find({ phoneNumber }).limit(1).next();
       let code = generateCode();
       let hashedCode = hash(code);
-      if (!user) {
-        user = await User.insertOne({
-          phoneNumber,
-          code: hashedCode,
-          breakingNewsAlerts: true,
-          onBoardingText: false,
-        });
-      } else {
-        await User.update({ phoneNumber }, { $set: { code: hashedCode } });
-      }
+
+      await User.updateOne({ phoneNumber }, { $set: { code: hashedCode }}, { upsert: true })
 
       await sendMessage(phoneNumber, `Detroit Now login code: ${code}`);
       res.status(200).json({ success: true });

@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import debug from 'debug';
 
 import Config from '../config';
-import { sendMessage } from './twilio';
+import { sendMessage } from './texting/send-message';
 
 const logger = debug('app:breaking-news')
 
@@ -29,7 +29,7 @@ export default function breakingNews(app) {
  *
  * @param {Object} db - MongoDB instance
  * @param {Array} articles - Breaking news articles
- * @returns {Array} A filtered array of articles that still need to be texted 
+ * @returns {Array} A filtered array of articles that still need to be texted
  */
 export async function ingestBreakingNews(db, articles) {
   let col = db.collection('BreakingNewsAlert');

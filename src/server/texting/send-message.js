@@ -3,7 +3,7 @@
 import debug from 'debug';
 import twilio from 'twilio'
 
-import Config from '../config';
+import Config from '../../config';
 
 const twilioClient = twilio();
 const logger = debug('app:twilio');

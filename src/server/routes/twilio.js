@@ -4,37 +4,17 @@ import { Router } from 'express';
 import debug from 'debug';
 import twilio from 'twilio';
 
-import { sendMessage } from '../twilio';
+import { sendMessage } from '../texting/send-message';
+import { handleResponse } from '../texting/handle-text-response';
 import Config from '../../config';
 import { isValidPhoneNumber } from '../util/parse';
 import { csrfProtection } from './middleware/csrf';
 
 var logger = debug('app:twilio');
 
-const START_BREAKING = 'START BREAKING';
-const STOP_BREAKING = 'STOP BREAKING';
-
-/**
- * Compare a text response to see what the user is trying to tell us
- *
- * @param {String} body - Body of the text message someone's sending us
- * @param {String} testCase - example text to compare the text message body to
- * @returns {Boolean} whether the text body matches the testcase
- */
-function compareMessages(body, testCase) {
-  body = body.toLowerCase();
-  testCase = testCase.toLowerCase();
-  return body === testCase;
-}
-
-function getCommandListText() {
-  return `${START_BREAKING} - activate breaking news alerts\n${STOP_BREAKING} - stop breaking news alerts`
-}
-
 export default function registerRoutes(app) {
   var router = Router();
   var db = app.get('db');
-  var User = db.collection('User');
 
   router.post('/text-mobile-link/', csrfProtection(app), (req, res, next) => {
     let phoneNumber = req.body.phoneNumber;
@@ -62,37 +42,23 @@ export default function registerRoutes(app) {
     });
   });
 
-  router.get('/handle-text-response/', (req, res, next) => {
+  /**
+   * Route hit by twilio to respond to text messages. Sends an XML resposne as
+   * per twilio docs
+   */
+  router.post('/handle-text-response/', (req, res, next) => {
     async function _handleResponse() {
       let phoneNumber = req.query.from;
       let body = req.query.body;
 
-      // Check the user
-      phoneNumber = phoneNumber.replace(/^\+\d/, '');
-      let user = await User.find({ phoneNumber }).limit(1).next();
-      if (!user) {
-        throw new Error('User doesnt exist');
-      }
+      let response = await handleResponse(db, phoneNumber, body).catch((e) => { throw new Error(e); });
 
       let twilioResp = new twilio.TwimlResponse();
-      let resp = 'yay';
-
-      if (compareMessages(body, STOP_BREAKING)) {
-        await User.update({ phoneNumber: user.phoneNumber }, { $set: { breakingNews: false }});
-        resp = `You have been unsubscribed from breaking news alerts.\n\nRe-subscribe using ${START_BREAKING}`;
-      } else if (compareMessages(body, START_BREAKING)) {
-        await User.update({ phoneNumber: user.phoneNumber }, { $set: { breakingNews: true }});
-        resp = `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${STOP_BREAKING}`;
-      } else {
-        resp = `Command not recognized:\n\n${getCommandListText()}`
-      }
-
-      twilioResp.message(resp, {
+      twilioResp.message(response, {
         to: `+1${user.phoneNumber}`,
         from: Config.twilioPhoneNumber,
       });
-
-      res.status(200).type('text/xml').send(twilioResp.toString());
+      res.status(200).type('text/xml').send(response);
       return next();
     }
 

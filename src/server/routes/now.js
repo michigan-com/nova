@@ -34,7 +34,7 @@ export default function registerRoutes(app) {
 
     let url = `${Config.socketUrl}/v1/article/${articleId}/`;
     request.get(url, (err, response, body) => {
-      if (err) {
+      if (err || response.statusCode === 404) {
         res.status(404);
         next();
         return
