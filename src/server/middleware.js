@@ -13,14 +13,14 @@ import passport from 'passport';
 
 import Config from '../config';
 
-var BASE_DIR = path.dirname(__dirname);
-var MongoStore = ConnectMongo(session);
+const BASE_DIR = path.dirname(__dirname);
+const MongoStore = ConnectMongo(session);
 
 export default function configureMiddleware(app) {
-  let db = app.get('db');
+  const db = app.get('db');
   let faviconFile = 'favicon.ico';
 
-  if (app.get('env') == 'development') {
+  if (app.get('env') === 'development') {
     app.use(errorhandler());
   }
 
