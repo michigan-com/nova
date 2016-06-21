@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { TOP_ARTICLE_STYLE, getTopArticleStyle } from './top-article';
+import { getTopArticleStyle } from './top-article';
 import { brandIcon } from '../../../../config';
 
 const INLINE = 'inline';
@@ -14,50 +14,57 @@ export default class InfoTile extends React.Component {
   getTileStyle() {
     switch (this.props.type) {
       case INLINE:
+      default:
         return getTopArticleStyle(this.props.rank);
     }
-    return {}
   }
 
-  _renderInlineTile() {
+  renderInlineTile() {
     let style = {};
     style.animationDelay = `${this.props.rank * 50}ms`;
     return (
-      <div className={ `info-tile ${INLINE}` } style={ style }>
-        <div className='img-container'>
-          <img src={ `/img/${brandIcon}/info-card-image.svg` }/>
+      <div className={`info-tile ${INLINE}`} style={style}>
+        <div className="img-container">
+          <img src={`/img/${brandIcon}/info-card-image.svg`} alt="Info Card" />
         </div>
-        <div className='text-container'>
-          { this.props.infoText }
+        <div className="text-container">
+          {this.props.infoText}
         </div>
       </div>
-    )
+    );
   }
 
-  _renderLargeTile() {
+  renderLargeTile() {
     return (
-      <div className={ `info-tile ${LARGE}` }>
-        { this.props.infoText }
+      <div className={`info-tile ${LARGE}`}>
+        {this.props.infoText}
       </div>
-    )
+    );
   }
 
   renderTile() {
     switch (this.props.type) {
       case INLINE:
-        return this._renderInlineTile();
+        return this.renderInlineTile();
       case LARGE:
-        return this._renderLargeTile();
+        return this.renderLargeTile();
+      default:
+        return this.renderInlineTile();
     }
-    return null;
   }
 
   render() {
     let style = this.getTileStyle(); // hey that rhymes
     return (
-      <div className='info-tile-container' style={ style }>
-        { this.renderTile() }
+      <div className="info-tile-container" style={style}>
+        {this.renderTile()}
       </div>
-    )
+    );
   }
 }
+
+InfoTile.propTypes = {
+  type: React.PropTypes.string.isRequired,
+  rank: React.PropTypes.number.isRequired,
+  infoText: React.PropTypes.element,
+};

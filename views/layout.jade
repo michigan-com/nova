@@ -9,6 +9,8 @@ html(lang="en")
     block css
   body
     block content
+    script.
+      var USER_ID = '#{locals.userId}';
     block js
     input(type='hidden', name='_csrf', id='_csrf', value='#{csrfToken}')
 

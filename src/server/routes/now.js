@@ -11,9 +11,11 @@ export default function registerRoutes(app) {
   var router = new Router();
 
   router.get('/', csrfProtection(app), (req, res, next) => {
+    let csrfToken = req.csrfToken ? req.csrfToken() : '';
+
     res.render('now', {
       title: Config.appName,
-      csrfToken: req.csrfToken(),
+      csrfToken,
     });
   });
 

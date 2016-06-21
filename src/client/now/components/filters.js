@@ -15,8 +15,8 @@ export default class SectionFilters extends React.Component {
     this.threshold = 20;
 
     this.state = {
-      showFilters: true
-    }
+      showFilters: true,
+    };
   }
 
   componentDidMount() {
@@ -28,15 +28,14 @@ export default class SectionFilters extends React.Component {
   }
 
   scrollHook = () => {
-    let scrollTop = document.body.scrollTop;
-    let delta = scrollTop - this.lastScrollTop;
+    const scrollTop = document.body.scrollTop;
+    const delta = scrollTop - this.lastScrollTop;
 
     if (scrollTop < 0 || (scrollTop + window.innerHeight) >= document.body.clientHeight) return;
 
-    if ((delta > 0 && this.scrollVelocity > 0) || (delta < 0 && this.scrollVelocity < 0))  {
+    if ((delta > 0 && this.scrollVelocity > 0) || (delta < 0 && this.scrollVelocity < 0)) {
       this.scrollVelocity += delta;
-    }
-    else {
+    } else {
       this.scrollVelocity = delta;
     }
 
@@ -52,27 +51,30 @@ export default class SectionFilters extends React.Component {
   }
 
   render() {
-    let activeSection = this.props.activeSectionIndex;
-
     let style = {};
     if (!this.state.showFilters) style.bottom = `-${SectionFilters.FILTER_HEIGHT}px`;
 
     return (
-      <div className='filters-container' style={ style }>
-        <div className='includes'>includes:</div>
-        <div className='filters'>
+      <div className="filters-container" style={style}>
+        <div className="includes">includes:</div>
+        <div className="filters">
           {
-            this.props.sections.map(function(section, index) {
-              return (
-                <SectionFilter name={ section.name }
-                            displayName={ section.displayName }
-                            active={ section.showArticles }
-                            key={ `section-${section.name}` }/>
-              )
-            })
+            this.props.sections.map((section) => (
+              <SectionFilter
+                name={section.name}
+                displayName={section.displayName}
+                active={section.showArticles}
+                key={`section-${section.name}`}
+              />
+          ))
           }
         </div>
       </div>
-    )
+    );
   }
 }
+
+SectionFilters.propTypes = {
+  activeSectionIndex: React.PropTypes.number,
+  sections: React.PropTypes.array,
+};

@@ -5,7 +5,7 @@ import debug from 'debug';
 import twilio from 'twilio';
 
 import { sendMessage } from '../texting/send-message';
-import handleResponse from '../texting/handle-text-response';
+import handleResponse, { NO_RESP } from '../texting/handle-text-response';
 import Config from '../../config';
 import { isValidPhoneNumber } from '../util/parse';
 import { csrfProtection } from './middleware/csrf';
@@ -54,10 +54,15 @@ export default function registerRoutes(app) {
 
     function twilioResp(phoneNumber, response) {
       let twilioResp = new twilio.TwimlResponse();
-      twilioResp.message(response, {
-        to: phoneNumber,
-        from: Config.twilioPhoneNumber,
-      });
+
+      // If we wanna receive a text and dont want to respond, we need to send a
+      // blank message. Only make a response if we have text we wanna respond with
+      if (response !== NO_RESP ) {
+        twilioResp.message(response, {
+          to: phoneNumber,
+          from: Config.twilioPhoneNumber,
+        });
+      }
       return res.status(200).type('text/xml').send(twilioResp.toString());
     }
 

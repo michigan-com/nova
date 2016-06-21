@@ -17,45 +17,44 @@ import { articleIdUrlRegex } from './lib/parse';
 function renderDashboard() {
   let store = Store.getState();
   render(
-    <Dashboard store={ store }/>,
+    <Dashboard store={store} />,
     document.getElementById('stream')
-  )
+  );
 }
 
-document.addEventListener('DOMContentLoaded', init);
-function init() {
+function historyChange() {
+  const state = History.getState();
 
+  const articleIdMatch = articleIdUrlRegex.exec(window.location.pathname);
+
+  if (/^\/stream/.test(window.location.pathname)) {
+    const idMatch = articleIdUrlRegex.exec(state.url);
+    if (idMatch) Store.dispatch(closeActiveArticle(idMatch[1], false));
+  } else if (articleIdMatch) {
+    const articleId = parseInt(articleIdMatch[1], 10);
+    Store.dispatch(articleSelected(articleId));
+  }
+}
+
+function init() {
   // History stuff
-  window.onpopstate = historyChange
+  window.onpopstate = historyChange;
 
   renderDashboard();
   Store.subscribe(renderDashboard);
 
-  let yesterday = new Date();
+  const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(0, 0, 0, 0);
   xr.get(`${Config.socketUrl}/v1/article/?fromDate=${yesterday}`)
     .then((resp) => {
-
-      let articles = resp.sort( (a, b) => { return (new Date(b.created_at)) - (new Date(a.created_at)); });
+      const articles = resp.sort((a, b) => (
+        new Date(b.created_at)) - (new Date(a.created_at)
+      ));
       Store.dispatch(articlesFetched(articles));
     }, (err) => {
-      console.log('something went wrong');
+      console.log(`something went wrong: ${err}`);
     });
 }
 
-function historyChange(e) {
-  let state = History.getState();
-  let stateTitle = state.title;
-
-  let articleIdMatch = articleIdUrlRegex.exec(window.location.pathname);
-
-  if (/^\/stream/.test(window.location.pathname)) {
-    let articleIdMatch = articleIdUrlRegex.exec(state.url);
-    if (articleIdMatch) Store.dispatch(closeActiveArticle(articleIdMatch[1], false));
-  }
-  else if (articleIdMatch) {
-    let articleId = parseInt(articleIdMatch[1]);
-    Store.dispatch(articleSelected(articleId));
-  }
-}
+document.addEventListener('DOMContentLoaded', init);

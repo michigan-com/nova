@@ -7,52 +7,63 @@ import Store from '../store';
 import { articleSelected } from '../../common/actions/active-article';
 
 export default class StreamArticle extends React.Component {
-  getArticleStyle() {
-    let article = this.props.article;
-    let rank = this.props.rank
-    let style = {
-      height: '75px',
-      animationDelay: `${rank * 50}ms`
-    };
-
-    return style
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
   }
 
   onClick() {
     Store.dispatch(articleSelected(this.props.article.article_id));
   }
 
+  getArticleStyle() {
+    const rank = this.props.rank;
+    const style = {
+      height: '75px',
+      animationDelay: `${rank * 50}ms`,
+    };
+
+    return style;
+  }
+
   renderImage() {
-    let article = this.props.article;
+    const article = this.props.article;
     let style = {};
     if (article.photo != null) style.backgroundImage = `url(${article.photo.thumbnail.url})`;
 
     return (
-      <div className='photo-container' style={ style }>
+      <div className="photo-container" style={style}>
       </div>
-    )
+    );
   }
 
   renderHeadline() {
-    let article = this.props.article;
+    const article = this.props.article;
 
     return (
-      <div className='headline-container'>
-        <div className='headline'>{ article.headline }</div>
-         <div className='published-time'>{ moment(article.created_at).format('MMMM Do YYYY, h:mm a')}</div>
+      <div className="headline-container">
+        <div className="headline">{article.headline}</div>
+        <div className="published-time">
+          {moment(article.created_at).format('MMMM Do YYYY, h:mm a')}
+        </div>
       </div>
-    )
+    );
   }
 
   render() {
     let style = this.getArticleStyle();
     return (
-      <div className='stream-article-container'>
-        <div className='stream-article' style={ style } onClick={ this.onClick.bind(this) }>
-          { this.renderImage() }
-          { this.renderHeadline() }
+      <div className="stream-article-container">
+        <div className="stream-article" style={style} onClick={this.onClick}>
+          {this.renderImage()}
+          {this.renderHeadline()}
         </div>
       </div>
-    )
+    );
   }
 }
+
+StreamArticle.propTypes = {
+  article: React.PropTypes.object.isRequired,
+  rank: React.PropTypes.number.isRequired,
+};

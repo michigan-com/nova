@@ -15,13 +15,23 @@ export default class SectionFilter extends React.Component {
     if (this.props.active) sectionFilterClass += ' active';
 
     return (
-      <div className={ sectionFilterClass }>
-        <div className='section-circle' onClick={ this.toggleFilter }>
-          <div className='icon'><img src={ `/img/${this.props.name}.svg`  }/></div>
-          <div className='active-icon'><img src={ `/img/check.svg` }/></div>
+      <div className={sectionFilterClass}>
+        <div className="section-circle" onClick={this.toggleFilter}>
+          <div className="icon">
+            <img src={`/img/${this.props.name}.svg`} alt={`${this.props.name}`} />
+          </div>
+          <div className="active-icon">
+            <img src={'/img/check.svg'} alt="Active" />
+          </div>
         </div>
-        <div className='section-filter-name'>{ this.props.displayName || this.props.name }</div>
+        <div className="section-filter-name">{this.props.displayName || this.props.name}</div>
       </div>
-    )
+    );
   }
 }
+
+SectionFilter.propTypes = {
+  name: React.PropTypes.string.isRequired,
+  active: React.PropTypes.bool.isRequired,
+  displayName: React.PropTypes.string,
+};

@@ -3,4 +3,4 @@
 import Articles from './articles';
 import ActiveArticle from '../../../common/reducers/active-article';
 
-export default { Articles, ActiveArticle }
+export default { Articles, ActiveArticle };

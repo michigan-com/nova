@@ -6,12 +6,14 @@ import request from 'supertest';
 
 import dbConnect from '../../../dist/util/db';
 import { createApp }  from '../../../dist/app';
-import { testPostRoute } from './helpers';
+import { hash } from '../../../dist/util/hash';
+import { testPostRoute, testGetRoute } from './helpers';
 import { CatchAsync } from '../../helpers';
 
 var db, UserCollection, app, agent;
 
 var testPhoneNumber = '3135550123';
+var testCode = '1234';
 
 describe('Testing login routes', () => {
   before(CatchAsync(async (done) => {
@@ -63,6 +65,20 @@ describe('Testing login routes', () => {
     user = await UserCollection.find({ phoneNumber: testPhoneNumber }).limit(1).next();
     notEqual(user, null, `User should be created`);
     notEqual(firstCode, user.code, `Codes should be different`)
+    done();
+  }));
+
+  it('tests to make sure the login works', CatchAsync(async (done) => {
+    // create a fake user
+    let code = hash(testCode);
+    let phoneNumber = testPhoneNumber;
+    await UserCollection.insert({ phoneNumber, code });
+
+    let res = await testPostRoute(agent, '/generate-login-code/', { phoneNumber, code });
+    equal(res.body.success, true, `should have returned { success: true }`);
+
+    // Now test the route
+    res = await testGetRoute(agent, '/');
     done();
   }));
 });

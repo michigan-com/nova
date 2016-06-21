@@ -3,15 +3,15 @@
 export const ARTICLES_FETCHED = 'ARTICLES_FETCHED';
 
 
-export function articlesFetched(articles=[]) {
+export function articlesFetched(articles = []) {
   return {
     type: ARTICLES_FETCHED,
-    value: articles
-  }
+    value: articles,
+  };
 }
 
 
 export const DEFAULT_STATE = {
   articles: [],
-  activeArticle: -1
-}
+  activeArticle: -1,
+};

@@ -10,18 +10,27 @@ export const GOT_TOP_ARTICLES = 'GOT_TOP_ARTICLES';
 export const GOT_QUICKSTATS = 'GOT_QUICKSTATS';
 export const TOGGLE_INFO = 'TOGGLE_INFO';
 
- export const INFO_BLURBS = [
-   <div>{ `Using ${appName}'s Speed Reader, you can read an entire article in a fraction of the time! `}</div>,
-   <div>On an iPhone? Save us to your home screen using the <img src='/img/share-button.svg'/> button</div>,
-   <div>Our bots summarize news articles around the clock.</div>,
-   <div>Try this: Tap on any headline to read a summary of the news article.</div>,
-   <div>{ `${appName} was built for busy people — more news, in less time. `}</div>,
-   <div>Out of articles? Don't worry! This list updates every 10 seconds, check back for more later!</div>,
-   <div>Did you know? The average adult reads 250 to 300 words per minute.</div>,
-   <div>Speed-reading tip: To read faster, try to not voice the words in your head.</div>,
-   <div>Max Speed Reading speed is 1000 WPM, can you go faster than that?</div>,
-   <div>Filters at the bottom of the page eliminate articles by category.</div>
- ];
+export const INFO_BLURBS = [
+  <div>
+     {`Using ${appName}'s Speed Reader, you can read an entire article in a` +
+     'fraction of the time!'}
+  </div>,
+  <div>
+    On an iPhone? Save us to your home screen using the
+    <img src="/img/share-button.svg" alt="Share" /> button
+  </div>,
+  <div>Our bots summarize news articles around the clock.</div>,
+  <div>Try this: Tap on any headline to read a summary of the news article.</div>,
+  <div>{`${appName} was built for busy people — more news, in less time. `}</div>,
+  <div>
+    Out of articles? Don't worry! This list updates every 10 seconds, check
+    back for more later!
+  </div>,
+  <div>Did you know? The average adult reads 250 to 300 words per minute.</div>,
+  <div>Speed-reading tip: To read faster, try to not voice the words in your head.</div>,
+  <div>Max Speed Reading speed is 1000 WPM, can you go faster than that?</div>,
+  <div>Filters at the bottom of the page eliminate articles by category.</div>,
+];
 
 const ARTICLEID_COOKIE = 'articleIds';
 /**
@@ -31,13 +40,13 @@ const ARTICLEID_COOKIE = 'articleIds';
  * @returns {Set} Set of article IDs
  */
 function getArticleIdsFromCookie() {
-  let cookie = Cookies.get(ARTICLEID_COOKIE) || '';
-  let cookieSplit = cookie.split(',');
-  let articleIds = new Set();
+  const cookie = Cookies.get(ARTICLEID_COOKIE) || '';
+  const cookieSplit = cookie.split(',');
+  const articleIds = new Set();
 
-  for (let value of cookieSplit) {
+  for (const value of cookieSplit) {
     if (isNaN(value)) continue;
-    articleIds.add(parseInt(value));
+    articleIds.add(parseInt(value, 10));
   }
   return articleIds;
 }
@@ -49,27 +58,27 @@ function getArticleIdsFromCookie() {
  * @param {Set} articleIds - Set of article IDs
  */
 export function saveArticleIdsToCookie(articleIds) {
-  let ids = []
-  for (let val of articleIds) {
+  const ids = [];
+  for (const val of articleIds) {
     if (isNaN(val)) continue;
     ids.push(val);
   }
 
-  let cookieVal = ids.join(',');
+  const cookieVal = ids.join(',');
   Cookies.set(ARTICLEID_COOKIE, cookieVal, { expires: Infinity });
 }
 
 
-export function sortTopArticles(articles=[], state) {
+export function sortTopArticles(articles = [], state) {
   if (!articles.length) return [];
 
-  let sectionState = {};
-  for (let section of state.sections) sectionState[section.name] = section.showArticles;
+  const sectionState = {};
+  for (const section of state.sections) sectionState[section.name] = section.showArticles;
 
-  let topArticles = [];
-  for (let article of articles) {
+  const topArticles = [];
+  for (const article of articles) {
     let addArticle = true;
-    for (let section of article.sections) {
+    for (const section of article.sections) {
       if (section in sectionState && !sectionState[section]) {
         addArticle = false;
         break;
@@ -81,24 +90,24 @@ export function sortTopArticles(articles=[], state) {
   return topArticles.slice(0, 25);
 }
 
-export function gotTopArticles(articles=[]) {
+export function gotTopArticles(articles = []) {
   return {
     type: GOT_TOP_ARTICLES,
-    value: articles
-  }
+    value: articles,
+  };
 }
 
-export function gotQuickstats(quickstats=[]) {
+export function gotQuickstats(quickstats = []) {
   return {
     type: GOT_QUICKSTATS,
-    value: quickstats
-  }
+    value: quickstats,
+  };
 }
 
 export function toggleInfo() {
   return {
-    type: TOGGLE_INFO
-  }
+    type: TOGGLE_INFO,
+  };
 }
 
 export const DEFAULT_ARTICLE_LIST = {
@@ -109,5 +118,5 @@ export const DEFAULT_ARTICLE_LIST = {
   showInfo: false,
   infoBlurbs: INFO_BLURBS,
   blurbIndex: getRandomInt(0, INFO_BLURBS.length - 1),
-  activeArticleReaders: 0
-}
+  activeArticleReaders: 0,
+};

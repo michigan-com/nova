@@ -5,11 +5,6 @@ import React from 'react';
 import { getRandomInt } from '../../lib/random';
 
 export default class LoadingImage extends React.Component {
-  static defaultProps = {
-    blurbs: ['Loading...', 'Starting flux capacitor...', 'Calculating jump to light speed...'],
-    pulseInterval: 500,
-    numBars: 3
-  }
 
   constructor(props) {
     super(props);
@@ -19,8 +14,8 @@ export default class LoadingImage extends React.Component {
 
     this.state = {
       pulsingIndex: -1,
-      blurbIndex
-    }
+      blurbIndex,
+    };
   }
 
   componentDidMount() {
@@ -33,7 +28,7 @@ export default class LoadingImage extends React.Component {
 
   pulse() {
     let pulsingIndex = this.state.pulsingIndex;
-    if (pulsingIndex + 1 == this.props.numBars) {
+    if (pulsingIndex + 1 === this.props.numBars) {
       pulsingIndex = 0;
     } else {
       pulsingIndex += 1;
@@ -41,15 +36,15 @@ export default class LoadingImage extends React.Component {
 
     this.setState({ pulsingIndex });
 
-    this.pulseTimeout = setTimeout(() => { this.pulse() }, this.props.pulseInterval);
+    this.pulseTimeout = setTimeout(() => { this.pulse(); }, this.props.pulseInterval);
   }
 
   renderBars() {
-    let bars = [];
+    const bars = [];
     for (let i = 0; i < this.props.numBars; i++) {
       let className = 'bar';
       if (this.state.pulsingIndex === i) className += ' pulse';
-      bars.push(<div className={ className } key={ `bar-${i}` }></div>)
+      bars.push(<div className={className} key={`bar-${i}`}></div>);
     }
     return bars;
   }
@@ -57,19 +52,31 @@ export default class LoadingImage extends React.Component {
   renderBlurb() {
     if (this.state.blurbIndex < 0 || this.state.blurbIndex >= this.props.blurbs.length) return null;
 
-    return this.props.blurbs[this.state.blurbIndex]
+    return this.props.blurbs[this.state.blurbIndex];
   }
 
   render() {
     return (
-      <div className='loading-image'>
-        <div className='blurb-container'>
-          { this.props.blurbs[this.state.blurbIndex] }
+      <div className="loading-image">
+        <div className="blurb-container">
+          {this.props.blurbs[this.state.blurbIndex]}
         </div>
-        <div className='loading-bars-container'>
-          { this.renderBars() }
+        <div className="loading-bars-container">
+          {this.renderBars()}
         </div>
       </div>
-    )
+    );
   }
 }
+
+LoadingImage.propTypes = {
+  blurbs: React.PropTypes.array,
+  numBars: React.PropTypes.number,
+  pulseInterval: React.PropTypes.number,
+};
+
+LoadingImage.defaultProps = {
+  blurbs: ['Loading...', 'Starting flux capacitor...', 'Calculating jump to light speed...'],
+  pulseInterval: 500,
+  numBars: 3,
+};

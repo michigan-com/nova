@@ -13,23 +13,30 @@ export const SECTION_OPTIONS = [SPORTS, BUSINESS, LOCAL];
 
 const SECTION_FILTER_GA_EVENT_CATEGORY = 'sectionFilter';
 
-var SECTION_COOKIE = 'sections';
+const SECTION_COOKIE = 'sections';
+
+export function writeSectionCookie(sectionState) {
+  Cookies.set(SECTION_COOKIE, JSON.stringify(sectionState), { expires: Infinity });
+}
 
 function defaultSections() {
-  let sectionsCookie = Cookies.get(SECTION_COOKIE) || undefined;
+  const sectionsCookie = Cookies.get(SECTION_COOKIE) || undefined;
 
   try {
     return JSON.parse(sectionsCookie);
-  } catch(e) {
-    console.log(`Failed to parse section cookie, setting default`);
+  } catch (e) {
+    console.log('Failed to parse section cookie, setting default');
   }
 
-  let sections = [];
-  for (let name of SECTION_OPTIONS) {
-    let displayName = name;
+  const sections = [];
+  for (const name of SECTION_OPTIONS) {
+    let displayName;
     switch (name) {
       case LOCAL:
         displayName = 'news';
+        break;
+      default:
+        displayName = name;
     }
 
     sections.push({
@@ -42,9 +49,6 @@ function defaultSections() {
   return sections;
 }
 
-export function writeSectionCookie(sectionState=DEFAULT_SECTIONS) {
-  Cookies.set(SECTION_COOKIE, JSON.stringify(sectionState), { expires: Infinity });
-}
 
 /**
  * Action to take when a section filter is clicked
@@ -53,19 +57,19 @@ export function writeSectionCookie(sectionState=DEFAULT_SECTIONS) {
  * @param {Boolean} previousState - Current filter state. The filter's new state
  *  will be !previousState
  */
-export function sectionSelect(sectionName='', previousState=false) {
-  let newState = !previousState;
+export function sectionSelect(sectionName = '', previousState = false) {
+  const newState = !previousState;
   gaEvent({
     eventCategory: SECTION_FILTER_GA_EVENT_CATEGORY,
     eventAction: newState ? 'show' : 'hide',
-    eventLabel: sectionName
+    eventLabel: sectionName,
   });
   return {
     type: SECTION_SELECT,
-    value: sectionName
-  }
+    value: sectionName,
+  };
 }
 
 export const DEFAULT_SECTIONS = {
-  sections: defaultSections()
-}
+  sections: defaultSections(),
+};

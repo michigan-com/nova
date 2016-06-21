@@ -2,12 +2,13 @@
 
 import { DEFAULT_STATE, ARTICLES_FETCHED } from '../../actions/articles';
 
-export default function articles(state=DEFAULT_STATE, action) {
+export default function reducer(state = DEFAULT_STATE, action) {
+  let articles;
   switch (action.type) {
     case ARTICLES_FETCHED:
-      let articles = action.value;
-      return { ...state, articles }
+      articles = action.value;
+      return { ...state, articles };
+    default:
+      return { ...state };
   }
-
-  return { ...state }
 }

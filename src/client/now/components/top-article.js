@@ -1,4 +1,4 @@
- 'use strict';
+'use strict';
 
 import React from 'react';
 
@@ -7,19 +7,19 @@ import { articleSelected } from '../../common/actions/active-article';
 
 export const TOP_ARTICLE_STYLE = {
   height: 100,
-  margin: 10
-}
+  margin: 10,
+};
 
 export function getTopArticleHeight() {
   let height = TOP_ARTICLE_STYLE.height;
-  if (window.innerWidth <= 992) height *= .7; // 70px
+  if (window.innerWidth <= 992) height *= 0.7; // 70px
   return height;
 }
 
 export function getTopArticleStyle(rank) {
-  let style = {
+  const style = {
     height: getTopArticleHeight(),
-    marginBottom: TOP_ARTICLE_STYLE.margin
+    marginBottom: TOP_ARTICLE_STYLE.margin,
   };
   style.top = `${(rank * (style.height + style.marginBottom)) + style.marginBottom}px`;
   return style;
@@ -38,27 +38,30 @@ export default class TopArticle extends React.Component {
 
     this.state = {
       articleClicked: false,
-    }
+    };
+
+    this.articleClicked = this.articleClicked.bind(this);
+    this.setSelfAsActive = this.setSelfAsActive.bind(this);
   }
 
   setSelfAsActive = () => {
-    let article = this.props.article;
+    const article = this.props.article;
     Store.dispatch(articleSelected(article.article_id, article.visits));
   }
 
-  articleClicked = (e) => {
+  articleClicked = () => {
     this.setState({ articleClicked: true });
 
     // TODO this should maybe be handled by the store, so we're not waiting
     // on the animation and THEN the fetching of the data in sequence
-    setTimeout((() => {
+    setTimeout(() => {
       this.setSelfAsActive();
-    }).bind(this), 750)
+    }, 750);
   }
 
   render() {
     // TODO figure out best way to animate this
-    let article = this.props.article;
+    const article = this.props.article;
     let readers = article.visits;
     let headline = article.headline;
 
@@ -77,12 +80,23 @@ export default class TopArticle extends React.Component {
 
     let containerStyle = getTopArticleStyle(this.props.rank);
     return (
-      <div className={ topArticleContainerClass } style={ containerStyle } id={ `top-article-container-${this.props.rank}-${this.props.windowSize}` }>
-        <div className={ topArticleClass }  onClick={ this.articleClicked.bind(this) } style={ style }>
-          <div className='readers-container'><div className='readers'>{ readers }</div></div>
-          <div className='headline'>{ headline }</div>
+      <div
+        className={topArticleContainerClass}
+        style={containerStyle}
+        id={`top-article-container-${this.props.rank}-${this.props.windowSize}`}
+      >
+        <div className={topArticleClass} onClick={this.articleClicked} style={style}>
+          <div className="readers-container"><div className="readers">{readers}</div></div>
+          <div className="headline">{headline}</div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+TopArticle.propTypes = {
+  article: React.PropTypes.object.isRequired,
+  rank: React.PropTypes.number.isRequired,
+  clicked: React.PropTypes.bool.isRequired,
+  windowSize: React.PropTypes.number,
+};

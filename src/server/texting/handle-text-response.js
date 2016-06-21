@@ -14,6 +14,7 @@ export const USER_UNSUBSCRIBED = `You have been unsubscribed from breaking news 
 export const USER_SUBSCRIBED = `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${STOP_BREAKING}`;
 export const HELP_RESPONSE = `${START_BREAKING} - activate breaking news alerts\n${STOP_BREAKING} - stop breaking news alerts`;
 export const COMMAND_NOT_REGOGNIZED = `Command not recognized:\n\n${HELP_RESPONSE}`;
+export const NO_RESP = ''; // for unsubscribing
 
 /**
  * Compare a text response to see what the user is trying to tell us
@@ -46,7 +47,7 @@ export default async function handleResponse(db, fromNumber, message) {
   let resp = COMMAND_NOT_REGOGNIZED;
   if (compareMessages(message, STOP_BREAKING) || compareMessages(message, STOP)) {
     await BreakingNewsSignup.remove({ phoneNumber });
-    resp = USER_UNSUBSCRIBED;
+    resp = NO_RESP;
   } else if (compareMessages(message, START_BREAKING)) {
     await BreakingNewsSignup.update({ phoneNumber }, { phoneNumber }, { upsert: true });
     resp = USER_SUBSCRIBED;

@@ -7,7 +7,7 @@ import handleResponse, {
   STOP_BREAKING,
   HELP,
   STOP,
-  USER_UNSUBSCRIBED,
+  NO_RESP,
   USER_SUBSCRIBED,
   COMMAND_NOT_REGOGNIZED,
   HELP_RESPONSE } from '../../../dist/texting/handle-text-response';
@@ -76,7 +76,7 @@ describe('Testing text message handling', () => {
 
     for (let cmd of stopCommands) {
       let resp = await handleResponse(db, testPhoneNumber, cmd);
-      equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
+      equal(resp, NO_RESP, 'Should have unsubscribed user');
       let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
       equal(signup, null, `Phone number shouldnt show up in collection`)
     }
@@ -102,7 +102,7 @@ describe('Testing text message handling', () => {
     notEqual(signup, null, `Should have a valid signup`);
 
     resp = await handleResponse(db, testPhoneNumber, STOP);
-    equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
+    equal(resp, NO_RESP, 'Should have unsubscribed user');
     signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
     equal(signup, null, `Phone number shouldnt show up in collection`)
 
@@ -112,7 +112,7 @@ describe('Testing text message handling', () => {
     notEqual(signup, null, `Should have a valid signup`);
 
     resp = await handleResponse(db, testPhoneNumber, STOP_BREAKING);
-    equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
+    equal(resp, NO_RESP, 'Should have unsubscribed user');
     signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
     equal(signup, null, `Phone number shouldnt show up in collection`)
 

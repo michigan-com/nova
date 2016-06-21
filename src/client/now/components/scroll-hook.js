@@ -2,8 +2,8 @@
 
 import assign from 'object-assign';
 
-let SCROLL_UP = 'up';
-let SCROLL_DOWN = 'down';
+const SCROLL_UP = 'up';
+const SCROLL_DOWN = 'down';
 
 export default class ScrollHook {
   static defaultProps = {
@@ -11,7 +11,7 @@ export default class ScrollHook {
     scrollTopThresholdDown: '0px',
     scrollTopThresholdUp: '0px',
     scrollDownHook: () => {},
-    scrollUpHook: () => {}
+    scrollUpHook: () => {},
   }
 
   constructor(opts) {
@@ -30,12 +30,12 @@ export default class ScrollHook {
     if (this.lastScrollTop === null || this.scrollTop === null) return false;
 
     let scrollThreshold = this.opts.scrollTopThresholdDown;
-    let scrollDirection = this.getScrollDirection();
+    const scrollDirection = this.getScrollDirection();
     if (scrollDirection === SCROLL_UP) {
       scrollThreshold = this.opts.scrollTopThresholdUp;
     }
 
-    let threshold = this.getThreshold(scrollNode, scrollThreshold);
+    const threshold = this.getThreshold(scrollNode, scrollThreshold);
     if (threshold === null) return false;
 
     if (this.scrollTop >= threshold && scrollDirection === SCROLL_DOWN) {
@@ -47,7 +47,7 @@ export default class ScrollHook {
     return false;
   }
 
-  triggerHook(node) {
+  triggerHook() {
     if (this.scrollTop < this.lastScrollTop) {
       this.opts.scrollUpHook();
     } else {
@@ -56,15 +56,15 @@ export default class ScrollHook {
   }
 
   getThreshold(scrollNode, threshold) {
-    let pxMatch = /^(\d+)px$/.exec(threshold);
+    const pxMatch = /^(\d+)px$/.exec(threshold);
     if (pxMatch) {
       return pxMatch(1);
     }
 
-    let percentMatch = /^(\d+)%$/.exec(threshold);
+    const percentMatch = /^(\d+)%$/.exec(threshold);
     if (percentMatch) {
       return (document.body.clientHeight - window.innerHeight) * (percentMatch[1] / 100);
-      //return (scrollNode.scrollHeight - scrollNode.clientHeight) * (percentMatch[1]) / 100
+      // return (scrollNode.scrollHeight - scrollNode.clientHeight) * (percentMatch[1]) / 100
     }
     return null;
   }
@@ -77,6 +77,6 @@ export default class ScrollHook {
   scrollDown(node) { this.opts.scrollDownHook(node); }
   scrollUp(node) { this.opts.scrollUpHook(node); }
 
-  getScrollTop = () => { return this.scrollTop; }
-  getRef = () => { return this.opts.ref; }
+  getScrollTop = () => ( this.scrollTop; )
+  getRef = () => ( this.opts.ref; )
 }

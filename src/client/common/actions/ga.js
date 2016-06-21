@@ -11,9 +11,12 @@ import assign from 'object-assign';
  *
  *    https://developers.google.com/analytics/devguides/collection/analyticsjs/events#event_fields
  */
-export function gaEvent(eventData={}) {
+export function gaEvent(eventData = {}) {
   // Make sure that an "event" gets sent
-  let payload = assign({}, eventData, { hitType: 'event' });
-  console.log(payload);
-  ga('send', payload);
+  const payload = assign({}, eventData, { hitType: 'event' });
+  window.ga('send', payload);
+}
+
+export function gaPageView(eventData = {}) {
+  window.ga('send', eventData);
 }

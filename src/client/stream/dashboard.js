@@ -6,7 +6,8 @@ import Infinite from 'react-infinite';
 import moment from 'moment';
 
 import Store from './store';
-import { closeActiveArticle, startSpeedReading, stopSpeedReading } from '../common/actions/active-article';
+import { closeActiveArticle, startSpeedReading, stopSpeedReading }
+  from '../common/actions/active-article';
 import Header from '../common/components/header';
 import ActiveArticle from '../common/components/active-article';
 import LoadingImage from '../common/components/loading-image';
@@ -21,29 +22,37 @@ export default class Dashboard extends React.Component {
       articlesLoaded: false,
       fadeOutLoading: false,
       timeFrame: '',
-    }
+    };
 
     this.lastScrollTop = document.body.scrollTop;
 
     this.articleList = null;
   }
 
-  registerScrollHandlers() {
-    let list = findDOMNode(this.articleList);
-    window.addEventListener('scroll', this.checkScroll);
-  }
+  componentWillReceiveProps(nextProps) {
+    const articles = nextProps.store.Articles.articles;
+    if (articles.length && !this.state.fadeOutLoading) {
+      this.setTimeFrame(articles[0]);
+      this.setState({ fadeOutLoading: true });
+      setTimeout(() => {
+        this.setState({ articlesLoaded: true });
+      }, 500);
+    }
 
-  unregisterScrollHandlers() {
-    let list = findDOMNode(this.articleList);
-    window.removeEventListener('scroll', this.checkScroll);
+    const nextActiveArticle = nextProps.store.ActiveArticle.activeArticle;
+    const thisActiveArticle = this.props.store.ActiveArticle.activeArticle;
+    if (!thisActiveArticle && !!nextActiveArticle) {
+      this.lastScrollTop = window.scrollY;
+      this.unregisterScrollHandlers();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.articlesLoaded && !prevState.articlesLoaded) this.registerScrollHandlers()
+    if (this.state.articlesLoaded && !prevState.articlesLoaded) this.registerScrollHandlers();
 
-    let prevActiveArticle = prevProps.store.ActiveArticle.activeArticle;
-    let thisActiveArticle = this.props.store.ActiveArticle.activeArticle
-    if ( !thisActiveArticle && !!prevActiveArticle) {
+    const prevActiveArticle = prevProps.store.ActiveArticle.activeArticle;
+    const thisActiveArticle = this.props.store.ActiveArticle.activeArticle;
+    if (!thisActiveArticle && !!prevActiveArticle) {
       document.body.scrollTop = this.lastScrollTop;
       this.registerScrollHandlers();
     }
@@ -53,52 +62,9 @@ export default class Dashboard extends React.Component {
     this.unregisterScrollHandlers();
   }
 
-  componentWillReceiveProps(nextProps) {
-    let articles = nextProps.store.Articles.articles;
-    if (articles.length && !this.state.fadeOutLoading) {
-      this.setTimeFrame(articles[0]);
-      this.setState({ fadeOutLoading: true });
-      setTimeout(() => {
-        this.setState({ articlesLoaded: true });
-      }, 500);
-    }
-
-    let nextActiveArticle = nextProps.store.ActiveArticle.activeArticle;
-    let thisActiveArticle = this.props.store.ActiveArticle.activeArticle
-    if (!thisActiveArticle && !!nextActiveArticle) {
-      this.lastScrollTop = window.scrollY;
-      this.unregisterScrollHandlers();
-    }
-  }
-
-  compone
-
-  /** Store events that need to be passed down to children */
-  closeActiveArticle(article_id) {
-    Store.dispatch(closeActiveArticle(article_id));
-  }
-
-  startSpeedReading(article_id) {
-    Store.dispatch(startSpeedReading(article_id));
-  }
-
-  stopSpeedReading(article_id) {
-    Store.dispatch(stopSpeedReading(article_id));
-  }
-
-  checkScroll = () => {
-    let articles = this.props.store.Articles.articles;
-    if (!articles.length) return;
-
-    let list = findDOMNode(this.articleList);
-    let percentScrolled = window.scrollY / list.clientHeight;
-    let articleIndex = Math.round(articles.length * percentScrolled);
-    this.setTimeFrame(articles[articleIndex]);
-  }
-
   setTimeFrame(article) {
     let timeFrame = moment(article.created_at);
-    let minute = timeFrame.minute();
+    const minute = timeFrame.minute();
     if (minute <= 15) {
       timeFrame = timeFrame.startOf('hour');
     } else if (minute > 15 && minute < 45) {
@@ -111,74 +77,115 @@ export default class Dashboard extends React.Component {
     this.setState({ timeFrame });
   }
 
+  startSpeedReading(articleId) {
+    Store.dispatch(startSpeedReading(articleId));
+  }
+
+  stopSpeedReading(articleId) {
+    Store.dispatch(stopSpeedReading(articleId));
+  }
+
+  /** Store events that need to be passed down to children */
+  closeActiveArticle(articleId) {
+    Store.dispatch(closeActiveArticle(articleId));
+  }
+
+  registerScrollHandlers() {
+    window.addEventListener('scroll', this.checkScroll);
+  }
+
+  unregisterScrollHandlers() {
+    window.removeEventListener('scroll', this.checkScroll);
+  }
+
+  checkScroll = () => {
+    const articles = this.props.store.Articles.articles;
+    if (!articles.length) return;
+
+    const list = findDOMNode(this.articleList);
+    const percentScrolled = window.scrollY / list.clientHeight;
+    const articleIndex = Math.round(articles.length * percentScrolled);
+    this.setTimeFrame(articles[articleIndex]);
+  }
+
+
   renderArticles() {
-    let articles = this.props.store.Articles.articles
+    const articles = this.props.store.Articles.articles;
     if (!this.state.articlesLoaded) {
       let className = 'loading-image-container';
       if (this.state.fadeOutLoading) className += ' fade-out';
       return (
-        <div className={ className }>
-          <LoadingImage key={ 'stream-loading' }/>
+        <div className={className}>
+          <LoadingImage key={'stream-loading'} />
         </div>
-      )
+      );
     }
 
-    let articleIds = new Set();
+    const articleIds = new Set();
     let articleComponents = [];
     let rank = 0;
     for (let article of articles) {
-      let articleId = article.article_id;
+      const articleId = article.article_id;
       if (articleIds.has(articleId)) continue;
       articleIds.add(articleId);
 
       articleComponents.push(
-        <StreamArticle rank={ rank } article={ article } key={ `stream-article-${article.url}`}/>
-      )
+        <StreamArticle rank={rank} article={article} key={`stream-article-${article.url}`} />
+      );
       rank += 1;
     }
 
     return (
-      <div className='articles'>
-        <Infinite containerHeight= { articleComponents.length * 75 } elementHeight={ 75 }
+      <div className="articles">
+        <Infinite
+          containerHeight={articleComponents.length * 75}
+          elementHeight={75}
           useWindowAsScrollContainer
-          ref={ (ref) => { this.articleList = ref }}>
-          { articleComponents }
+          ref={(ref) => { this.articleList = ref; }}
+        >
+          {articleComponents}
         </Infinite>
       </div>
-    )
+    );
   }
 
   renderTime() {
     return (
-      <div className='time-frame'>
-        <div className='blurb'>Vieweing articles published around</div>
-        <div className='time-frame-time'>{ this.state.timeFrame }</div>
+      <div className="time-frame">
+        <div className="blurb">Vieweing articles published around</div>
+        <div className="time-frame-time">{this.state.timeFrame}</div>
       </div>
-    )
+    );
   }
 
   render() {
-    let store = this.props.store;
-    let activeArticle = store.ActiveArticle.activeArticle;
-    if (activeArticle != null) {
+    const store = this.props.store;
+    const activeArticle = store.ActiveArticle.activeArticle;
+    if (activeArticle !== null) {
       return (
-        <div className='stream'>
-          <ActiveArticle article={ activeArticle }
-            readers={ 0 }
-            speedReading={ store.ActiveArticle.speedReading }
-            closeActiveArticle={ this.closeActiveArticle }
-            startSpeedReading={ this.startSpeedReading }
-            stopSpeedReading={ this.stopSpeedReading }/>
+        <div className="stream">
+          <ActiveArticle
+            article={activeArticle}
+            readers={0}
+            speedReading={store.ActiveArticle.speedReading}
+            closeActiveArticle={this.closeActiveArticle}
+            startSpeedReading={this.startSpeedReading}
+            stopSpeedReading={this.stopSpeedReading}
+          />
         </div>
-      )
+      );
     }
 
     return (
-      <div className='stream'>
-        <Header appName={ Config.appName }/>
-        { this.renderArticles() }
-        { this.renderTime() }
+      <div className="stream">
+        <Header appName={Config.appName} />
+        {this.renderArticles()}
+        {this.renderTime()}
       </div>
-    )
+    );
   }
 }
+
+Dashboard.propTypes = {
+  store: React.PropTypes.object.isRequired,
+};

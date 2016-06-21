@@ -15,7 +15,8 @@ import { START_BREAKING,
   USER_UNSUBSCRIBED,
   USER_SUBSCRIBED,
   COMMAND_NOT_REGOGNIZED,
-  HELP_RESPONSE } from '../../../dist/texting/handle-text-response';
+  HELP_RESPONSE,
+  NO_RESP } from '../../../dist/texting/handle-text-response';
 
 var db, agent, app, User, BreakingNewsSignup;
 var testPhoneNumber = '3135550123';
@@ -25,9 +26,14 @@ function confirmResponseMessage(xmlResp, expectedPhoneNumber, expectedText) {
     parseString(xmlResp, (err, res) => {
       if (err) reject(true);
 
-      let msg = res.Response.Message[0];
-      equal(msg._, expectedText, `Expected text does not match`);
-      equal(msg.$.to, `+1${expectedPhoneNumber}`, `Phone number doesnt match`);
+      if (expectedText === '') {
+        let msg = res.Response;
+        equal(msg, expectedText, 'Empty response expected');
+      } else {
+        let msg = res.Response.Message[0];
+        equal(msg._, expectedText, `Expected text does not match`);
+        equal(msg.$.to, `+1${expectedPhoneNumber}`, `Phone number doesnt match`);
+      }
       resolve(res);
     });
   });
@@ -115,7 +121,7 @@ describe('Testing twilio texting routes', () => {
       let signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
       notEqual(signup, null, 'Oops, signup didnt get inserted correctly');
 
-      await testTextResponse(phoneNumber, cmd, USER_UNSUBSCRIBED);
+      await testTextResponse(phoneNumber, cmd, NO_RESP);
 
       signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
       equal(signup, null, 'Signup should no longer exist');
@@ -129,7 +135,7 @@ describe('Testing twilio texting routes', () => {
     let signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     notEqual(signup, null, 'Oops, signup didnt get inserted correctly');
 
-    await testTextResponse(phoneNumber, STOP_BREAKING, USER_UNSUBSCRIBED);
+    await testTextResponse(phoneNumber, STOP_BREAKING, NO_RESP);
     signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     equal(signup, null, 'Signup shouldnt exist');
 
@@ -137,7 +143,7 @@ describe('Testing twilio texting routes', () => {
     signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     notEqual(signup, null, 'Oops, signup didnt get inserted correctly');
 
-    await testTextResponse(phoneNumber, STOP, USER_UNSUBSCRIBED);
+    await testTextResponse(phoneNumber, STOP, NO_RESP);
     signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     equal(signup, null, 'Signup shouldnt exist');
 
