@@ -35,7 +35,7 @@ export default function configureMiddleware(app) {
     secret: 'Nova news now, \'na mean?',
     store: new MongoStore({ db }),
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   }));
   app.use(flash());
 

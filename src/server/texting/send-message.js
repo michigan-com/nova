@@ -1,7 +1,7 @@
 'use strict';
 
 import debug from 'debug';
-import twilio from 'twilio'
+import twilio from 'twilio';
 
 import Config from '../../config';
 
@@ -14,31 +14,30 @@ const logger = debug('app:twilio');
  * @param {String} phoneNumber - 10 digit number, area code + 7 digits
  * @param {String} message to be sent
  */
-export function sendMessage(phoneNumber, message, mediaUrl="") {
+export function sendMessage(phoneNumber, message, mediaUrl = '') {
   return new Promise((resolve, reject) => {
-    if (phoneNumber.length != 10) {
-      let error = `Invalid phone number, must be exactly 10 characters: ${phoneNumber}`;
+    if (phoneNumber.length !== 10) {
+      const error = `Invalid phone number, must be exactly 10 characters: ${phoneNumber}`;
       return reject(error);
     }
 
-    let twilioData = {
+    const twilioData = {
       to: `+1${phoneNumber}`,
       from: `${Config.twilioPhoneNumber}`,
-      body: message
+      body: message,
     };
 
-    if (mediaUrl != "") {
+    if (mediaUrl !== '') {
       twilioData.mediaUrl = mediaUrl;
     }
 
-    if (process.env.NODE_ENV === "prod") {
-      twilioClient.sendMessage(twilioData, (err, responseData) => {
-        if (err) return reject(error);
-        resolve(responseData);
+    if (process.env.NODE_ENV === 'prod') {
+      return twilioClient.sendMessage(twilioData, (err, responseData) => {
+        if (err) return reject(err);
+        return resolve(responseData);
       });
-    } else {
-      logger(twilioData);
-      resolve(twilioData);
     }
+    logger(twilioData);
+    return resolve(twilioData);
   });
 }

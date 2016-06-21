@@ -9,5 +9,5 @@
  * @returns {Boolean} True if the input string is a valid phone number, false otherwise
  */
 export function isValidPhoneNumber(phoneNumber) {
-  return !(isNaN(phoneNumber) || `${phoneNumber}`.length != 10);
+  return !(isNaN(phoneNumber) || `${phoneNumber}`.length !== 10);
 }

@@ -8,7 +8,6 @@ export function generateRandomNumber(min, max) {
 }
 
 export default function generateCode() {
-  let code = generateRandomNumber(1000, 10000);
-
+  const code = generateRandomNumber(1000, 10000);
   return `${code}`;
 }

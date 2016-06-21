@@ -1,7 +1,5 @@
 'use strict';
 
-import Config from '../../config';
-
 export const START_BREAKING = 'START BREAKING';
 export const STOP_BREAKING = 'STOP BREAKING';
 
@@ -10,10 +8,14 @@ export const HELP = 'HELP';
 export const STOP = 'STOP';
 
 // outgoing Text messages
-export const USER_UNSUBSCRIBED = `You have been unsubscribed from breaking news alerts.\n\nRe-subscribe using ${START_BREAKING}`;
-export const USER_SUBSCRIBED = `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${STOP_BREAKING}`;
-export const HELP_RESPONSE = `${START_BREAKING} - activate breaking news alerts\n${STOP_BREAKING} - stop breaking news alerts`;
-export const COMMAND_NOT_REGOGNIZED = `Command not recognized:\n\n${HELP_RESPONSE}`;
+export const USER_UNSUBSCRIBED =
+  `You have been unsubscribed from breaking news alerts.\n\nRe-subscribe using ${START_BREAKING}`;
+export const USER_SUBSCRIBED =
+  `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${STOP_BREAKING}`;
+export const HELP_RESPONSE =
+  `${START_BREAKING} - activate breaking news alerts\n${STOP_BREAKING} - stop breaking news alerts`;
+export const COMMAND_NOT_REGOGNIZED =
+  `Command not recognized:\n\n${HELP_RESPONSE}`;
 export const NO_RESP = ''; // for unsubscribing
 
 /**
@@ -24,9 +26,9 @@ export const NO_RESP = ''; // for unsubscribing
  * @returns {Boolean} whether the text body matches the testcase
  */
 function compareMessages(body, testCase) {
-  body = body.toLowerCase();
-  testCase = testCase.toLowerCase();
-  return body === testCase;
+  const lowerBody = body.toLowerCase();
+  const lowerTest = testCase.toLowerCase();
+  return lowerBody === lowerTest;
 }
 
 /**
@@ -38,11 +40,10 @@ function compareMessages(body, testCase) {
  * @returns {String} Text message to be sent back to the user.
  */
 export default async function handleResponse(db, fromNumber, message) {
-  let User = db.collection('User');
-  let BreakingNewsSignup = db.collection('BreakingNewsSignup');
+  const BreakingNewsSignup = db.collection('BreakingNewsSignup');
 
   // Check the user
-  let phoneNumber = fromNumber.replace(/^\+\d/, '');
+  const phoneNumber = fromNumber.replace(/^\+\d/, '');
 
   let resp = COMMAND_NOT_REGOGNIZED;
   if (compareMessages(message, STOP_BREAKING) || compareMessages(message, STOP)) {

@@ -12,60 +12,59 @@ import { isValidPhoneNumber } from '../util/parse';
 const logger = debug('app:login');
 
 export default function registerRoutes(app) {
-  let passport = app.get('passport');
-  let db = app.get('db');
-  let User = db.collection('User');
-  let router = Router();
+  const passport = app.get('passport');
+  const db = app.get('db');
+  const User = db.collection('User');
+  const router = new Router();
 
-  router.get('/login/', csrfProtection(app), (req, res, next) => {
+  router.get('/login/', csrfProtection(app), (req, res) => {
     if (req.user) return res.redirect('/');
-    res.render('login', {
+    return res.render('login', {
       csrfToken: req.csrfToken(),
-      message: req.flash('error')
+      message: req.flash('error'),
     });
   });
 
-  router.get('/logout/', (req, res, next) => {
+  router.get('/logout/', (req, res) => {
     req.logout();
     req.flash('info', 'You have been logged out');
-    res.redirect('/');
+    return res.redirect('/');
   });
 
   router.post('/generate-login-code/', csrfProtection(app), (req, res, next) => {
-    async function generateLoginCode(req, res, next) {
-      let phoneNumber = req.body.phoneNumber
+    async function generateLoginCode() {
+      const phoneNumber = req.body.phoneNumber;
 
       if (!isValidPhoneNumber(phoneNumber)) {
-        let error = `Please only input 10 numbers (area code + phone number)`;
+        const error = 'Please only input 10 numbers (area code + phone number)';
         res.status(442).send({ error });
         return next();
       }
 
-      let user = await User.find({ phoneNumber }).limit(1).next();
-      let code = generateCode();
-      let hashedCode = hash(code);
+      const code = generateCode();
+      const hashedCode = hash(code);
 
-      await User.updateOne({ phoneNumber }, { $set: { code: hashedCode }}, { upsert: true })
+      await User.updateOne({ phoneNumber }, { $set: { code: hashedCode } }, { upsert: true });
 
       await sendMessage(phoneNumber, `Detroit Now login code: ${code}`);
       res.status(200).json({ success: true });
       return next();
     }
 
-    generateLoginCode(req, res, next).catch((e) => {
-      logger(`twilio error: ${error}`)
+    generateLoginCode().catch((error) => {
+      logger(`twilio error: ${error}`);
       res.status(500).send({ error });
       return next();
     });
   });
 
   router.post('/login/', csrfProtection(app), (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', (err, user) => {
       if (err || !user) return res.status(401).json({ error: 'Invalid code' });
-      req.logIn(user, (err) => {
-        if (err) return res.status(401).json({ error: err });
+      return req.logIn(user, (error) => {
+        if (err) return res.status(401).json({ error });
         return res.status(200).json({ success: 'true' });
-      })
+      });
     })(req, res, next);
   });
 

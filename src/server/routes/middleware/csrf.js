@@ -11,13 +11,13 @@ import csrf from 'csurf';
  * @return {Function} Csrf middleware or noop middleware
  */
 export function csrfProtection(app) {
-  let shouldCsrf = app.get('use csrf');
+  const shouldCsrf = app.get('use csrf');
 
   if (shouldCsrf) {
     return csrf({ cookie: true });
   } else {
-    return function(req, res, next) {
+    return function (req, res, next) {
       next();
-    }
+    };
   }
 }

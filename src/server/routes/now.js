@@ -8,10 +8,10 @@ import { csrfProtection } from './middleware/csrf';
 
 
 export default function registerRoutes(app) {
-  var router = new Router();
+  const router = new Router();
 
-  router.get('/', csrfProtection(app), (req, res, next) => {
-    let csrfToken = req.csrfToken ? req.csrfToken() : '';
+  router.get('/', csrfProtection(app), (req, res) => {
+    const csrfToken = req.csrfToken ? req.csrfToken() : '';
 
     res.render('now', {
       title: Config.appName,
@@ -20,34 +20,34 @@ export default function registerRoutes(app) {
   });
 
   // TODO login required
-  router.get('/stream/', (req, res, next) => {
+  router.get('/stream/', (req, res) => {
     res.render('stream', {
-      title: Config.appName
+      title: Config.appName,
     });
   });
 
   router.get('/article/:articleId/', csrfProtection(app), (req, res, next) => {
-    let articleId = req.params.articleId;
+    const articleId = req.params.articleId;
     if (isNaN(articleId)) {
       res.status(404);
       next();
       return;
     }
 
-    let url = `${Config.socketUrl}/v1/article/${articleId}/`;
+    const url = `${Config.socketUrl}/v1/article/${articleId}/`;
     request.get(url, (err, response, body) => {
       if (err || response.statusCode === 404) {
         res.status(404);
         next();
-        return
+        return;
       }
 
-      let article = JSON.parse(body);
+      const article = JSON.parse(body);
+      const title = article.headline;
+      const description = article.subheadline;
       let photoUrl = '';
-      let title = article.headline;
-      let description = article.subheadline;
       if (article.photo) {
-        photoUrl = article.photo.full.url
+        photoUrl = article.photo.full.url;
       }
 
       res.render('now', {
@@ -61,7 +61,7 @@ export default function registerRoutes(app) {
     });
   });
 
-  router.get('/pricing/', (req, res, next) => {
+  router.get('/pricing/', (req, res) => {
     res.render('pricing');
   });
 
