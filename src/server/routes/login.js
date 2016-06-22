@@ -17,9 +17,9 @@ export default function registerRoutes(app) {
   const User = db.collection('User');
   const router = new Router();
 
-  router.get('/login/', csrfProtection(app), (req, res) => {
+  router.get('/signup/', csrfProtection(app), (req, res) => {
     if (req.user) return res.redirect('/');
-    return res.render('login', {
+    return res.render('signup', {
       csrfToken: req.csrfToken(),
       message: req.flash('error'),
     });

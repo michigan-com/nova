@@ -29,7 +29,7 @@ export default class Header extends React.Component {
     if (this.props.userId !== null) {
       loginContent = <a href="/logout/">Logout</a>;
     } else {
-      loginContent = <a href="/login/">Join</a>;
+      loginContent = <a href="/signup/">Join</a>;
     }
 
     return (
@@ -79,7 +79,7 @@ export default class Header extends React.Component {
             <div id="readers">
               <div id="numbers">{`${readers}`}</div>
             </div>
-            <div id="info" onClick={this.toggleInfo} >
+            <div id="info" >
               {this.renderLoginButton()}
             </div>
           </div>

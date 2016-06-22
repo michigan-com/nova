@@ -4,22 +4,15 @@ import React from 'react';
 import xr from 'xr';
 
 import Store from '../store';
-import { phoneNumberInputChange, phoneNumberError } from '../actions/phone-number';
+import { phoneNumberInputChange, phoneNumberError, confirmedPhoneNumber }
+  from '../actions/phone-number';
 
 export default class PhoneNumberInput extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      phoneNumberSent: false,
-      phoneNumber: '',
-      code: '',
-      error: '',
-    };
+    this.csrf = document.getElementById('_csrf').value;
 
-    this.csrf = document.getElementById('csrf').value;
-
-    this.checkCode = this.checkCode.bind(this);
     this.checkPhoneNumber = this.checkPhoneNumber.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
@@ -28,9 +21,9 @@ export default class PhoneNumberInput extends React.Component {
     e.stopPropagation();
     e.preventDefault();
 
-    const csrf = document.getElementById('csrf').value;
+    const csrf = this.csrf;
     const phoneNumber = this.props.PhoneNumber.phoneNumber;
-    const code = this.state.code;
+    // const code = this.state.code;
 
     if (phoneNumber.length !== 10) {
       Store.dispatch(
@@ -44,28 +37,14 @@ export default class PhoneNumberInput extends React.Component {
 
     xr.post('/generate-login-code/', { phoneNumber, _csrf: csrf }).then(
       () => {
-        this.setState({ phoneNumberSent: true, error: '' });
+        Store.dispatch(confirmedPhoneNumber());
       },
       (err) => {
         const resp = JSON.parse(err.response);
         const error = resp.error;
-        this.setState({ error });
+        Store.dispatch(phoneNumberError(error));
       }
     );
-
-    if (!this.state.phoneNumberSent) {
-      // Generate the code
-    } else {
-      // Veryify the code
-      xr.post('/login/', { phoneNumber, code, _csrf: csrf }).then(
-        () => {
-          window.location = window.location.origin;
-        },
-        () => {
-          this.setState({ error: 'Invalid code, please try again' });
-        }
-      );
-    }
   }
 
   validNumberInput(e) {
@@ -76,31 +55,14 @@ export default class PhoneNumberInput extends React.Component {
     e.preventDefault();
 
     if ((keyCode > 57 || keyCode < 48) && keyCode !== 8) {
-      this.setState(this.state);
       return false;
     }
-
     return true;
-  }
-
-  checkCode(e) {
-    const keyCode = e.which || e.keyCode;
-    if (!this.validNumberInput(e)) return;
-
-    const newState = { ...this.state };
-    const newVal = String.fromCharCode(keyCode);
-    const oldCode = this.state.code;
-
-    if (keyCode === 8) {
-      newState.code = oldCode.slice(0, oldCode.length - 1);
-    } else if (oldCode.length < 6) {
-      newState.code += newVal;
-    }
-    this.setState(newState);
   }
 
   checkPhoneNumber(e) {
     const keyCode = e.which || e.keyCode;
+    if (keyCode === 13) return;
     if (!this.validNumberInput(e)) {
       Store.dispatch(phoneNumberError('Numbers only, please'));
       return;
@@ -124,62 +86,49 @@ export default class PhoneNumberInput extends React.Component {
   }
 
   renderFormContent() {
-    let formContent = null;
     let inputClass = 'input';
     if (this.props.PhoneNumber.phoneNumberValidationError) inputClass += ' error';
 
-    if (this.state.phoneNumberSent) {
-      formContent = (
-        <div className="form-content">
-          <p>Great! We just texted you a 6 digit code, enter that in here and you'll be all set</p>
-          <p>Phone number: <strong>{this.state.phoneNumber}</strong></p>
-          <input
-            type="text"
-            className={inputClass}
-            name="code"
-            ref="code"
-            value={this.state.code}
-            onKeyDown={this.checkCode}
-            placeholder="1234"
-          />
-        </div>
-      );
-    } else {
-      formContent = (
-        <div className="form-content">
-          <p>Join the Detroit Now squad for access to more features.</p>
-          <p>
-            Enter your phone number to join. It's free! We'll text you a
-            verification code just to make sure it's you.
-          </p>
-          <input
-            type="text"
-            className={inputClass}
-            name="phoneNumber"
-            ref="phoneNumber"
-            value={this.props.PhoneNumber.phoneNumber}
-            onKeyDown={this.checkPhoneNumber}
-            placeholder="3135550123"
+    return (
+      <div className="form-content">
+        <p>Enter your mobile number</p>
+        <input
+          type="text"
+          className={inputClass}
+          name="phoneNumber"
+          ref="phoneNumber"
+          value={this.props.PhoneNumber.phoneNumber}
+          onKeyDown={this.checkPhoneNumber}
+          placeholder="3135550123"
+        />
+      </div>
+    );
+  }
+
+  renderFormHeader() {
+    let content = null;
+    if (this.props.BreakingNews.breakingNewsSignupForm) {
+      content = (
+        <div className="form-header">
+          <h2 className="form-title">Get breaking news alerts delivered via SMS</h2>
+          <img
+            className="breaking-news-example"
+            src="/img/breaking-news-example.png"
+            alt="Breaking News"
           />
         </div>
       );
     }
-
-    return (
-      <div>
-        {formContent}
-        <a className="tell-me-more" href="/pricing/">Tell me more about these features</a>
-      </div>
-    );
+    return content;
   }
 
   render() {
     return (
       <div className="phone-number-input">
         <div className="login-form-container">
-          <h2>Get breaking news alerts delivered via SMS</h2>
+          {this.renderFormHeader()}
           <form
-            action="/login/"
+            action="/generate-login-code/"
             method="POST"
             ref="phoneNumberForm"
             onSubmit={this.submitForm}
@@ -198,4 +147,5 @@ export default class PhoneNumberInput extends React.Component {
 
 PhoneNumberInput.propTypes = {
   PhoneNumber: React.PropTypes.object.isRequired,
+  BreakingNews: React.PropTypes.object.isRequired,
 };

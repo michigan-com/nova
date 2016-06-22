@@ -134,14 +134,17 @@ export default class PhoneNumberInput extends React.Component {
       if (this.state.error) phoneNumberInputClass += ' error';
 
       content = (
-        <input
-          type="text"
-          ref="phone-number"
-          className={phoneNumberInputClass}
-          placeholder="3135550123"
-          value={this.state.phoneNumber}
-          onKeyDown={this.checkKeyValue}
-        />
+        <div>
+          <input
+            type="text"
+            ref="phone-number"
+            className={phoneNumberInputClass}
+            placeholder="3135550123"
+            value={this.state.phoneNumber}
+            onKeyDown={this.checkKeyValue}
+          />
+          <p className="blurb">We will never spam or share your number.</p>
+        </div>
       );
     } else {
       content = (
@@ -162,7 +165,6 @@ export default class PhoneNumberInput extends React.Component {
           <div className={formContentClass}>
             <div className="errors">{this.state.error || ' '}</div>
             {content}
-            <p className="blurb">We will never spam or share your number.</p>
           </div>
           <div className="form-submit">
             <input

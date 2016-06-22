@@ -1,6 +1,6 @@
 @import ./subpage;
 
-.login-form-container {
+.signup {
   width: 50%;
   margin: 0 auto;
   padding: 20px;
@@ -22,6 +22,9 @@ input[type=text] {
   font-size: 20px;
   line-height: 30px;
   height: 30px;
+  border: 1px solid transparent;
+  border-bottom: 1px solid $light-blue;
+  outline: none !important;
 
   &.error {
     border: 1px solid $red;
@@ -30,11 +33,11 @@ input[type=text] {
 
 input[type=submit] {
   appearance: none;
-  background-color: $red;
+  background-color: $light-blue;
   color: white;
-  font-size: 20px;
-  line-height: 30px;
-  height: 30px;
+  font-size: 15px;
+  line-height: 40px;
+  height: 40px;
   width: 50%;
   border: none;
   padding: 0;
@@ -43,8 +46,12 @@ input[type=submit] {
   cursor: pointer;
   transition: background-color 200ms linear;
 
+  @media (max-width: $screen-sm) {
+    width: 90%;
+  }
+
   &:hover {
-    background-color: color($red blackness(20%));
+    background-color: color($light-blue blackness(20%));
   }
 }
 
@@ -53,6 +60,7 @@ input[type=submit] {
   font-size: 12px;
   margin-top: 10px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .tell-me-more {
@@ -61,4 +69,21 @@ input[type=submit] {
   display: block;
   text-align: center;
   color: black;
+}
+
+.phone-number-input {
+  width: 100%;
+
+  .form-header {
+    width: 100%;
+    .breaking-news-example {
+      width: 75%;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+}
+
+.form-title {
+  font-weight: normal;
 }

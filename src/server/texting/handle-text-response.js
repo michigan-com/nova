@@ -50,7 +50,7 @@ export default async function handleResponse(db, fromNumber, message) {
     await BreakingNewsSignup.remove({ phoneNumber });
     resp = NO_RESP;
   } else if (compareMessages(message, START_BREAKING)) {
-    await BreakingNewsSignup.update({ phoneNumber }, { phoneNumber }, { upsert: true });
+    await BreakingNewsSignup.updateOne({ phoneNumber }, { phoneNumber }, { upsert: true });
     resp = USER_SUBSCRIBED;
   } else if (compareMessages(message, HELP)) {
     resp = HELP_RESPONSE;

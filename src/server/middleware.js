@@ -7,14 +7,14 @@ import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import ConnectMongo from 'connect-mongo';
+import connectMongo from 'connect-mongo';
 import flash from 'connect-flash';
 import passport from 'passport';
 
 import Config from '../config';
 
 const BASE_DIR = path.dirname(__dirname);
-const MongoStore = ConnectMongo(session);
+const MongoStore = connectMongo(session);
 
 export default function configureMiddleware(app) {
   const db = app.get('db');

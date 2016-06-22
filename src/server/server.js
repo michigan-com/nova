@@ -24,7 +24,7 @@ async function startServer() {
   app.set('port', port);
 
   logger(`[SERVER] Environment: ${app.get('env')}`);
-  const server = app.listen(port, '0.0.0.0', function (err) {
+  const server = app.listen(port, '0.0.0.0', function appStart(err) {
     if (err) throw new Error(err);
 
     const host = this.address();

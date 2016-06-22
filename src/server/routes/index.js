@@ -3,7 +3,7 @@
 import texting from './texting';
 import now from './now';
 import login from './login';
-
+import breaking from './breaking-news';
 
 // Set process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN
 export default function registerRoutes(app) {
@@ -11,4 +11,5 @@ export default function registerRoutes(app) {
   now(app);
   texting(app);
   login(app);
+  breaking(app);
 }
