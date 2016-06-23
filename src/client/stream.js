@@ -3,6 +3,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 import xr from 'xr';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 /** Browser history stuff */
 require('historyjs/scripts/bundled/html4+html5/native.history.js');
@@ -12,12 +18,14 @@ import Dashboard from './stream/dashboard';
 import Store from './stream/store';
 import { articleSelected, closeActiveArticle } from './common/actions/active-article';
 import { articlesFetched } from './stream/actions/articles';
-import { articleIdUrlRegex } from './lib/parse';
+import { articleIdUrlRegex } from './util/parse';
 
 function renderDashboard() {
   let store = Store.getState();
   render(
-    <Dashboard store={store} />,
+    <MuiThemeProvider>
+      <Dashboard store={store} />
+    </MuiThemeProvider>,
     document.getElementById('stream')
   );
 }

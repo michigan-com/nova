@@ -3,7 +3,7 @@
 import xr from 'xr';
 
 import { appName, socketUrl } from '../../../../config';
-import { millisToMinutesAndSeconds } from '../../lib/parse';
+import { millisToMinutesAndSeconds } from '../../util/parse';
 import { gaEvent, gaPageView } from './ga';
 
 /** Browser history stuff */

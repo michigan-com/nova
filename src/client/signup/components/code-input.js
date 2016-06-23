@@ -1,11 +1,14 @@
 'use strict';
 
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import xr from 'xr';
 
 import Store from '../store';
 import { codeValidationError, codeInputChange, codeConfirmed } from '../actions/code';
+import { unconfirmPhoneNumber } from '../actions/phone-number';
 import { userSignedUp } from '../actions/breaking-news';
+import { formatPhoneNumber } from '../util/format';
 
 export default class CodeInput extends React.Component {
   constructor(props) {
@@ -15,6 +18,10 @@ export default class CodeInput extends React.Component {
 
     this.checkCode = this.checkCode.bind(this);
     this.submitForm = this.submitForm.bind(this);
+  }
+
+  backToPhoneInput() {
+    Store.dispatch(unconfirmPhoneNumber());
   }
 
   handlePostLogin() {
@@ -99,6 +106,9 @@ export default class CodeInput extends React.Component {
     return (
       <div className="code-input-form">
         <h2 className="form-title">Enter the 4 digit code we texted to verify your mobile #</h2>
+        <div className="current-phone-number">
+          {formatPhoneNumber(this.props.PhoneNumber.phoneNumber)}
+        </div>
         <form
           action="/login/"
           method="POST"
@@ -110,7 +120,9 @@ export default class CodeInput extends React.Component {
             type="text"
             className={inputClass}
             name="code"
-            ref="code"
+            ref={(input) => {
+              if (input) input.focus();
+            }}
             value={this.props.Code.code}
             onKeyDown={this.checkCode}
             placeholder="1234"
@@ -120,6 +132,7 @@ export default class CodeInput extends React.Component {
             {this.props.Code.codeValidationErrorMessage}
           </div>
           <input type="submit" value="Verify" />
+          <div className="back-button" onClick={this.backToPhoneInput}>Back To Phone Input</div>
         </form>
       </div>
     );

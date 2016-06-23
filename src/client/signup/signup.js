@@ -4,6 +4,7 @@ import React from 'react';
 
 import PhoneNumberInput from './components/phone-number-input';
 import CodeInput from './components/code-input';
+import BreakingNewsSignup from './components/breaking-news';
 import Header from '../common/components/header';
 
 import Config from '../../../config';

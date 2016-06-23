@@ -5,7 +5,7 @@ import { GOT_TOP_ARTICLES, GOT_QUICKSTATS, DEFAULT_ARTICLE_LIST, TOGGLE_INFO,
 import { DEFAULT_SECTIONS, SECTION_SELECT, writeSectionCookie } from '../../actions/filters';
 import { ARTICLE_LOADED, CLOSE_ACTIVE_ARTICLE, getActiveArticleReaders,
   } from '../../../common/actions/active-article';
-import { getRandomInt } from '../../../lib/random';
+import { getRandomInt } from '../../../util/random';
 
 const DEFAULT_STATE = { ...DEFAULT_ARTICLE_LIST, ...DEFAULT_SECTIONS };
 

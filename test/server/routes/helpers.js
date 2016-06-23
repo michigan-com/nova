@@ -10,7 +10,7 @@ import { equal, notEqual } from 'assert';
  * @return {Promise} WIll reject with err and resolve with the supertest response
  *  object
  */
-export function testGetRoute(agent, route, status=200) {
+export function testGetRoute(agent, route, status = 200) {
   return new Promise((resolve, reject) => {
     agent
       .get(route)
@@ -42,7 +42,7 @@ export function testExpectedRedirect(agent, route, location) {
 
         equal(res.status, 302, 'Should be a 302 redirect');
         return resolve(res);
-      })
+      });
   });
 }
 
@@ -57,14 +57,13 @@ export function testExpectedRedirect(agent, route, location) {
  * @return {Promise} will reject with err and resolve with the supertest response
  *  object
  */
-export function testPostRoute(agent, route, postData={}, status=200) {
+export function testPostRoute(agent, route, postData = {}, status = 200) {
   return new Promise((resolve, reject) => {
     agent
       .post(route)
       .send(postData)
       .end((err, res) => {
         if (err) return reject(err);
-
         equal(res.status, status, `Status should be ${status}`);
         return resolve(res);
       });

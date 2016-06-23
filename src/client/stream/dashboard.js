@@ -5,6 +5,7 @@ import { findDOMNode } from 'react-dom';
 import Infinite from 'react-infinite';
 import moment from 'moment';
 
+
 import Store from './store';
 import { closeActiveArticle, startSpeedReading, stopSpeedReading }
   from '../common/actions/active-article';

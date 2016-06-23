@@ -7,7 +7,7 @@ import { parseString } from 'xml2js';
 import { CatchAsync } from '../../helpers';
 import { testPostRoute } from './helpers';
 import dbConnect from '../../../dist/util/db';
-import { createApp } from '../../../dist/app'
+import { createApp } from '../../../dist/app';
 import { START_BREAKING,
   STOP_BREAKING,
   HELP,
@@ -31,8 +31,8 @@ function confirmResponseMessage(xmlResp, expectedPhoneNumber, expectedText) {
         equal(msg, expectedText, 'Empty response expected');
       } else {
         let msg = res.Response.Message[0];
-        equal(msg._, expectedText, `Expected text does not match`);
-        equal(msg.$.to, `+1${expectedPhoneNumber}`, `Phone number doesnt match`);
+        equal(msg._, expectedText, 'Expected text does not match');
+        equal(msg.$.to, `+1${expectedPhoneNumber}`, 'Phone number doesnt match');
       }
       resolve(res);
     });
@@ -75,7 +75,7 @@ describe('Testing twilio texting routes', () => {
       '313313313313313',
       '313000',
       '+13134210982',
-      "The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men",
+      'The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men',
     ];
 
     for (let phoneNumber of invalidNumbers) {
@@ -88,13 +88,13 @@ describe('Testing twilio texting routes', () => {
   it('Tests valid calls to /text-mobile-link/', CatchAsync(async (done) => {
     let validNumbers = [
       '3135550123',
-      '3130123456'
+      '3130123456',
     ];
 
     for (let phoneNumber of validNumbers) {
       let params = { phoneNumber };
       let res = await testPostRoute(agent, '/text-mobile-link/', params, 200);
-      equal(res.body.resp.to, `+1${phoneNumber}`, `'To' phone numbers dont match`)
+      equal(res.body.resp.to, `+1${phoneNumber}`, '\'To\' phone numbers dont match');
     }
     done();
   }));
@@ -112,7 +112,7 @@ describe('Testing twilio texting routes', () => {
   it('Tests the stop commands on /handle-text-response/', CatchAsync(async (done) => {
     let stopCommands = [
       STOP,
-      STOP_BREAKING
+      STOP_BREAKING,
     ];
     let phoneNumber = testPhoneNumber;
 

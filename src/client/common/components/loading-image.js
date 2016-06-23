@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { getRandomInt } from '../../lib/random';
+import { getRandomInt } from '../../util/random';
 
 export default class LoadingImage extends React.Component {
 

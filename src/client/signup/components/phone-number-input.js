@@ -96,7 +96,9 @@ export default class PhoneNumberInput extends React.Component {
           type="text"
           className={inputClass}
           name="phoneNumber"
-          ref="phoneNumber"
+          ref={(input) => {
+            if (input) input.focus();
+          }}
           value={this.props.PhoneNumber.phoneNumber}
           onKeyDown={this.checkPhoneNumber}
           placeholder="3135550123"
@@ -107,7 +109,7 @@ export default class PhoneNumberInput extends React.Component {
 
   renderFormHeader() {
     let content = null;
-    if (this.props.BreakingNews.breakingNewsSignupForm) {
+    if (this.props.BreakingNews.breakingNewsSignupDone) {
       content = (
         <div className="form-header">
           <h2 className="form-title">Get breaking news alerts delivered via SMS</h2>

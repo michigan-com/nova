@@ -3,10 +3,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import uaParser from 'ua-parser-js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 import Store, { DEFAULT_STATE } from './store';
 import { closeActiveArticle, startSpeedReading, stopSpeedReading }
     from '../common/actions/active-article';
+import { showProfilePage, hideProfilePage } from '../common/actions/user';
 import InfoTile from './components/info-tile';
 import TopArticle, { getTopArticleHeight } from './components/top-article';
 import ActiveArticle from '../common/components/active-article';
@@ -14,6 +21,7 @@ import LoadingImage from '../common/components/loading-image';
 import Header from '../common/components/header';
 import SectionFilters from './components/filters';
 import PhoneInput from './components/phone-number-input';
+import ProfilePage from '../common/components/profile-page';
 
 import { appName } from '../../../config';
 
@@ -228,7 +236,12 @@ class NowDashboard extends React.Component {
       if (this.state.activeArticleClose) topArticlesContainerClass += ' active-article-close';
       dashboardContents = (
         <div className={dashboardContainerClass}>
-          <Header readers={this.props.readers} userId={this.props.userId} appName={appName} />
+          <Header
+            readers={this.props.readers}
+            userId={this.props.User.userId}
+            appName={appName}
+            onProfileClick={() => { Store.dispatch(showProfilePage()); }}
+          />
           <div className="definition-container">
             <div className="definitions">
               <div className="readers-container"><div className="readers">readers</div></div>
@@ -241,6 +254,10 @@ class NowDashboard extends React.Component {
           <SectionFilters
             sections={this.props.sections}
             activeSectionIndex={this.props.activeSectionIndex}
+          />
+          <ProfilePage
+            User={this.props.User}
+            onClose={() => { Store.dispatch(hideProfilePage()); }}
           />
         </div>
       );
@@ -264,34 +281,36 @@ function drawDashboard(state = DEFAULT_STATE) {
   }
 
   ReactDOM.render(
-    <NowDashboard
-      // Article list
-      topArticles={state.ArticleList.topArticles}
-      readers={state.ArticleList.totalReaders}
-      clickedArticles={state.ArticleList.clickedArticles}
-      sections={state.ArticleList.sections}
-      showInfo={state.ArticleList.showInfo}
+    <MuiThemeProvider>
+      <NowDashboard
+        // Article list
+        topArticles={state.ArticleList.topArticles}
+        readers={state.ArticleList.totalReaders}
+        clickedArticles={state.ArticleList.clickedArticles}
+        sections={state.ArticleList.sections}
+        showInfo={state.ArticleList.showInfo}
 
-      // Active Article
-      activeArticle={state.ActiveArticle.activeArticle}
-      speedReading={state.ActiveArticle.speedReading}
-      activeArticleReaders={activeArticleReaders}
-      articleLoading={state.ActiveArticle.articleLoading}
+        // Active Article
+        activeArticle={state.ActiveArticle.activeArticle}
+        speedReading={state.ActiveArticle.speedReading}
+        activeArticleReaders={activeArticleReaders}
+        articleLoading={state.ActiveArticle.articleLoading}
 
-      // Info Stuff
-      infoText={state.ArticleList.infoBlurbs[state.ArticleList.blurbIndex]}
+        // Info Stuff
+        infoText={state.ArticleList.infoBlurbs[state.ArticleList.blurbIndex]}
 
-      // Phone number input
-      showInput={state.PhoneNumber.showInput}
-      dismissInput={state.PhoneNumber.dismissInput}
-      expandInput={state.PhoneNumber.expandInput}
+        // Phone number input
+        showInput={state.PhoneNumber.showInput}
+        dismissInput={state.PhoneNumber.dismissInput}
+        expandInput={state.PhoneNumber.expandInput}
 
 
-      // User Stuff
-      userId={state.User.userId}
+        // User Stuff
+        User={state.User}
 
-      key="now-dashboard"
-    />,
+        key="now-dashboard"
+      />
+    </MuiThemeProvider>,
     document.getElementById('now')
   );
 }
@@ -308,7 +327,7 @@ NowDashboard.propTypes = {
   activeArticleReaders: React.PropTypes.number,
   speedReading: React.PropTypes.bool,
   readers: React.PropTypes.number,
-  userId: React.PropTypes.string,
+  User: React.PropTypes.object,
   sections: React.PropTypes.array,
   activeSectionIndex: React.PropTypes.number,
 };

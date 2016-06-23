@@ -25,16 +25,9 @@ export default class Header extends React.Component {
   }
 
   renderLoginButton() {
-    let loginContent = null;
-    if (this.props.userId !== null) {
-      loginContent = <a href="/logout/">Logout</a>;
-    } else {
-      loginContent = <a href="/signup/">Join</a>;
-    }
-
     return (
-      <div className="user-area">
-        {loginContent}
+      <div className="user-area" onClick={this.props.onProfileClick}>
+        <img src="/img/profile-icon.svg" alt="Profile page" />
       </div>
     );
   }
@@ -93,4 +86,9 @@ Header.propTypes = {
   userId: React.PropTypes.string,
   readers: React.PropTypes.number,
   appName: React.PropTypes.string.isRequired,
+  onProfileClick: React.PropTypes.func,
+};
+
+Header.defaultProps = {
+  onProfileClick: () => {},
 };

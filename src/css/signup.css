@@ -87,3 +87,22 @@ input[type=submit] {
 .form-title {
   font-weight: normal;
 }
+
+.back-button {
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 20px;
+  height: 20px;
+  text-align: center;
+  margin: 10px 0px;
+}
+
+.current-phone-number {
+  color: grey;
+  text-align: center;
+  font-size: 15px;
+  line-height: 20px;
+  height: 20px;
+  margin: 10px 0px;
+}

@@ -206,6 +206,7 @@
     flex-direction: column;
     align-items: center;
     margin-right: 5px;
+    cursor: pointer;
 
     a {
       text-decoration: underline;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="breaking-news-signup-flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="sign-up-breaking-news" transform="translate(-336.000000, -20.000000)" fill="#FFFFFF">
+            <path d="M346,20 C340.5,20 336,24.5 336,30 C336,35.5 340.5,40 346,40 C351.5,40 356,35.5 356,30 C356,24.5 351.5,20 346,20 L346,20 Z M346,23 C347.7,23 349,24.3 349,26 C349,27.7 347.7,29 346,29 C344.3,29 343,27.7 343,26 C343,24.3 344.3,23 346,23 L346,23 Z M346,37.2 C343.5,37.2 341.3,35.9 340,34 C340,32 344,30.9 346,30.9 C348,30.9 352,32 352,34 C350.7,35.9 348.5,37.2 346,37.2 L346,37.2 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

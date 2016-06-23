@@ -26,8 +26,12 @@ export function userWantsBreakingNews() {
   };
 }
 
+export function breakingNewsSignupDone() {
+
+}
+
 export const DEFAULT_STATE = {
-  breakingNewsSignupForm: breakingNewsUrlParamPresent,
+  breakingNewsSignupComplete: breakingNewsUrlParamPresent,
   userWantsBreakingNews: breakingNewsUrlParamPresent,
   userSignedUp: false,
   userSignupError: '',

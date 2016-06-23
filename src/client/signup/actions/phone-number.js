@@ -3,6 +3,7 @@
 export const PHONE_NUMBER_INPUT_CHANGE = 'PHONE_NUMBER_INPUT_CHANGE';
 export const PHONE_NUMBER_VALIDATION_ERROR = 'PHONE_NUMBER_VALIDATION_ERROR';
 export const CONFIRMED_PHONE_NUMBER = 'CONFIRMED_PHONE_NUMBER';
+export const UNCONFIRM_PHONE_NUMBER = 'UNCONFIRM_PHONE_NUMBER';
 
 /**
  * Does phone number validation. Returns error string if phone number is valid,
@@ -36,6 +37,12 @@ export function phoneNumberError(error) {
 export function confirmedPhoneNumber() {
   return {
     type: CONFIRMED_PHONE_NUMBER,
+  };
+}
+
+export function unconfirmPhoneNumber() {
+  return {
+    type: UNCONFIRM_PHONE_NUMBER,
   };
 }
 

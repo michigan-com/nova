@@ -62,7 +62,7 @@ export default function registerRoutes(app) {
     passport.authenticate('local', (err, user) => {
       if (err || !user) return res.status(401).json({ error: 'Invalid code' });
       return req.logIn(user, (error) => {
-        if (err) return res.status(401).json({ error });
+        if (error) return res.status(401).json({ error });
         return res.status(200).json({ success: 'true' });
       });
     })(req, res, next);
