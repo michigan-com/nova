@@ -2,7 +2,7 @@
 
 import React from 'react';
 import xr from 'xr';
-import Toggle from 'material-ui/toggle';
+import Toggle from 'material-ui/Toggle';
 
 import { DEFAULT_STATE } from '../../actions/signup';
 
