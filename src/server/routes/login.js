@@ -40,7 +40,7 @@ export default function registerRoutes(app) {
         return next();
       }
 
-      const code = process.NODE_ENV === 'test' ? '1111' : generateCode();
+      const code = process.env.NODE_ENV === 'test' ? '1111' : generateCode();
       const hashedCode = hash(code);
 
       await User.updateOne({ phoneNumber }, { $set: { code: hashedCode } }, { upsert: true });
