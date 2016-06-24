@@ -1,8 +1,8 @@
 
 {
   "use": [
-        "autoprefixer",
         "postcss-import",
+        "autoprefixer",
         "postcss-mixins",
         "postcss-simple-vars",
         "postcss-nested",
