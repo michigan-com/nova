@@ -2,6 +2,7 @@
 
 export const USER_SIGNED_UP = 'USER_SIGNED_UP';
 export const USER_WANTS_BREAKING_NEWS = 'USER_WANTS_BREAKING_NEWS';
+export const USER_DOES_NOT_WANT_BREAKING_NEWS = 'USER_DOES_NOT_WANT_BREAKING_NEWS';
 
 export const CODE_INPUT_CHANGE = 'CODE_INPUT_CHANGE';
 export const CODE_GENERATED = 'CODE_GENERATED';
@@ -89,6 +90,12 @@ export function userSignedUp() {
 export function userWantsBreakingNews() {
   return {
     type: USER_WANTS_BREAKING_NEWS,
+  };
+}
+
+export function userDoesNotWantBreakingNews() {
+  return {
+    type: USER_DOES_NOT_WANT_BREAKING_NEWS,
   };
 }
 

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import xr from 'xr';
+import Toggle from 'material-ui/toggle';
 
 import { DEFAULT_STATE } from '../../actions/signup';
 
@@ -119,6 +120,20 @@ export default class PhoneNumberInput extends React.Component {
           />
         </div>
       );
+    } else {
+      content = (
+        <div className="form-header">
+          <h2 className="form-title">
+            Detroit Now uses AI to give you essential news in less time.
+          </h2>
+          <Toggle
+            defaultToggled={this.props.Signup.userWantsBreakingNews}
+            label="Subscribe To Breaking News Alerts"
+            onToggle={this.props.onBreakingNewsToggle}
+          />
+
+        </div>
+      );
     }
     return content;
   }
@@ -149,5 +164,6 @@ export default class PhoneNumberInput extends React.Component {
 PhoneNumberInput.propTypes = {
   onComplete: React.PropTypes.func.isRequired,
   onUpdate: React.PropTypes.func.isRequired,
+  onBreakingNewsToggle: React.PropTypes.func,
   Signup: React.PropTypes.shape(DEFAULT_STATE).isRequired,
 };

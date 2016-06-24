@@ -84,7 +84,6 @@ export default class ProfilePage extends React.Component {
       );
     } else {
       const userInfo = this.state.userInfo;
-      const breakingNewsStatusClass = ['breaking-news-status'];
       pageContent = (
         <div className="profile-page">
           <div className="profile-title">{`Profile page for ${userInfo.phoneNumber}`}</div>
@@ -94,12 +93,6 @@ export default class ProfilePage extends React.Component {
               defaultToggled={userInfo.breakingNewsSignup}
               label="Breaking News Alerts"
               onToggle={this.toggleBreakingNews}
-              iconStyle={{
-                textColor: 'white',
-              }}
-              style={{
-                color: 'white',
-              }}
             />
           </div>
           <div className="text-commands">
@@ -149,6 +142,7 @@ ProfilePage.propTypes = {
   User: React.PropTypes.shape(DEFAULT_USER_STATE).isRequired,
   Signup: React.PropTypes.shape(DEFAULT_SIGNUP_STATE).isRequired,
   onClose: React.PropTypes.func,
+  dispatch: React.PropTypes.func.isRequired,
 };
 
 ProfilePage.defaultProps = {

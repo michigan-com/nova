@@ -6,7 +6,8 @@ import PhoneNumberInput from './phone-number-input';
 import CodeInput from './code-input';
 import { DEFAULT_STATE, unconfirmPhoneNumber, codeValidationError, codeInputChange,
   phoneNumberInputChange, phoneNumberError, codeConfirmed,
-  confirmedPhoneNumber } from '../../actions/signup';
+  confirmedPhoneNumber, userWantsBreakingNews, userDoesNotWantBreakingNews,
+  } from '../../actions/signup';
 
 export default class Signup extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ export default class Signup extends React.Component {
 
     this.codeUpdate = this.codeUpdate.bind(this);
     this.phoneUpdate = this.phoneUpdate.bind(this);
+    this.breakingNewsToggle = this.breakingNewsToggle.bind(this);
   }
 
   codeUpdate(code, error) {
@@ -24,6 +26,11 @@ export default class Signup extends React.Component {
   phoneUpdate(phoneNumber, error) {
     if (error) this.props.dispatch(phoneNumberError(error));
     else this.props.dispatch(phoneNumberInputChange(phoneNumber));
+  }
+
+  breakingNewsToggle() {
+    if (this.props.Signup.userWantsBreakingNews) this.props.dispatch(userDoesNotWantBreakingNews());
+    else this.props.dispatch(userWantsBreakingNews());
   }
 
   renderSuccessPage() {
@@ -48,6 +55,7 @@ export default class Signup extends React.Component {
           Signup={this.props.Signup}
           onUpdate={this.phoneUpdate}
           onComplete={() => { this.props.dispatch(confirmedPhoneNumber()); }}
+          onBreakingNewsToggle={this.breakingNewsToggle}
         />
       );
     } else {

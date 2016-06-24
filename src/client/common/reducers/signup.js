@@ -3,8 +3,8 @@
 
 import { DEFAULT_STATE, USER_SIGNED_UP, USER_WANTS_BREAKING_NEWS, CODE_INPUT_CHANGE,
   CODE_GENERATED, CODE_CONFIRMED, CODE_VALIDATION_ERROR, PHONE_NUMBER_INPUT_CHANGE,
-  PHONE_NUMBER_VALIDATION_ERROR, CONFIRMED_PHONE_NUMBER, UNCONFIRM_PHONE_NUMBER }
-  from '../actions/signup';
+  PHONE_NUMBER_VALIDATION_ERROR, CONFIRMED_PHONE_NUMBER, UNCONFIRM_PHONE_NUMBER,
+  USER_DOES_NOT_WANT_BREAKING_NEWS } from '../actions/signup';
 
 export default function reducer(state = DEFAULT_STATE, action) {
   let userSignedUp;
@@ -22,6 +22,9 @@ export default function reducer(state = DEFAULT_STATE, action) {
       return { ...state, userSignedUp };
     case USER_WANTS_BREAKING_NEWS:
       userWantsBreakingNews = true;
+      return { ...state, userWantsBreakingNews };
+    case USER_DOES_NOT_WANT_BREAKING_NEWS:
+      userWantsBreakingNews = false;
       return { ...state, userWantsBreakingNews };
     case CODE_INPUT_CHANGE:
       code = action.value;

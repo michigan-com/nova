@@ -7,10 +7,9 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: black;
+  background-color: white;
   z-index: calc($active-article-z-index * 2);
   transition: top 250ms ease-out;
-  color: white;
 
   &.show {
     top: 0;
