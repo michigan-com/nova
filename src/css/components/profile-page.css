@@ -1,4 +1,5 @@
-@import base;
+@import ./base;
+@import ./signup;
 
 .profile-page-container {
   position: fixed;

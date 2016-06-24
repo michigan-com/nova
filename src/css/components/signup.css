@@ -1,4 +1,4 @@
-@import ./subpage;
+@import './base';
 
 .signup {
   width: 50%;
@@ -71,7 +71,7 @@ input[type=submit] {
   color: black;
 }
 
-.phone-number-input {
+.phone-number-signup {
   width: 100%;
 
   .form-header {

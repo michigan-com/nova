@@ -4,6 +4,10 @@ import React from 'react';
 import xr from 'xr';
 import Toggle from 'material-ui/Toggle';
 
+import Signup from './signup';
+import { DEFAULT_STATE as DEFAULT_USER_STATE } from '../actions/user';
+import { DEFAULT_SATTE as DEFAULT_SIGNUP_STATE } from '../actions/signup';
+
 export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
@@ -73,10 +77,10 @@ export default class ProfilePage extends React.Component {
     let pageContent = null;
     if (this.state.userInfo === null) {
       pageContent = (
-        <div className="login-prompt">
-          <h3>Detroit Now uses artificial intelligence to give you essential news in less time.</h3>
-          <a href="/signup/">Join Now</a>
-        </div>
+        <Signup
+          dispatch={this.props.dispatch}
+          Signup={this.props.Signup}
+        />
       );
     } else {
       const userInfo = this.state.userInfo;
@@ -142,7 +146,8 @@ export default class ProfilePage extends React.Component {
 }
 
 ProfilePage.propTypes = {
-  User: React.PropTypes.object.isRequired,
+  User: React.PropTypes.shape(DEFAULT_USER_STATE).isRequired,
+  Signup: React.PropTypes.shape(DEFAULT_SIGNUP_STATE).isRequired,
   onClose: React.PropTypes.func,
 };
 

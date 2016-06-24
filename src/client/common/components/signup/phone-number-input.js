@@ -3,9 +3,7 @@
 import React from 'react';
 import xr from 'xr';
 
-import Store from '../store';
-import { phoneNumberInputChange, phoneNumberError, confirmedPhoneNumber }
-  from '../actions/phone-number';
+import { DEFAULT_STATE } from '../../actions/signup';
 
 export default class PhoneNumberInput extends React.Component {
   constructor(props) {
@@ -22,27 +20,28 @@ export default class PhoneNumberInput extends React.Component {
     e.preventDefault();
 
     const csrf = this.csrf;
-    const phoneNumber = this.props.PhoneNumber.phoneNumber;
+    const phoneNumber = this.props.Signup.phoneNumber;
     // const code = this.state.code;
 
     if (phoneNumber.length !== 10) {
-      Store.dispatch(
-        phoneNumberError('Please include area code and phone number (10 numbers total)')
+      this.props.onUpdate(
+        phoneNumber,
+        'Please include area code and phone number (10 numbers total)'
       );
       return;
     } else if (isNaN(phoneNumber)) {
-      Store.dispatch(phoneNumberError('Only numbers, please'));
+      this.props.onUpdate(phoneNumber, 'Only numbers, please');
       return;
     }
 
     xr.post('/generate-login-code/', { phoneNumber, _csrf: csrf }).then(
       () => {
-        Store.dispatch(confirmedPhoneNumber());
+        this.props.onComplete();
       },
       (err) => {
         const resp = JSON.parse(err.response);
         const error = resp.error;
-        Store.dispatch(phoneNumberError(error));
+        this.props.onUpdate(phoneNumber, `${error}`);
       }
     );
   }
@@ -62,14 +61,15 @@ export default class PhoneNumberInput extends React.Component {
 
   checkPhoneNumber(e) {
     const keyCode = e.which || e.keyCode;
+    const newVal = String.fromCharCode(keyCode);
+    const oldNumber = this.props.Signup.phoneNumber;
+    let newNumber = oldNumber;
+
     if (keyCode === 13) return;
     if (!this.validNumberInput(e)) {
-      Store.dispatch(phoneNumberError('Numbers only, please'));
+      this.props.onUpdate(oldNumber, 'Numbers only, please');
       return;
     }
-    const newVal = String.fromCharCode(keyCode);
-    const oldNumber = this.props.PhoneNumber.phoneNumber;
-    let newNumber = oldNumber;
 
     if (keyCode === 8) {
       newNumber = oldNumber.slice(0, oldNumber.length - 1);
@@ -77,17 +77,16 @@ export default class PhoneNumberInput extends React.Component {
       if (oldNumber.length < 10) {
         newNumber += newVal;
       } else {
-        Store.dispatch(phoneNumberError('Phone numbers should be 10 numbers in length'));
+        this.props.onUpdate(oldNumber, 'Phone numbers should be 10 numbers in length');
         return;
       }
     }
-    Store.dispatch(phoneNumberError(''));
-    Store.dispatch(phoneNumberInputChange(newNumber));
+    this.props.onUpdate(newNumber, '');
   }
 
   renderFormContent() {
     let inputClass = 'input';
-    if (this.props.PhoneNumber.phoneNumberValidationError) inputClass += ' error';
+    if (this.props.Signup.phoneNumberValidationError) inputClass += ' error';
 
     return (
       <div className="form-content">
@@ -99,7 +98,7 @@ export default class PhoneNumberInput extends React.Component {
           ref={(input) => {
             if (input) input.focus();
           }}
-          value={this.props.PhoneNumber.phoneNumber}
+          value={this.props.Signup.phoneNumber}
           onKeyDown={this.checkPhoneNumber}
           placeholder="3135550123"
         />
@@ -109,7 +108,7 @@ export default class PhoneNumberInput extends React.Component {
 
   renderFormHeader() {
     let content = null;
-    if (this.props.BreakingNews.breakingNewsSignupDone) {
+    if (this.props.Signup.breakingNewsSignup) {
       content = (
         <div className="form-header">
           <h2 className="form-title">Get breaking news alerts delivered via SMS</h2>
@@ -126,7 +125,7 @@ export default class PhoneNumberInput extends React.Component {
 
   render() {
     return (
-      <div className="phone-number-input">
+      <div className="phone-number-signup">
         <div className="login-form-container">
           {this.renderFormHeader()}
           <form
@@ -137,7 +136,7 @@ export default class PhoneNumberInput extends React.Component {
           >
             {this.renderFormContent()}
             <div className="error-messages">
-              {this.props.PhoneNumber.phoneNumberValidationError}
+              {this.props.Signup.phoneNumberValidationError}
             </div>
             <input type="submit" value="Get The News" />
           </form>
@@ -148,6 +147,7 @@ export default class PhoneNumberInput extends React.Component {
 }
 
 PhoneNumberInput.propTypes = {
-  PhoneNumber: React.PropTypes.object.isRequired,
-  BreakingNews: React.PropTypes.object.isRequired,
+  onComplete: React.PropTypes.func.isRequired,
+  onUpdate: React.PropTypes.func.isRequired,
+  Signup: React.PropTypes.shape(DEFAULT_STATE).isRequired,
 };

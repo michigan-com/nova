@@ -1,14 +1,10 @@
 'use strict';
 
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import xr from 'xr';
 
-import Store from '../store';
-import { codeValidationError, codeInputChange, codeConfirmed } from '../actions/code';
-import { unconfirmPhoneNumber } from '../actions/phone-number';
-import { userSignedUp } from '../actions/breaking-news';
-import { formatPhoneNumber } from '../util/format';
+import { DEFAULT_STATE } from '../../actions/signup';
+import { formatPhoneNumber } from '../../../util/format';
 
 export default class CodeInput extends React.Component {
   constructor(props) {
@@ -20,23 +16,18 @@ export default class CodeInput extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  backToPhoneInput() {
-    Store.dispatch(unconfirmPhoneNumber());
-  }
-
   handlePostLogin() {
     // First, need to check if the user wants breaking news. If they do,
     // add them
-    if (!this.props.BreakingNews.userWantsBreakingNews) {
-      Store.dispatch(codeConfirmed());
+    if (!this.props.Signup.userWantsBreakingNews) {
+      this.props.onComplete();
       return;
     }
 
-    const phoneNumber = this.props.PhoneNumber.phoneNumber;
+    const phoneNumber = this.props.Signup.phoneNumber;
     xr.post('/breaking-news-signup/', { phoneNumber, _csrf: this.csrf }).then(
       () => {
-        Store.dispatch(userSignedUp());
-        Store.dispatch(codeConfirmed());
+        this.props.onComplete();
       },
       (err) => {
         console.error(err);
@@ -59,34 +50,34 @@ export default class CodeInput extends React.Component {
 
   checkCode(e) {
     const keyCode = e.which || e.keyCode;
+    const newVal = String.fromCharCode(keyCode);
+    const oldCode = this.props.Signup.code;
+    let newCode = oldCode;
+
     if (keyCode === 13) return;
     if (!this.validNumberInput(e)) {
-      Store.dispatch(codeValidationError('Numbers only, please'));
+      this.props.onUpdate(oldCode, 'Numbers only, please');
       return;
     }
-    const newVal = String.fromCharCode(keyCode);
-    const oldCode = this.props.Code.code;
-    let newCode = oldCode;
     if (keyCode === 8) {
       newCode = oldCode.slice(0, oldCode.length - 1);
     } else {
       if (oldCode.length < 4) {
         newCode += newVal;
       } else {
-        Store.dispatch(codeValidationError('The code should be 4 numbers in length'));
+        this.props.onUpdate(oldCode, 'The code should be 4 numbers in length');
         return;
       }
     }
-    Store.dispatch(codeValidationError(''));
-    Store.dispatch(codeInputChange(newCode));
+    this.props.onUpdate(newCode, '');
   }
 
   submitForm(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    const phoneNumber = this.props.PhoneNumber.phoneNumber;
-    const code = this.props.Code.code;
+    const phoneNumber = this.props.Signup.phoneNumber;
+    const code = this.props.Signup.code;
 
     xr.post('/login/', { phoneNumber, code, _csrf: this.csrf }).then(
       () => {
@@ -94,20 +85,20 @@ export default class CodeInput extends React.Component {
         this.handlePostLogin();
       },
       () => {
-        Store.dispatch(codeValidationError('Invalid code, please try again'));
+        this.props.onUpdate(code, 'Invalid code, please try again');
       }
     );
   }
 
   render() {
     let inputClass = 'input';
-    if (this.props.Code.codeValidationErrorMessage) inputClass += ' error';
+    if (this.props.Signup.codeValidationErrorMessage) inputClass += ' error';
 
     return (
       <div className="code-input-form">
         <h2 className="form-title">Enter the 4 digit code we texted to verify your mobile #</h2>
         <div className="current-phone-number">
-          {formatPhoneNumber(this.props.PhoneNumber.phoneNumber)}
+          {formatPhoneNumber(this.props.Signup.phoneNumber)}
         </div>
         <form
           action="/login/"
@@ -123,16 +114,16 @@ export default class CodeInput extends React.Component {
             ref={(input) => {
               if (input) input.focus();
             }}
-            value={this.props.Code.code}
+            value={this.props.Signup.code}
             onKeyDown={this.checkCode}
             placeholder="1234"
           />
 
           <div className="error-messages">
-            {this.props.Code.codeValidationErrorMessage}
+            {this.props.Signup.codeValidationErrorMessage}
           </div>
           <input type="submit" value="Verify" />
-          <div className="back-button" onClick={this.backToPhoneInput}>Back To Phone Input</div>
+          <div className="back-button" onClick={this.props.onBack}>Back To Phone Input</div>
         </form>
       </div>
     );
@@ -140,7 +131,8 @@ export default class CodeInput extends React.Component {
 }
 
 CodeInput.propTypes = {
-  Code: React.PropTypes.object.isRequired,
-  PhoneNumber: React.PropTypes.object.isRequired,
-  BreakingNews: React.PropTypes.object.isRequired,
+  Signup: React.PropTypes.shape(DEFAULT_STATE).isRequired,
+  onUpdate: React.PropTypes.func.isRequired,
+  onComplete: React.PropTypes.func.isRequired,
+  onBack: React.PropTypes.func.isRequired,
 };

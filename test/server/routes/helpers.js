@@ -14,6 +14,7 @@ export function testGetRoute(agent, route, status = 200) {
   return new Promise((resolve, reject) => {
     agent
       .get(route)
+      .on('error', (err) => { reject(err); })
       .end((err, res) => {
         if (err) return reject(err);
 
@@ -37,6 +38,7 @@ export function testExpectedRedirect(agent, route, location) {
     agent
       .get(route)
       .expect('Location', location)
+      .on('error', (err) => { reject(err); })
       .end((err, res) => {
         if (err) return reject(err);
 
@@ -62,6 +64,7 @@ export function testPostRoute(agent, route, postData = {}, status = 200) {
     agent
       .post(route)
       .send(postData)
+      .on('error', (err) => { reject(err); })
       .end((err, res) => {
         if (err) return reject(err);
         equal(res.status, status, `Status should be ${status}`);

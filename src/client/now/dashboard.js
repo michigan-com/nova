@@ -3,12 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import uaParser from 'ua-parser-js';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
 
 import Store, { DEFAULT_STATE } from './store';
 import { closeActiveArticle, startSpeedReading, stopSpeedReading }
@@ -22,6 +16,7 @@ import Header from '../common/components/header';
 import SectionFilters from './components/filters';
 import PhoneInput from './components/phone-number-input';
 import ProfilePage from '../common/components/profile-page';
+import Theme from '../common/components/mui-theme';
 
 import { appName } from '../../../config';
 
@@ -256,7 +251,9 @@ class NowDashboard extends React.Component {
             activeSectionIndex={this.props.activeSectionIndex}
           />
           <ProfilePage
+            Signup={this.props.Signup}
             User={this.props.User}
+            dispatch={Store.dispatch}
             onClose={() => { Store.dispatch(hideProfilePage()); }}
           />
         </div>
@@ -266,6 +263,29 @@ class NowDashboard extends React.Component {
     return dashboardContents;
   }
 }
+
+NowDashboard.propTypes = {
+  topArticles: React.PropTypes.array.isRequired,
+  articleLoading: React.PropTypes.bool.isRequired,
+  activeArticle: React.PropTypes.object,
+  showInput: React.PropTypes.bool,
+  dismissInput: React.PropTypes.bool,
+  expandInput: React.PropTypes.bool,
+  infoText: React.PropTypes.element,
+  clickedArticles: React.PropTypes.object, // actually a set
+  activeArticleReaders: React.PropTypes.number,
+  speedReading: React.PropTypes.bool,
+  readers: React.PropTypes.number,
+  sections: React.PropTypes.array,
+  activeSectionIndex: React.PropTypes.number,
+  User: React.PropTypes.object,
+  Signup: React.PropTypes.object,
+};
+
+NowDashboard.childContextTypes = {
+  dispatch: React.PropTypes.func,
+};
+
 
 function drawDashboard(state = DEFAULT_STATE) {
   let activeArticleReaders = 0;
@@ -281,7 +301,7 @@ function drawDashboard(state = DEFAULT_STATE) {
   }
 
   ReactDOM.render(
-    <MuiThemeProvider>
+    <Theme>
       <NowDashboard
         // Article list
         topArticles={state.ArticleList.topArticles}
@@ -308,29 +328,15 @@ function drawDashboard(state = DEFAULT_STATE) {
         // User Stuff
         User={state.User}
 
+        // Signup Stuff
+        Signup={state.Signup}
+
         key="now-dashboard"
       />
-    </MuiThemeProvider>,
+    </Theme>,
     document.getElementById('now')
   );
 }
-
-NowDashboard.propTypes = {
-  topArticles: React.PropTypes.array.isRequired,
-  articleLoading: React.PropTypes.bool.isRequired,
-  activeArticle: React.PropTypes.object,
-  showInput: React.PropTypes.bool,
-  dismissInput: React.PropTypes.bool,
-  expandInput: React.PropTypes.bool,
-  infoText: React.PropTypes.element,
-  clickedArticles: React.PropTypes.object, // actually a set
-  activeArticleReaders: React.PropTypes.number,
-  speedReading: React.PropTypes.bool,
-  readers: React.PropTypes.number,
-  User: React.PropTypes.object,
-  sections: React.PropTypes.array,
-  activeSectionIndex: React.PropTypes.number,
-};
 
 function initDashboard() {
   // Draw the inital dashboard with no articles

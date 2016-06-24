@@ -22,6 +22,11 @@ describe('Tests the login-protected user routes', function () {
       app = createApp(db, false);
       agent = request.agent(app);
 
+      let res = await User.insert({
+        phoneNumber: testPhoneNumber,
+        code: hash(testCode),
+      });
+
       done();
     }
 
@@ -29,12 +34,6 @@ describe('Tests the login-protected user routes', function () {
   }));
 
   afterEach(CatchAsync(async (done) => {
-    await db.dropDatabase();
-
-    let res = await User.insert({
-      phoneNumber: testPhoneNumber,
-      code: hash(testCode),
-    });
     done();
   }));
 
@@ -68,9 +67,8 @@ describe('Tests the login-protected user routes', function () {
     const phoneNumber = testPhoneNumber;
     const code = '1234';
     let res = await testPostRoute(agent, '/login/', { phoneNumber, code });
-    var cookies = res.headers['set-cookie'];
-    // agent.jar.setCookies(cookies);
-    // console.log('set cookies');
+    should.exist(res.headers['set-cookie']);
+    // TODO Figure out logins
     // await testGetRoute(agent, '/user/get-user-info/');
 
     done();

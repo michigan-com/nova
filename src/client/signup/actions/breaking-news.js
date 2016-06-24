@@ -31,7 +31,7 @@ export function breakingNewsSignupDone() {
 }
 
 export const DEFAULT_STATE = {
-  breakingNewsSignupComplete: breakingNewsUrlParamPresent,
+  breakingNewsSignup: breakingNewsUrlParamPresent,
   userWantsBreakingNews: breakingNewsUrlParamPresent,
   userSignedUp: false,
   userSignupError: '',
