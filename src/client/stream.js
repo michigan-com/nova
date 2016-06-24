@@ -18,7 +18,7 @@ import Dashboard from './stream/dashboard';
 import Store from './stream/store';
 import { articleSelected, closeActiveArticle } from './common/actions/active-article';
 import { articlesFetched } from './stream/actions/articles';
-import { articleIdUrlRegex } from './util/parse';
+import { articleIdUrlRegex } from './util/format';
 
 function renderDashboard() {
   let store = Store.getState();

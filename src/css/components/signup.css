@@ -4,6 +4,7 @@
   width: 50%;
   margin: 0 auto;
   padding: 20px;
+  overflow-x: auto;
 
   @media (max-width: $screen-sm) {
     width: 100%;
@@ -14,20 +15,20 @@
   }
 }
 
-
 input[type=text] {
   width: 75%;
   margin: 15px auto;
   display: block;
   font-size: 20px;
-  line-height: 30px;
-  height: 30px;
+  line-height: 35px;
+  height: 35jpx;
   border: 1px solid transparent;
   border-bottom: 1px solid $light-blue;
   outline: none !important;
+  background-color: transparent;
 
   &.error {
-    border: 1px solid $red;
+    border-bottom: 1px solid $red;
   }
 }
 
@@ -55,6 +56,13 @@ input[type=submit] {
   }
 }
 
+.code-input-form {
+  input[type=text] {
+    width: 50%;
+    text-align: center;
+  }
+}
+
 .error-messages {
   color: $red;
   font-size: 12px;
@@ -76,6 +84,7 @@ input[type=submit] {
 
   .form-header {
     width: 100%;
+
     .breaking-news-example {
       width: 75%;
       margin: 0 auto;
@@ -86,6 +95,7 @@ input[type=submit] {
 
 .form-title {
   font-weight: normal;
+  margin: 0 auto;
 }
 
 .back-button {

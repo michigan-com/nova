@@ -5,14 +5,14 @@ import xr from 'xr';
 import Toggle from 'material-ui/Toggle';
 
 import Signup from './signup';
-import { DEFAULT_STATE as DEFAULT_USER_STATE } from '../actions/user';
+import { formatPhoneNumber } from '../../util/format';
+import { DEFAULT_STATE as DEFAULT_USER_STATE, updateUserInfo, logout } from '../actions/user';
 import { DEFAULT_SATTE as DEFAULT_SIGNUP_STATE } from '../actions/signup';
 
 export default class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userInfo: null,
       loadingUserInfo: false,
     };
 
@@ -25,10 +25,11 @@ export default class ProfilePage extends React.Component {
   }
 
   toggleBreakingNews() {
-    if (this.state.userInfo === null) return;
+    const userInfo = this.props.User.userInfo;
+    if (userInfo === null) return;
 
-    const userIsSignedUp = this.state.userInfo.breakingNewsSignup;
-    const phoneNumber = this.state.userInfo.phoneNumber;
+    const userIsSignedUp = userInfo.breakingNewsSignup;
+    const phoneNumber = userInfo.phoneNumber;
     let url = '';
     if (userIsSignedUp) url = '/user/breaking-news-signup-remove/';
     else url = '/user/breaking-news-signup/';
@@ -57,7 +58,8 @@ export default class ProfilePage extends React.Component {
         } catch (e) {
           console.log(e);
         } finally {
-          this.setState({ userInfo, loadingUserInfo });
+          this.props.dispatch(updateUserInfo(userInfo));
+          this.setState({ loadingUserInfo });
         }
       },
       (e) => {
@@ -68,14 +70,14 @@ export default class ProfilePage extends React.Component {
   }
 
   renderUserInfo() {
-    if (this.state.loadingUserInfo && this.state.userInfo === null) {
+    if (this.state.loadingUserInfo && this.props.User.userInfo === null) {
       return (
         <div className="loading-user"><h3>Loading user info...</h3></div>
       );
     }
 
     let pageContent = null;
-    if (this.state.userInfo === null) {
+    if (this.props.User.userInfo === null) {
       pageContent = (
         <Signup
           dispatch={this.props.dispatch}
@@ -83,11 +85,15 @@ export default class ProfilePage extends React.Component {
         />
       );
     } else {
-      const userInfo = this.state.userInfo;
+      const userInfo = this.props.User.userInfo;
       pageContent = (
         <div className="profile-page">
-          <div className="profile-title">{`Profile page for ${userInfo.phoneNumber}`}</div>
-          <div className="profile-subtitle">Brought to you by robots</div>
+          <div className="profile-title-container">
+            <div className="profile-title">
+              {`${formatPhoneNumber(userInfo.phoneNumber)}`}
+            </div>
+            <div className="profile-subtitle">Brought to you by robots</div>
+          </div>
           <div className="breaking-news-status">
             <Toggle
               defaultToggled={userInfo.breakingNewsSignup}
@@ -99,6 +105,14 @@ export default class ProfilePage extends React.Component {
             <p>You can also text us any of these commands:</p>
             <div className="command">ALERTS ON - turn on breaking news alerts</div>
             <div className="command">ALERTS OFF - turn off breaking news alerts</div>
+          </div>
+          <div className="logout-button-container">
+            <div
+              className="logout-button"
+              onClick={() => { this.props.dispatch(logout()); }}
+            >
+              Logout
+            </div>
           </div>
         </div>
       );
@@ -113,8 +127,7 @@ export default class ProfilePage extends React.Component {
 
   renderHeader() {
     let headerText = '';
-    if (this.state.loadingUserInfo) headerText = '';
-    else if (this.state.userId === null) headerText = 'Sign Up';
+    if (this.props.User.userInfo === null) headerText = 'Sign Up';
     else headerText = 'Profile';
 
     return (
@@ -129,6 +142,7 @@ export default class ProfilePage extends React.Component {
   render() {
     const profileClassName = ['profile-page-container'];
     if (this.props.User.showProfilePage) profileClassName.push('show');
+    if (this.props.User.userInfo === null) profileClassName.push('profile-page-signup');
     return (
       <div className={profileClassName.join(' ')}>
         {this.renderHeader()}

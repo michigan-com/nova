@@ -106,7 +106,6 @@ export default class CodeInput extends React.Component {
           ref="codeInputForm"
           onSubmit={this.submitForm}
         >
-          <p>Enter verification code</p>
           <input
             type="text"
             className={inputClass}
@@ -116,7 +115,7 @@ export default class CodeInput extends React.Component {
             }}
             value={this.props.Signup.code}
             onKeyDown={this.checkCode}
-            placeholder="1234"
+            placeholder="4321"
           />
 
           <div className="error-messages">

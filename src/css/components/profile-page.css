@@ -14,6 +14,32 @@
   &.show {
     top: 0;
   }
+
+  &.profile-page-signup {
+    background: url(/img/aerial-detroit.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      background: rgba(0, 0, 0, .5);
+      width: 100%;
+      height: 100%;
+    }
+
+    .form-title {
+      margin: 10% auto;
+    }
+
+    * {
+      color: white !important;
+    }
+  }
 }
 
 .profile-page-header {
@@ -22,6 +48,7 @@
   width: 100%;
   color: white;
   position: relative;
+  z-index: 2;
 
   @media (max-width: $screen-sm) {
     height: $header-height-sm;
@@ -60,12 +87,22 @@
 .profile-page-content {
   width: 100%;
   position: relative;
+  z-index: 2;
+
+  .profile-page {
+    width: 75%;
+    margin: 0 auto;
+  }
+}
+
+.profile-title-container {
+  text-align: center;
+  margin: 15px 0px;
 
   .profile-title {
     font-size: 20px;
     line-height: 30px;
     height: 30px;
-    margin: 10px 0px;
     width: 100%;
   }
 
@@ -73,5 +110,35 @@
     font-size: 12px;
     line-height: 15px;
     height: 15px;
+  }
+
+}
+
+.breaking-news-status {
+  margin: 30px 0px;
+}
+
+.logout-button-container {
+  width: 100%;
+  margin: 20px 0px;
+
+  .logout-button {
+    width: 50%;
+    margin: 0 auto;
+    color: $light-blue;
+    border: 1px solid $light-blue;
+    background: transparent;
+    font-size: 20px;
+    line-height: 40px;
+    height: 40px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 250ms linear;
+
+    &:hover {
+      background-color: $light-blue;
+      color: white;
+    }
   }
 }

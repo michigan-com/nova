@@ -25,10 +25,9 @@ export default function registerRoutes(app) {
     });
   });
 
-  router.get('/logout/', (req, res) => {
+  router.post('/logout/', (req, res) => {
     req.logout();
-    req.flash('info', 'You have been logged out');
-    return res.redirect('/');
+    return res.status(200).json({ success: true });
   });
 
   router.post('/generate-login-code/', csrfProtection(app), (req, res, next) => {
@@ -41,7 +40,7 @@ export default function registerRoutes(app) {
         return next();
       }
 
-      const code = generateCode();
+      const code = process.NODE_ENV === 'test' ? '1111' : generateCode();
       const hashedCode = hash(code);
 
       await User.updateOne({ phoneNumber }, { $set: { code: hashedCode } }, { upsert: true });

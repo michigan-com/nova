@@ -1,7 +1,7 @@
 'use strict';
 
-export const START_BREAKING = 'START BREAKING';
-export const STOP_BREAKING = 'STOP BREAKING';
+export const ALERTS_ON = 'ALERTS ON';
+export const ALERTS_OFF = 'ALERTS OFF';
 
 // Legally required stuff
 export const HELP = 'HELP';
@@ -9,11 +9,11 @@ export const STOP = 'STOP';
 
 // outgoing Text messages
 export const USER_UNSUBSCRIBED =
-  `You have been unsubscribed from breaking news alerts.\n\nRe-subscribe using ${START_BREAKING}`;
+  `You have been unsubscribed from breaking news alerts.\n\nRe-subscribe using ${ALERTS_ON}`;
 export const USER_SUBSCRIBED =
-  `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${STOP_BREAKING}`;
+  `You have subscribed to breaking news alerts.\n\nUn-subscribe using ${ALERTS_OFF}`;
 export const HELP_RESPONSE =
-  `${START_BREAKING} - activate breaking news alerts\n${STOP_BREAKING} - stop breaking news alerts`;
+  `${ALERTS_ON} - activate breaking news alerts\n${ALERTS_OFF} - stop breaking news alerts`;
 export const COMMAND_NOT_REGOGNIZED =
   `Command not recognized:\n\n${HELP_RESPONSE}`;
 export const NO_RESP = ''; // for unsubscribing
@@ -46,10 +46,11 @@ export default async function handleResponse(db, fromNumber, message) {
   const phoneNumber = fromNumber.replace(/^\+\d/, '');
 
   let resp = COMMAND_NOT_REGOGNIZED;
-  if (compareMessages(message, STOP_BREAKING) || compareMessages(message, STOP)) {
+  if (compareMessages(message, ALERTS_OFF) || compareMessages(message, STOP)) {
     await BreakingNewsSignup.remove({ phoneNumber });
-    resp = NO_RESP;
-  } else if (compareMessages(message, START_BREAKING)) {
+    if (compareMessages(message, STOP)) resp = NO_RESP;
+    else resp = USER_UNSUBSCRIBED;
+  } else if (compareMessages(message, ALERTS_ON)) {
     await BreakingNewsSignup.updateOne({ phoneNumber }, { phoneNumber }, { upsert: true });
     resp = USER_SUBSCRIBED;
   } else if (compareMessages(message, HELP)) {

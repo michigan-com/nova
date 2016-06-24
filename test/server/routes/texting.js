@@ -8,8 +8,8 @@ import { CatchAsync } from '../../helpers';
 import { testPostRoute } from './helpers';
 import dbConnect from '../../../dist/util/db';
 import { createApp } from '../../../dist/app';
-import { START_BREAKING,
-  STOP_BREAKING,
+import { ALERTS_ON,
+  ALERTS_OFF,
   HELP,
   STOP,
   USER_UNSUBSCRIBED,
@@ -112,7 +112,7 @@ describe('Testing twilio texting routes', () => {
   it('Tests the stop commands on /handle-text-response/', CatchAsync(async (done) => {
     let stopCommands = [
       STOP,
-      STOP_BREAKING,
+      ALERTS_OFF,
     ];
     let phoneNumber = testPhoneNumber;
 
@@ -121,7 +121,8 @@ describe('Testing twilio texting routes', () => {
       let signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
       notEqual(signup, null, 'Oops, signup didnt get inserted correctly');
 
-      await testTextResponse(phoneNumber, cmd, NO_RESP);
+      if (cmd === STOP) await testTextResponse(phoneNumber, cmd, NO_RESP);
+      else await testTextResponse(phoneNumber, cmd, USER_UNSUBSCRIBED);
 
       signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
       equal(signup, null, 'Signup should no longer exist');
@@ -131,15 +132,15 @@ describe('Testing twilio texting routes', () => {
 
   it('Tests subscribing and unsubscribing through /handle-text-response/', CatchAsync(async (done) => {
     let phoneNumber = testPhoneNumber;
-    await testTextResponse(phoneNumber, START_BREAKING, USER_SUBSCRIBED);
+    await testTextResponse(phoneNumber, ALERTS_ON, USER_SUBSCRIBED);
     let signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     notEqual(signup, null, 'Oops, signup didnt get inserted correctly');
 
-    await testTextResponse(phoneNumber, STOP_BREAKING, NO_RESP);
+    await testTextResponse(phoneNumber, ALERTS_OFF, USER_UNSUBSCRIBED);
     signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     equal(signup, null, 'Signup shouldnt exist');
 
-    await testTextResponse(phoneNumber, START_BREAKING, USER_SUBSCRIBED);
+    await testTextResponse(phoneNumber, ALERTS_ON, USER_SUBSCRIBED);
     signup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
     notEqual(signup, null, 'Oops, signup didnt get inserted correctly');
 

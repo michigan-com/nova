@@ -3,12 +3,13 @@
 import { equal, notEqual } from 'assert';
 
 import handleResponse, {
-  START_BREAKING,
-  STOP_BREAKING,
+  ALERTS_ON,
+  ALERTS_OFF,
   HELP,
   STOP,
   NO_RESP,
   USER_SUBSCRIBED,
+  USER_UNSUBSCRIBED,
   COMMAND_NOT_REGOGNIZED,
   HELP_RESPONSE } from '../../../dist/texting/handle-text-response';
 import dbConnect from '../../../dist/util/db';
@@ -23,7 +24,6 @@ async function insertDummyUser(phoneNumber) {
 }
 
 describe('Testing text message handling', () => {
-
   before(CatchAsync(async (done) => {
     db = await dbConnect('mongodb://localhost:27017/nova-test');
     UserCollection = db.collection('User');
@@ -51,8 +51,8 @@ describe('Testing text message handling', () => {
       'asdfasdf',
       'query',
       "Look, just because I don't be givin' no man a foot massage don't make it right for Marsellus to throw Antwone into a glass motherfuckin' house",
-      "The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men",
-      "This gun is advertised as the most popular gun in American crime. Do you believe that shit? It actually says that in the little book that comes with it: the most popular gun in American crime. Like they're actually proud of that shit."
+      'The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men',
+      "This gun is advertised as the most popular gun in American crime. Do you believe that shit? It actually says that in the little book that comes with it: the most popular gun in American crime. Like they're actually proud of that shit.",
     ];
 
     for (let command of notRealCommands) {
@@ -64,59 +64,59 @@ describe('Testing text message handling', () => {
 
   it('Tests the help command', CatchAsync(async (done) => {
     let resp = await handleResponse(db, testPhoneNumber, HELP);
-    equal(resp, HELP_RESPONSE, `Should have responded with help command`);
+    equal(resp, HELP_RESPONSE, 'Should have responded with help command');
     done();
   }));
 
   it('Tests the stop commands', CatchAsync(async (done) => {
     let stopCommands = [
-      STOP_BREAKING,
+      ALERTS_OFF,
       STOP,
     ];
 
     for (let cmd of stopCommands) {
       let resp = await handleResponse(db, testPhoneNumber, cmd);
-      equal(resp, NO_RESP, 'Should have unsubscribed user');
+      if (cmd === ALERTS_OFF) equal(resp, USER_UNSUBSCRIBED, 'Should send a response');
+      else equal(resp, NO_RESP, 'Should not send a response');
       let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-      equal(signup, null, `Phone number shouldnt show up in collection`)
+      equal(signup, null, 'Phone number shouldnt show up in collection');
     }
     done();
   }));
 
   it('Tests the start commands', CatchAsync(async (done) => {
-    let resp = await handleResponse(db, testPhoneNumber, START_BREAKING);
+    let resp = await handleResponse(db, testPhoneNumber, ALERTS_ON);
     equal(resp, USER_SUBSCRIBED, 'Should have subscribed user');
     let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-    notEqual(signup, null, `Should have a valid signup`);
+    notEqual(signup, null, 'Should have a valid signup');
     done();
   }));
 
 
   it('Test subscribing and unsubscribing', CatchAsync(async (done) => {
     let signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-    equal(signup, null, `Phone number shouldnt show up in collection`)
+    equal(signup, null, 'Phone number shouldnt show up in collection');
 
-    let resp = await handleResponse(db, testPhoneNumber, START_BREAKING);
+    let resp = await handleResponse(db, testPhoneNumber, ALERTS_ON);
     equal(resp, USER_SUBSCRIBED, 'Should have subscribed user');
     signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-    notEqual(signup, null, `Should have a valid signup`);
+    notEqual(signup, null, 'Should have a valid signup');
 
     resp = await handleResponse(db, testPhoneNumber, STOP);
     equal(resp, NO_RESP, 'Should have unsubscribed user');
     signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-    equal(signup, null, `Phone number shouldnt show up in collection`)
+    equal(signup, null, 'Phone number shouldnt show up in collection');
 
-    resp = await handleResponse(db, testPhoneNumber, START_BREAKING);
+    resp = await handleResponse(db, testPhoneNumber, ALERTS_ON);
     equal(resp, USER_SUBSCRIBED, 'Should have subscribed user');
     signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-    notEqual(signup, null, `Should have a valid signup`);
+    notEqual(signup, null, 'Should have a valid signup');
 
-    resp = await handleResponse(db, testPhoneNumber, STOP_BREAKING);
-    equal(resp, NO_RESP, 'Should have unsubscribed user');
+    resp = await handleResponse(db, testPhoneNumber, ALERTS_OFF);
+    equal(resp, USER_UNSUBSCRIBED, 'Should have unsubscribed user');
     signup = await BreakingNewsSignup.find({ phoneNumber: testPhoneNumber }).limit(1).next();
-    equal(signup, null, `Phone number shouldnt show up in collection`)
+    equal(signup, null, 'Phone number shouldnt show up in collection');
 
     done();
   }));
-
 });

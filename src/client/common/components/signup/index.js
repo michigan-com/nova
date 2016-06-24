@@ -1,13 +1,14 @@
 'use strict';
 
 import React from 'react';
+import xr from 'xr';
 
 import PhoneNumberInput from './phone-number-input';
 import CodeInput from './code-input';
 import { DEFAULT_STATE, unconfirmPhoneNumber, codeValidationError, codeInputChange,
-  phoneNumberInputChange, phoneNumberError, codeConfirmed,
-  confirmedPhoneNumber, userWantsBreakingNews, userDoesNotWantBreakingNews,
-  } from '../../actions/signup';
+  phoneNumberInputChange, phoneNumberError, confirmedPhoneNumber,
+  userWantsBreakingNews, userDoesNotWantBreakingNews, userSignedUp } from '../../actions/signup';
+import { updateUserInfo } from '../../actions/user';
 
 export default class Signup extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class Signup extends React.Component {
     this.codeUpdate = this.codeUpdate.bind(this);
     this.phoneUpdate = this.phoneUpdate.bind(this);
     this.breakingNewsToggle = this.breakingNewsToggle.bind(this);
+    this.signupComplete = this.signupComplete.bind(this);
   }
 
   codeUpdate(code, error) {
@@ -33,6 +35,18 @@ export default class Signup extends React.Component {
     else this.props.dispatch(userWantsBreakingNews());
   }
 
+  signupComplete() {
+    this.props.dispatch(userSignedUp());
+    xr.get('/user/get-user-info/').then(
+      (resp) => {
+        this.props.dispatch(updateUserInfo(resp));
+      },
+      (err) => {
+        this.props.dispatch(codeValidationError(err));
+      }
+    );
+  }
+
   renderSuccessPage() {
     return (
       <div className="success">
@@ -43,10 +57,6 @@ export default class Signup extends React.Component {
   }
 
   renderLoginFormContent() {
-    if (this.props.Signup.codeConfirmed) {
-      return this.renderSuccessPage();
-    }
-
     let formContent = null;
     const signupState = this.props.Signup;
     if (!signupState.phoneNumberConfirmed) {
@@ -64,7 +74,7 @@ export default class Signup extends React.Component {
           Signup={this.props.Signup}
           onBack={() => { this.props.dispatch(unconfirmPhoneNumber()); }}
           onUpdate={this.codeUpdate}
-          onComplete={() => { this.props.dispatch(codeConfirmed()); }}
+          onComplete={this.signupComplete}
         />
       );
     }

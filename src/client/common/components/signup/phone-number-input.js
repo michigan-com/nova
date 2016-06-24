@@ -91,7 +91,6 @@ export default class PhoneNumberInput extends React.Component {
 
     return (
       <div className="form-content">
-        <p>Enter your mobile number</p>
         <input
           type="text"
           className={inputClass}
@@ -101,7 +100,7 @@ export default class PhoneNumberInput extends React.Component {
           }}
           value={this.props.Signup.phoneNumber}
           onKeyDown={this.checkPhoneNumber}
-          placeholder="3135550123"
+          placeholder="Enter your mobile number"
         />
       </div>
     );
@@ -126,12 +125,13 @@ export default class PhoneNumberInput extends React.Component {
           <h2 className="form-title">
             Detroit Now uses AI to give you essential news in less time.
           </h2>
-          <Toggle
-            defaultToggled={this.props.Signup.userWantsBreakingNews}
-            label="Subscribe To Breaking News Alerts"
-            onToggle={this.props.onBreakingNewsToggle}
-          />
-
+          <div className="breaking-news-status">
+            <Toggle
+              defaultToggled={this.props.Signup.userWantsBreakingNews}
+              label="Subscribe To Breaking News Alerts"
+              onToggle={this.props.onBreakingNewsToggle}
+            />
+          </div>
         </div>
       );
     }

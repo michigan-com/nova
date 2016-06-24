@@ -18,8 +18,7 @@ export default function reducer(state = DEFAULT_STATE, action) {
   let phoneNumberConfirmed;
   switch (action.type) {
     case USER_SIGNED_UP:
-      userSignedUp = true;
-      return { ...state, userSignedUp };
+      return { ...DEFAULT_STATE };
     case USER_WANTS_BREAKING_NEWS:
       userWantsBreakingNews = true;
       return { ...state, userWantsBreakingNews };
@@ -28,7 +27,8 @@ export default function reducer(state = DEFAULT_STATE, action) {
       return { ...state, userWantsBreakingNews };
     case CODE_INPUT_CHANGE:
       code = action.value;
-      return { ...state, code };
+      codeValidationErrorMessage = '';
+      return { ...state, code, codeValidationErrorMessage };
     case CODE_GENERATED:
       codeGenerated = true;
       return { ...state, codeGenerated };
@@ -40,7 +40,8 @@ export default function reducer(state = DEFAULT_STATE, action) {
       return { ...state, codeValidationErrorMessage };
     case PHONE_NUMBER_INPUT_CHANGE:
       phoneNumber = action.value;
-      return { ...state, phoneNumber };
+      phoneNumberValidationError = '';
+      return { ...state, phoneNumber, phoneNumberValidationError };
     case PHONE_NUMBER_VALIDATION_ERROR:
       phoneNumberValidationError = action.value;
       return { ...state, phoneNumberValidationError };

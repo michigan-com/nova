@@ -23,6 +23,7 @@ export default function registerRoutes(app) {
       const phoneNumber = user.phoneNumber;
       const breakingNewsSignup = await BreakingNewsSignup.find({ phoneNumber }).limit(1).next();
       const userInfo = {
+        userId: user._id,
         phoneNumber: user.phoneNumber,
         breakingNewsSignup: breakingNewsSignup !== null,
       };

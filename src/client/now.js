@@ -10,7 +10,7 @@ import Store from './now/store';
 import { closeActiveArticle, articleSelected } from './common/actions/active-article';
 import { gotTopArticles, gotQuickstats } from './now/actions/article-list';
 import { initDashboard } from './now/dashboard';
-import { articleIdUrlRegex } from './util/parse';
+import { articleIdUrlRegex } from './util/format';
 
 function historyChange() {
   const state = History.getState();
