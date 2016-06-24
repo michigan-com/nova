@@ -110,9 +110,6 @@ export default class CodeInput extends React.Component {
             type="text"
             className={inputClass}
             name="code"
-            ref={(input) => {
-              if (input) input.focus();
-            }}
             value={this.props.Signup.code}
             onKeyDown={this.checkCode}
             placeholder="4321"

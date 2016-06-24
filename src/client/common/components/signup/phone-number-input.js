@@ -95,9 +95,6 @@ export default class PhoneNumberInput extends React.Component {
           type="text"
           className={inputClass}
           name="phoneNumber"
-          ref={(input) => {
-            if (input) input.focus();
-          }}
           value={this.props.Signup.phoneNumber}
           onKeyDown={this.checkPhoneNumber}
           placeholder="Enter your mobile number"
