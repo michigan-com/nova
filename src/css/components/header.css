@@ -187,6 +187,10 @@
     margin-right: 15px;
     width: 5%;
 
+    @media (max-width: $screen-sm) {
+      margin-right: 0;
+    }
+
     .info-button {
       width: 18px;
       height: 18px;

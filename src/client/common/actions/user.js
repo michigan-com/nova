@@ -16,7 +16,6 @@ export function logout() {
   };
 }
 
-
 export function updateUserInfo(userInfo) {
   return {
     type: UPDATE_USER_INFO,

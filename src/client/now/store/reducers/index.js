@@ -7,6 +7,7 @@ import User from '../../../common/reducers/user';
 import Signup from '../../../common/reducers/signup';
 import ArticleList from './article-list';
 import PhoneNumber from './phone-number';
+import BreakingNews from './breaking-news';
 
 export default combineReducers({
   ActiveArticle,
@@ -14,4 +15,5 @@ export default combineReducers({
   PhoneNumber,
   User,
   Signup,
+  BreakingNews,
 });

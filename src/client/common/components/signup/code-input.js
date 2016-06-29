@@ -119,7 +119,7 @@ export default class CodeInput extends React.Component {
             {this.props.Signup.codeValidationErrorMessage}
           </div>
           <input type="submit" value="Verify" />
-          <div className="back-button" onClick={this.props.onBack}>Back To Phone Input</div>
+          <div className="signup-back-button" onClick={this.props.onBack}>Back To Phone Input</div>
         </form>
       </div>
     );

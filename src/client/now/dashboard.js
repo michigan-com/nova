@@ -3,11 +3,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import uaParser from 'ua-parser-js';
+import { batchActions } from 'redux-batched-actions';
 
 import Store, { DEFAULT_STATE } from './store';
 import { closeActiveArticle, startSpeedReading, stopSpeedReading }
     from '../common/actions/active-article';
 import { showProfilePage, hideProfilePage } from '../common/actions/user';
+import { regularSignup } from '../common/actions/signup';
 import InfoTile from './components/info-tile';
 import TopArticle, { getTopArticleHeight } from './components/top-article';
 import ActiveArticle from '../common/components/active-article';
@@ -16,6 +18,7 @@ import Header from '../common/components/header';
 import SectionFilters from './components/filters';
 import PhoneInput from './components/phone-number-input';
 import ProfilePage from '../common/components/profile-page';
+import BreakingNewsTile from './components/breaking-news-tile';
 import Theme from '../common/components/mui-theme';
 
 import { appName } from '../../../config';
@@ -142,11 +145,28 @@ class NowDashboard extends React.Component {
     }
 
     const topArticles = [];
+    const userLoggedIn = this.props.User.userInfo !== null;
+    const breakingNewsArticleExists = this.props.BreakingNews.breakingNewsArticles.length !== 0;
     let rank = 0;
+
+    if (breakingNewsArticleExists) {
+      topArticles.push(
+        <BreakingNewsTile
+          breakingNewsArticle={this.props.BreakingNews.breakingNewsArticles[0]}
+          windowSize={this.state.windowSize}
+          userLoggedIn={userLoggedIn}
+          key={'breaking-news-tile'}
+        />
+      );
+
+      if (userLoggedIn) rank += 1;
+      else rank += 3;
+    }
+
     for (let index = 0; index < this.props.topArticles.length; index++) {
       let article = this.props.topArticles[index];
 
-      if (rank === 3) {
+      if (rank === 3 && !breakingNewsArticleExists) {
         if (this.onDesktop && this.props.showInput && !this.props.dismissInput) {
           topArticles.push(
             <PhoneInput rank={rank} expandInput={this.props.expandInput} key="phone-input-tile" />
@@ -235,7 +255,12 @@ class NowDashboard extends React.Component {
             readers={this.props.readers}
             userId={this.props.User.userId}
             appName={appName}
-            onProfileClick={() => { Store.dispatch(showProfilePage()); }}
+            onProfileClick={() => {
+              Store.dispatch(batchActions([
+                regularSignup(),
+                showProfilePage(),
+              ]));
+            }}
           />
           <div className="definition-container">
             <div className="definitions">
@@ -280,6 +305,7 @@ NowDashboard.propTypes = {
   activeSectionIndex: React.PropTypes.number,
   User: React.PropTypes.object,
   Signup: React.PropTypes.object,
+  BreakingNews: React.PropTypes.object,
 };
 
 NowDashboard.childContextTypes = {
@@ -330,6 +356,9 @@ function drawDashboard(state = DEFAULT_STATE) {
 
         // Signup Stuff
         Signup={state.Signup}
+
+        // Breaking News Stuff
+        BreakingNews={state.BreakingNews}
 
         key="now-dashboard"
       />

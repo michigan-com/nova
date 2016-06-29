@@ -4,6 +4,9 @@ export const USER_SIGNED_UP = 'USER_SIGNED_UP';
 export const USER_WANTS_BREAKING_NEWS = 'USER_WANTS_BREAKING_NEWS';
 export const USER_DOES_NOT_WANT_BREAKING_NEWS = 'USER_DOES_NOT_WANT_BREAKING_NEWS';
 
+export const BREAKING_NEWS_SIGNUP = 'BREAKING_NEWS_SIGNUP';
+export const REGULAR_SIGNUP = 'REGULAR_SIGNUP';
+
 export const CODE_INPUT_CHANGE = 'CODE_INPUT_CHANGE';
 export const CODE_GENERATED = 'CODE_GENERATED';
 export const CODE_CONFIRMED = 'CODE_CONFIRMED';
@@ -27,6 +30,14 @@ export function validatePhoneNumber(phoneNumber) {
   if (phoneNumber.length !== 10) return 'Phone number should be 10 numbers in length';
   else if (!isNaN(phoneNumber)) return 'Only numbers in the phone number please';
   return '';
+}
+
+export function breakingNewsSignup() {
+  return { type: BREAKING_NEWS_SIGNUP };
+}
+
+export function regularSignup() {
+  return { type: REGULAR_SIGNUP };
 }
 
 export function phoneNumberInputChange(phoneNumber = '') {

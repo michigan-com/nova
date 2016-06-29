@@ -34,6 +34,14 @@
 
     .form-title {
       margin: 10% auto;
+
+      &.breaking {
+        margin: 10px auto;
+      }
+
+      @media (max-width: $screen-sm) {
+        font-size: 20px;
+      }
     }
 
     * {

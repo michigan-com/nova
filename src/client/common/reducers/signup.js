@@ -4,18 +4,12 @@
 import { DEFAULT_STATE, USER_SIGNED_UP, USER_WANTS_BREAKING_NEWS, CODE_INPUT_CHANGE,
   CODE_GENERATED, CODE_CONFIRMED, CODE_VALIDATION_ERROR, PHONE_NUMBER_INPUT_CHANGE,
   PHONE_NUMBER_VALIDATION_ERROR, CONFIRMED_PHONE_NUMBER, UNCONFIRM_PHONE_NUMBER,
-  USER_DOES_NOT_WANT_BREAKING_NEWS } from '../actions/signup';
+  USER_DOES_NOT_WANT_BREAKING_NEWS, BREAKING_NEWS_SIGNUP, REGULAR_SIGNUP,
+  } from '../actions/signup';
 
 export default function reducer(state = DEFAULT_STATE, action) {
-  let userSignedUp;
-  let userWantsBreakingNews;
-  let code;
-  let codeGenerated;
-  let codeConfirmed;
-  let codeValidationErrorMessage;
-  let phoneNumber;
-  let phoneNumberValidationError;
-  let phoneNumberConfirmed;
+  let { userWantsBreakingNews, code, codeGenerated, codeConfirmed, codeValidationErrorMessage,
+    phoneNumber, phoneNumberValidationError, phoneNumberConfirmed, breakingNewsSignup } = state;
   switch (action.type) {
     case USER_SIGNED_UP:
       return { ...DEFAULT_STATE };
@@ -51,6 +45,14 @@ export default function reducer(state = DEFAULT_STATE, action) {
     case UNCONFIRM_PHONE_NUMBER:
       phoneNumberConfirmed = false;
       return { ...state, phoneNumberConfirmed };
+    case BREAKING_NEWS_SIGNUP:
+      breakingNewsSignup = true;
+      userWantsBreakingNews = true;
+      return { ...state, breakingNewsSignup, userWantsBreakingNews };
+    case REGULAR_SIGNUP:
+      breakingNewsSignup = false;
+      userWantsBreakingNews = false;
+      return { ...state, breakingNewsSignup, userWantsBreakingNews };
     default:
       return { ...state };
   }

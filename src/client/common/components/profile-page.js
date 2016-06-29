@@ -89,9 +89,7 @@ export default class ProfilePage extends React.Component {
       pageContent = (
         <div className="profile-page">
           <div className="profile-title-container">
-            <div className="profile-title">
-              {`${formatPhoneNumber(userInfo.phoneNumber)}`}
-            </div>
+            <div className="profile-title">Profile Page</div>
             <div className="profile-subtitle">Brought to you by robots</div>
           </div>
           <div className="breaking-news-status">

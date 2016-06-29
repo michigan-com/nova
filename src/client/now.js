@@ -9,6 +9,7 @@ import Config from '../../config';
 import Store from './now/store';
 import { closeActiveArticle, articleSelected } from './common/actions/active-article';
 import { gotTopArticles, gotQuickstats } from './now/actions/article-list';
+import { updateBreakingNewsArticles } from './now/actions/breaking-news';
 import { initDashboard } from './now/dashboard';
 import { articleIdUrlRegex } from './util/format';
 
@@ -37,10 +38,16 @@ function init() {
   const socket = io(Config.socketUrl, { transports: ['websocket', 'xhr-polling'] });
   socket.emit('get_popular');
   socket.emit('get_quickstats');
+  socket.emit('get_breaking_news');
   socket.on('got_popular', (data) => {
     Store.dispatch(gotTopArticles(data.snapshot.articles));
   });
-  socket.on('got_quickstats', (data) => { Store.dispatch(gotQuickstats(data.snapshot.stats)); });
+  socket.on('got_quickstats', (data) => {
+    Store.dispatch(gotQuickstats(data.snapshot.stats));
+  });
+  socket.on('got_breaking_news', (data) => {
+    Store.dispatch(updateBreakingNewsArticles(data.snapshot.articles));
+  });
 
   // See if we have an ?articleId= url param
   const match = articleIdUrlRegex.exec(window.location.pathname);

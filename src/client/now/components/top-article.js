@@ -21,7 +21,7 @@ export function getTopArticleStyle(rank) {
     height: getTopArticleHeight(),
     marginBottom: TOP_ARTICLE_STYLE.margin,
   };
-  style.top = `${(rank * (style.height + style.marginBottom)) + style.marginBottom}px`;
+  style.top = `${(rank * (style.height + style.marginBottom))}px`;
   return style;
 }
 
@@ -50,6 +50,7 @@ export default class TopArticle extends React.Component {
   }
 
   articleClicked = () => {
+    if (this.props.disableViewing) return;
     this.setState({ articleClicked: true });
 
     // TODO this should maybe be handled by the store, so we're not waiting
@@ -99,4 +100,9 @@ TopArticle.propTypes = {
   rank: React.PropTypes.number.isRequired,
   clicked: React.PropTypes.bool.isRequired,
   windowSize: React.PropTypes.number,
+  disableViewing: React.PropTypes.bool,
+};
+
+TopArticle.defaultProps = {
+  disableViewing: false,
 };

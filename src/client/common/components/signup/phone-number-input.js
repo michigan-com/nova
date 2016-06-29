@@ -108,7 +108,7 @@ export default class PhoneNumberInput extends React.Component {
     if (this.props.Signup.breakingNewsSignup) {
       content = (
         <div className="form-header">
-          <h2 className="form-title">Get breaking news alerts delivered via SMS</h2>
+          <h2 className="form-title breaking">Get breaking news alerts delivered via SMS</h2>
           <img
             className="breaking-news-example"
             src="/img/breaking-news-example.png"
