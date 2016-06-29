@@ -3,6 +3,7 @@
 @import './components/active-article';
 @import './components/nav-controls';
 @import './components/top-article';
+@import './components/loading-image';
 @import './components/phone-number-input';
 @import './components/header';
 @import './components/loading-image';

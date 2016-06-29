@@ -72,7 +72,7 @@ export default class SpeedControl extends React.Component {
     if (this.state.drawBars) speedControlClass += ' draw';
 
     let width = SpeedControl.maxSpeed;
-    if (window.innerWidth > 768) width += (window.innerWidth * 0.75);
+    if (window.innerWidth > 768) width += (window.innerWidth);
     else width += window.innerWidth;
 
     let style = { width: `${width}px` };

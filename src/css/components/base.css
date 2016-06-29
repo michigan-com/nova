@@ -1,5 +1,7 @@
 @import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
-
+:root {
+  --active-article-top-padding: 30vh;
+}
 html {
   height: 100%;
 }
@@ -8,10 +10,12 @@ body {
   margin: 0;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Open Sans","Helvetica Neue",sans-serif;
   letter-spacing: 0;
+  font-size: calc(112.5% + 0.5vw);
   font-weight: 300;
   font-style: normal;
   text-transform: none;
   color: rgba(0,0,0,0.87);
+  -webkit-font-smoothing: antialiased;
 }
 
 *, *:before, *:after {
@@ -29,6 +33,7 @@ $light-blue: #6B9ABE;
 /* Stole from bootstrap until we decide what we wanna do */
 $screen-md: 992px;
 $screen-sm: 768px;
+$screen-lg: 1490px;
 $notdesktop: new-breakpoint(max-width 991px 12);
 $desktop: new-breakpoint(min-width 992px 12);
 $mobile: new-breakpoint(max-width 768px 12);
@@ -42,10 +47,10 @@ $article-height-lg: 100px;
 
 $active-article-z-index: 100;
 $active-image-z-index: 1;
-$article-content-padding: 15px;
-$active-article-top-padding: 30vh;
+$article-content-padding: 4vmin;
+$active-article-top-padding: 45vh;
 
-$summary-font-size: 16px;
+$summary-font-size: calc((92.5% + 0.5vw) * .8) ;
 
 /* container info */
 $header-height-sm: 60px;

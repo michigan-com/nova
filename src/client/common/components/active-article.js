@@ -3,7 +3,7 @@
 import React from 'react';
 
 import SpeedReader from './speed-reader';
-import LoadingImage from './loading-image';
+
 
 export default class ActiveArticle extends React.Component {
   constructor(props) {
@@ -17,10 +17,13 @@ export default class ActiveArticle extends React.Component {
 
       fadeOutArticle: false,
     };
+
+    this.blurPhoto = this.blurPhoto.bind(this);
+    this.photoLoaded = this.photoLoaded.bind(this);
   }
 
   componentWillMount() {
-    this.loadPhoto();
+    if (this.props.article.photo !== null) this.loadPhoto();
     document.body.scrollTop = 0;
   }
 
@@ -28,30 +31,43 @@ export default class ActiveArticle extends React.Component {
     setTimeout(() => {
       this.setState({ fadeInContent: true });
     }, 1000);
+
+    window.addEventListener('scroll', this.blurPhoto);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.blurPhoto);
   }
 
   getBackgroundStyle() {
-    const article = this.props.article;
     const style = {};
-
-    document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
-
-    if (this.state.photoLoaded && this.state.fadeInPhoto && !!article.photo) {
-      style.backgroundImage = `url(${article.photo.full.url})`;
+    style.filter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
+    style.WebkitFilter = this.state.photoBlur ? `blur(${this.state.photoBlur}px)` : 'blur(0px)';
+    if (this.state.photoLoaded) {
+      style.opacity = this.state.photoBlur ? 1 - (this.state.photoBlur / 5) : 1;
     }
+    document.body.className = document.body.className.replace(/\s*photo-loading\s*/, '');
     return style;
   }
 
-  loadPhoto() {
-    document.body.className = `${document.body.className} photo-loading`;
-    const article = this.props.article;
-    if (!article.photo) {
-      this.photoLoaded();
-      return;
+  blurPhoto() {
+    if (document.body.scrollTop >= 0) {
+      this.setState({ photoBlur: document.body.scrollTop / (window.innerHeight / 10) });
+    } else {
+      this.setState({ photoBlur: 0 });
     }
+  }
 
+  photoLoaded = () => {
+    this.setState({
+      photoLoaded: true,
+      fadeInPhoto: true,
+    });
+  }
+
+  loadPhoto() {
+    const article = this.props.article;
     const i = new Image();
-    i.onload = () => { this.photoLoaded(); };
     i.src = article.photo.full.url;
   }
 
@@ -59,14 +75,6 @@ export default class ActiveArticle extends React.Component {
     // TODO
     this.setState({ fadeOutArticle: true });
     setTimeout(() => { this.props.closeActiveArticle(this.props.article.article_id); }, 500);
-  }
-
-  photoLoaded = () => {
-    this.setState({ photoLoaded: true });
-
-    setTimeout(() => {
-      this.setState({ fadeInPhoto: true });
-    }, 500);
   }
 
   // Speed reader button changes locations based on scroll height
@@ -91,10 +99,7 @@ export default class ActiveArticle extends React.Component {
 
   render() {
     let activeArticleContainerClass = 'active-article-container';
-    let loadingImage = null;
     if (this.state.fadeInPhoto) activeArticleContainerClass += ' photo-loaded';
-    else loadingImage = <LoadingImage blurbs={[]} />;
-
     let articleImageClass = 'article-image';
     if (this.state.fadeInPhoto) articleImageClass += ' fade-in';
     else if (this.state.photoLoaded && !this.state.fadeInPhoto) articleImageClass += ' fade-out';
@@ -102,6 +107,16 @@ export default class ActiveArticle extends React.Component {
     if (this.state.fadeOutArticle) activeArticleContainerClass += ' fade-out-article';
 
     let article = this.props.article;
+    let imageWrapperStyle = {};
+    let articlePhotoUrl = '';
+    if (article.photo !== null) {
+      articlePhotoUrl = article.photo.small && window.innerWidth < 400 ?
+        article.photo.small.url : article.photo.full.url;
+      imageWrapperStyle.height = article.photo.full.width < article.photo.full.height ?
+        document.documentElement.style.setProperty('--active-article-top-padding', '60vh') :
+        document.documentElement.style.setProperty('--active-article-top-padding', '35vh');
+      imageWrapperStyle.backgroundColor = this.state.photoLoaded ? 'white' : 'inherit';
+    }
     let activeArticleClass = 'active-article';
     let articleContentClass = 'article-content';
     if (this.state.fadeImageOut) {
@@ -117,7 +132,15 @@ export default class ActiveArticle extends React.Component {
     return (
       <div className={activeArticleContainerClass} >
         <div className={activeArticleClass} ref="active-article">
-          <div className={articleImageClass} style={this.getBackgroundStyle()}>{loadingImage}</div>
+          <div className="image-wrapper" style={imageWrapperStyle} >
+            <img
+              alt={articlePhotoUrl}
+              src={articlePhotoUrl}
+              className={articleImageClass}
+              style={this.getBackgroundStyle()}
+              onLoad={this.photoLoaded}
+            />
+          </div>
           <div className="article-content-container" ref="article-content-container">
             <div className={articleContentClass} ref="article-content">
               {this.renderReaders()}

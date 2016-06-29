@@ -48,6 +48,7 @@ export default function configureMiddleware(app) {
     res.locals.brandIcon = Config.brandIcon || 'rabbit';
     res.locals.userId = req.user ? req.user._id : '';
     res.locals.config = { ...Config };
+    res.locals.node_env = process.env.NODE_ENV;
     next();
   });
 }

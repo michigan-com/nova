@@ -107,7 +107,7 @@ export default class SpeedReader extends React.Component {
     const currentScrollTop = body.scrollTop;
 
     // this means the user is trying to scroll up, so just let them already
-    // if (currentScrollTop < lastScrollTop) return;
+    if (currentScrollTop < lastScrollTop - 15) return;
 
     const scrollTopGoal = document.body.clientHeight - window.innerHeight;
     const remaining = scrollTopGoal - currentScrollTop;
@@ -439,8 +439,8 @@ export default class SpeedReader extends React.Component {
             {this.renderControls()}
             <div className="wpm" ref="wpm"></div>
           </div>
-          {this.renderSpeedControl()}
         </div>
+        {this.renderSpeedControl()}
       </div>
     );
   }

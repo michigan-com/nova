@@ -43,10 +43,10 @@ $context-menu-height: calc($controls-height * .8);
   position: fixed;
   left: 0;
   bottom: 0;
-  width: 100px;
   height: 50px;
   padding: 5px 10px;
   z-index: calc($active-article-z-index + 2);
+  user-select: none;
 
   .back-button {
     display: flex;
@@ -58,12 +58,12 @@ $context-menu-height: calc($controls-height * .8);
     background-color: #323232;
     color: white;
     border-radius: 20px;
-    padding: 5px;
+    padding: .5em;
     text-align: center;
     cursor: pointer;
 
     .fa {
-      padding-left: 5px;
+      padding-right: .2em;
     }
 
     .text {

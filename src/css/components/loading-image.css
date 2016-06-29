@@ -1,54 +1,67 @@
 @import './base';
-@import '../animations/pulse';
 
-/** Loading image */
-.loading-image-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 50%;
-  height: 100%;
-  margin: 0 auto;
-  opacity: 1;
-  transition: opacity 500ms linear;
+@-webkit-keyframes line-scale-party {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1); }
+  50% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5); }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
 
-  @media (max-width: $screen-sm) {
-    width: 100%;
-  }
-
-
-  &.fade-out {
-    opacity: 0;
-  }
+@keyframes line-scale-party {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1); }
+  50% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5); }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
+.line-scale-party > div:nth-child(1) {
+  -webkit-animation-delay: -0.05s;
+          animation-delay: -0.05s;
+  -webkit-animation-duration: 0.97s;
+          animation-duration: 0.97s; }
+.line-scale-party > div:nth-child(2) {
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+  -webkit-animation-duration: 0.67s;
+          animation-duration: 0.67s; }
+.line-scale-party > div:nth-child(3) {
+  -webkit-animation-delay: 0.57s;
+          animation-delay: 0.57s;
+  -webkit-animation-duration: 1.29s;
+          animation-duration: 1.29s; }
+.line-scale-party > div:nth-child(4) {
+  -webkit-animation-delay: 0.42s;
+          animation-delay: 0.42s;
+  -webkit-animation-duration: 1.13s;
+          animation-duration: 1.13s; }
+.line-scale-party > div {
+  background-color: $red;
+  width: 4px;
+  height: 35px;
+  border-radius: 2px;
+  margin: 2px;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  display: inline-block;
+  -webkit-animation-name: line-scale-party;
+          animation-name: line-scale-party;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-delay: 0;
+          animation-delay: 0; }
+.line-scale-party {
+    margin: 20px auto;
+    width: 35px;
+    transform: rotate(90deg) scale(2);
 }
-
-.loading-image {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.blurb-container {
   text-align: center;
-  width: 100%;
-
-  .blurb-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: 30px;
-    margin-bottom: 15px;
-  }
-
-  .loading-bars-container {
-    .bar {
-      background-color: $red;
-      height: 10px;
-      max-width: 10%;
-      min-width: 100px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-
-      &.pulse {
-        @extend pulse;
-      }
-    }
-  }
+  margin-bottom: 2em;
 }
