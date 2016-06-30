@@ -1,16 +1,18 @@
 'use strict';
 
 import io from 'socket.io-client';
+import xr from 'xr';
 
 /** Browser history stuff */
 require('historyjs/scripts/bundled/html4+html5/native.history.js');
 
 import Config from '../../config';
-import Store from './now/store';
-import { closeActiveArticle, articleSelected } from './common/actions/active-article';
-import { gotTopArticles, gotQuickstats } from './now/actions/article-list';
-import { updateBreakingNewsArticles } from './now/actions/breaking-news';
-import { initDashboard } from './now/dashboard';
+import Store from './store';
+import { closeActiveArticle, articleSelected } from './actions/active-article';
+import { gotTopArticles, gotQuickstats } from './actions/article-list';
+import { updateBreakingNewsArticles } from './actions/breaking-news';
+import { streamArticlesFetched } from './actions/stream-articles';
+import { initDashboard } from './components/dashboard';
 import { articleIdUrlRegex } from './util/format';
 
 function historyChange() {
@@ -48,6 +50,18 @@ function init() {
   socket.on('got_breaking_news', (data) => {
     Store.dispatch(updateBreakingNewsArticles(data.snapshot.articles));
   });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  xr.get(`${Config.socketUrl}/v1/article/?fromDate=${today}`)
+    .then((resp) => {
+      const articles = resp.sort((a, b) => (
+        new Date(b.created_at)) - (new Date(a.created_at)
+      ));
+      Store.dispatch(streamArticlesFetched(articles));
+    }, (err) => {
+      console.log(`something went wrong: ${err}`);
+    });
 
   // See if we have an ?articleId= url param
   const match = articleIdUrlRegex.exec(window.location.pathname);

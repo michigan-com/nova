@@ -57,9 +57,11 @@ $header-height-sm: 60px;
 $header-height-lg: 100px;
 $header-z-index: calc($active-article-z-index / 2);
 
-$filter-height: 65px;
+$filter-height: 85px;
 $filter-circle-height: calc($filter-height * .5);
 $filter-name-height: calc($filter-height * .3);
+
+$nav-height: 50px;
 
 $top-article-z-index: $active-article-z-index;
 

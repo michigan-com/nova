@@ -1,0 +1,61 @@
+@import ./base;
+@import ./filters;
+
+.user-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  & {
+    z-index: calc($header-z-index);
+
+    .nav-options {
+      z-index: 2;
+    }
+
+    .filters-container {
+      z-index: 1;
+    }
+  }
+}
+
+.nav-options {
+  position: relative;
+  height: $nav-height;
+  width: 100%;
+
+  .nav-option {
+    background: $red;
+    display: inline-block;
+    float: left;
+    width: 50%;
+    border-bottom: 5px solid $red;
+    cursor: pointer;
+    height: $nav-height;
+    color: white;
+    transition: border 250ms linear;
+
+    &:first-child {
+      border-right: 1px solid rgba(0, 0, 0, 0.08)
+    }
+
+    .nav-option-display-name {
+      height: $nav-height;
+      line-height: $nav-height;
+      width: 100%;
+      text-align: center;
+      opacity: .5;
+      text-transform: uppercase;
+      transition: opacity 250ms linear;
+    }
+
+    &.active {
+      border-bottom: 5px solid white;
+
+      .nav-option-display-name {
+        opacity: 1;
+      }
+    }
+  }
+}

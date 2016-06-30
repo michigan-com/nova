@@ -1,0 +1,114 @@
+@import ./base;
+
+$filter-background: rgb(117, 117, 117);
+
+.filters-container {
+  width: 100%;
+  position: fixed;
+  bottom: $nav-height;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: $filter-height;
+  background-color:$filter-background;
+  box-shadow: 0px -2px 6px 0px rgba(0,0,0,0.20);
+  padding: 5px 0px;
+  transition: bottom 250ms linear;
+
+  .includes {
+    font-size: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
+    padding: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: top 500ms ease-in;
+
+    @media (max-width: $screen-sm) {
+      width: 100%;
+    }
+  }
+}
+
+.section-filter {
+  width: calc($filter-height);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  cursor: pointer;
+  opacity: .38;
+  transition: all 150ms linear;
+
+  &.active {
+    opacity: 1;
+    .active-icon {
+      opacity: 1 !important;
+    }
+
+    .icon {
+      opacity: 0 !important;
+    }
+  }
+
+  .section-circle {
+    height: calc($filter-height * .3);
+    width: calc($filter-height * .3);
+    cursor: pointer;
+    position: relative;
+
+    .icon, .active-icon {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 250ms linear;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      text-align: center;
+      border-radius: 50%;
+      border: 1px solid white;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .icon {
+      background: white;
+      opacity: 1;
+    }
+
+    .active-icon {
+      background-color: transparent;
+      color: white;
+      opacity: 0;
+    }
+  }
+
+  .section-filter-name {
+    font-size: calc($filter-name-height * .5);
+    text-transform: uppercase;
+    margin: 0 auto;
+    font-weight: 400;
+    color: white;
+
+    @media (max-width: $screen-sm) {
+      font-size: calc($filter-name-height * .5)
+    }
+  }
+}

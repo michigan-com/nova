@@ -1,5 +1,24 @@
 @import './base';
 
+.loading-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  margin: 0 auto;
+  opacity: 1;
+  transition: opacity 500ms linear;
+
+  @media (max-width: $screen-sm) {
+    width: 100%;
+  }
+
+  &.fade-out {
+    opacity: 0;
+  }
+}
+
 @-webkit-keyframes line-scale-party {
   0% {
     -webkit-transform: scale(1);
