@@ -1,6 +1,9 @@
-extends ./subpage
+extends ./layout
 
-block subpage-content
+block content
+  .header
+    .app-name #{appName}
+    
   #pricing-container
     table#pricing
       thead.table-header

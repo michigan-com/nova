@@ -1,6 +1,29 @@
-@import ./subpage;
+@import ./components/base;
+@import ./components/header;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background-color: $red;
+  height: 50px;
+
+  .app-name {
+    font-size: 35px;
+    line-height: 50px;
+    height: 50px;
+    text-align: center;
+    color: white;
+    width: 100%;
+    font-family: 'Open Sans';
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+}
 
 #pricing-container {
+  margin-top: 60px;
   width: 100%;
   padding: 20px;
 }
@@ -50,6 +73,3 @@
     width: 90%;
   }
 }
-
-
-

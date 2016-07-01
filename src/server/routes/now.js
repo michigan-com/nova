@@ -19,13 +19,6 @@ export default function registerRoutes(app) {
     });
   });
 
-  // TODO login required
-  router.get('/stream/', (req, res) => {
-    res.render('stream', {
-      title: Config.appName,
-    });
-  });
-
   router.get('/article/:articleId/', csrfProtection(app), (req, res, next) => {
     const articleId = req.params.articleId;
     if (isNaN(articleId)) {
@@ -62,7 +55,9 @@ export default function registerRoutes(app) {
   });
 
   router.get('/pricing/', (req, res) => {
-    res.render('pricing');
+    res.render('pricing', {
+      appName: Config.appName,
+    });
   });
 
   app.use('/', router);
