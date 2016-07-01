@@ -6,6 +6,10 @@ import moment from 'moment';
 import Store from '../store';
 import { articleSelected } from '../actions/active-article';
 
+export const STREAM_ARTICLE_STYLE = {
+  height: '75px',
+};
+
 export default class StreamArticle extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +23,7 @@ export default class StreamArticle extends React.Component {
   getArticleStyle() {
     const rank = this.props.rank;
     const style = {
-      height: '75px',
+      ...STREAM_ARTICLE_STYLE,
       animationDelay: `${rank * 50}ms`,
     };
 
@@ -29,7 +33,7 @@ export default class StreamArticle extends React.Component {
   renderImage() {
     const article = this.props.article;
     let style = {};
-    if (article.photo != null) style.backgroundImage = `url(${article.photo.thumbnail.url})`;
+    if (article.photo != null) style.backgroundImage = `url(${article.photo.small.url})`;
 
     return (
       <div className="photo-container" style={style}>

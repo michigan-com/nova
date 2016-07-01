@@ -191,9 +191,11 @@ body {
   padding: 5px;
   background-color: $red;
   color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
   @media (max-width: $screen-sm) {
-    width: 50%;
+    width: 100%;
     top: $header-height-sm;
   }
 

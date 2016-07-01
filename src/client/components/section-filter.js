@@ -15,8 +15,8 @@ export default class SectionFilter extends React.Component {
     if (this.props.active) sectionFilterClass += ' active';
 
     return (
-      <div className={sectionFilterClass}>
-        <div className="section-circle" onClick={this.toggleFilter}>
+      <div className={sectionFilterClass} onClick={this.toggleFilter}>
+        <div className="section-circle">
           <div className="icon">
             <img src={`/img/${this.props.name}.svg`} alt={`${this.props.name}`} />
           </div>

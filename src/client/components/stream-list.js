@@ -17,7 +17,7 @@ export default class Dashboard extends React.Component {
     super(props);
 
     this.state = {
-      articlesLoaded: false,
+      articlesLoaded: !!this.props.StreamArticles.articles.length,
       fadeOutLoading: false,
       timeFrame: '',
     };
@@ -29,12 +29,21 @@ export default class Dashboard extends React.Component {
 
   componentWillMount() {
     this.registerScrollHandlers();
+    if (this.props.StreamArticles.articles.length) {
+      this.setTimeFrame(this.props.StreamArticles.articles[0]);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    const articles = nextProps.StreamArticles.articles;
-    if (articles.length && !this.state.fadeOutLoading) {
-      this.setTimeFrame(articles[0]);
+    const nextArticles = nextProps.StreamArticles.articles;
+    const thisArticles = this.props.StreamArticles.articles;
+
+    if (!thisArticles.length !== nextArticles.length) {
+      this.checkScroll();
+    }
+
+    if (!thisArticles.length && nextArticles.length) {
+      this.setTimeFrame(nextArticles[0]);
       this.setState({ fadeOutLoading: true });
       setTimeout(() => {
         this.setState({ articlesLoaded: true });
@@ -47,17 +56,36 @@ export default class Dashboard extends React.Component {
   }
 
   setTimeFrame(article) {
-    let timeFrame = moment(article.created_at);
-    const minute = timeFrame.minute();
-    if (minute <= 15) {
-      timeFrame = timeFrame.startOf('hour');
-    } else if (minute > 15 && minute < 45) {
-      timeFrame.minute(30);
-    } else {
-      timeFrame = timeFrame.add('1', 'hour').startOf('hour');
+    const now = new Date();
+    const currentArticleTime = moment(article.created_at);
+    const ONE_MINUTE = 1000 * 60;
+    const ONE_HOUR = ONE_MINUTE * 60;
+    const ONE_DAY = ONE_HOUR * 24;
+    let delta = now - currentArticleTime;
+
+    const timeFrameValues = [];
+    if (delta > ONE_DAY) {
+      const numDays = Math.round(delta / ONE_DAY);
+      const append = numDays <= 1 ? 'day' : 'days';
+      timeFrameValues.push(`${numDays} ${append}`);
+      delta -= (numDays * ONE_DAY);
+    }
+    if (delta > ONE_HOUR) {
+      const numHours = Math.round(delta / ONE_HOUR);
+      const append = numHours <= 1 ? 'hour' : 'hours';
+      timeFrameValues.push(`${numHours} ${append}`);
+      delta -= (numHours * ONE_HOUR);
+    }
+    if (delta > ONE_MINUTE) {
+      const numMinutes = Math.round(delta / ONE_MINUTE);
+      const append = numMinutes <= 1 ? 'minute' : 'minutes';
+      timeFrameValues.push(`${numMinutes} ${append}`);
     }
 
-    timeFrame = timeFrame.format('MMMM Do YYYY, h:mm a');
+    if (timeFrameValues.length === 0) timeFrameValues.push('Now!');
+    else timeFrameValues.push('ago');
+
+    const timeFrame = timeFrameValues.join(' ');
     this.setState({ timeFrame });
   }
 
@@ -106,7 +134,7 @@ export default class Dashboard extends React.Component {
     }
 
     return (
-      <div className="articles">
+      <div className="articles" style={{ marginBottom: '100px' }}>
         <Infinite
           containerHeight={articleComponents.length * 75}
           elementHeight={75}
@@ -122,7 +150,7 @@ export default class Dashboard extends React.Component {
   renderTime() {
     return (
       <div className="time-frame">
-        <div className="blurb">Vieweing articles published around</div>
+        <div className="blurb">Viewing articles published</div>
         <div className="time-frame-time">{this.state.timeFrame}</div>
       </div>
     );

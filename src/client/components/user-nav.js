@@ -69,7 +69,7 @@ UserNav.navOptionDisplayNames = {
 
 UserNav.propTypes = {
   sections: React.PropTypes.array.isRequired,
-  Nav: React.PropTypes.obj,
+  Nav: React.PropTypes.object.isRequired,
 };
 
 UserNav.contextTypes = {

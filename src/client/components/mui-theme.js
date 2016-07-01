@@ -25,3 +25,7 @@ export default function MuiTheme(props) {
     </MuiThemeProvider>
   );
 }
+
+MuiTheme.propTypes = {
+  children: React.PropTypes.object,
+};

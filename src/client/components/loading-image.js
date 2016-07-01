@@ -27,10 +27,10 @@ export default class LoadingImage extends React.Component {
           {this.props.blurbs[this.state.blurbIndex]}
         </div>
         <div className="loading-bars-container line-scale-party">
-          <div> </div>
-          <div> </div>
-          <div> </div>
-          <div> </div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </div>
     );

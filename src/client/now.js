@@ -29,6 +29,22 @@ function historyChange() {
   }
 }
 
+function fetchStreamArticles() {
+  console.log('fetching articles');
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+  xr.get(`${Config.socketUrl}/v1/article/?fromDate=${yesterday}`)
+    .then((resp) => {
+      const articles = resp.sort((a, b) => (
+        new Date(b.created_at)) - (new Date(a.created_at)
+      ));
+      Store.dispatch(streamArticlesFetched(articles));
+    }, (err) => {
+      console.log('something went wrong:', err);
+    });
+}
+
 function init() {
   // Initialize the dashboard, will subscribe to Dispatcher events
   initDashboard();
@@ -51,17 +67,9 @@ function init() {
     Store.dispatch(updateBreakingNewsArticles(data.snapshot.articles));
   });
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  xr.get(`${Config.socketUrl}/v1/article/?fromDate=${today}`)
-    .then((resp) => {
-      const articles = resp.sort((a, b) => (
-        new Date(b.created_at)) - (new Date(a.created_at)
-      ));
-      Store.dispatch(streamArticlesFetched(articles));
-    }, (err) => {
-      console.log(`something went wrong: ${err}`);
-    });
+
+  fetchStreamArticles();
+  setInterval(fetchStreamArticles, 1000 * 60 * 2); // 2 minutes
 
   // See if we have an ?articleId= url param
   const match = articleIdUrlRegex.exec(window.location.pathname);

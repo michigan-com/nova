@@ -43,17 +43,6 @@ export default class TopArticleList extends React.Component {
     }
   }
 
-  // Save what articles are currently drawn
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.activeArticleClose && this.state.activeArticleClose) {
-      document.body.scrollTop = this.lastScrollTop;
-      setTimeout(() => {
-        this.setState({ activeArticleClose: false });
-      }, 250);
-    }
-  }
-
-
   renderArticles() {
     if (this.state.articlesLoading || !this.props.ArticleList.topArticles.length) {
       let className = 'loading-image-container';

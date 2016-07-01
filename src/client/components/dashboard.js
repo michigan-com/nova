@@ -39,7 +39,6 @@ class Dashboard extends React.Component {
 
     this.state = {
       windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall,
-      showInfo: false,
       activeArticleClose: false,
     };
   }
@@ -55,8 +54,34 @@ class Dashboard extends React.Component {
       this.lastScrollTop = document.body.scrollTop;
       document.body.scrollTop = 0;
     }
+
+    // We closed the active article
+    if (!!this.props.ActiveArticle.activeArticle && !nextProps.ActiveArticle.activeArticle) {
+      document.body.scrollTop = this.lastScrollTop;
+      this.setState({ activeArticleClose: true });
+    } else if (this.props.ActiveArticle.articleLoading && !nextProps.ActiveArticle.articleLoading
+      && !nextProps.ActiveArticle.activeArticle) {
+      this.setState({ activeArticleClose: true });
+      document.body.scrollTop = this.lastScrollTop;
+    }
   }
 
+  componentDidUpdate(prevProps) {
+    // We closed the active article
+    if (!!prevProps.ActiveArticle.activeArticle && !this.props.ActiveArticle.activeArticle) {
+      document.body.scrollTop = this.lastScrollTop;
+    } else if (prevProps.ActiveArticle.articleLoading && !this.props.ActiveArticle.articleLoading
+      && !this.props.ActiveArticle.activeArticle) {
+      document.body.scrollTop = this.lastScrollTop;
+    }
+  }
+
+  // // Save what articles are currently drawn
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (!prevState.activeArticleClose && this.state.activeArticleClose) {
+  //     document.body.scrollTop = this.lastScrollTop;
+  //   }
+  // }
 
   /**
    *  Determins if we need to show a input box for phone numbers. If on desktop,

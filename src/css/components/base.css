@@ -53,15 +53,15 @@ $active-article-top-padding: 45vh;
 $summary-font-size: calc((92.5% + 0.5vw) * .8) ;
 
 /* container info */
-$header-height-sm: 60px;
-$header-height-lg: 100px;
+$header-height-sm: 50px;
+$header-height-lg: 75px;
 $header-z-index: calc($active-article-z-index / 2);
 
-$filter-height: 85px;
+$filter-height: 60px;
 $filter-circle-height: calc($filter-height * .5);
 $filter-name-height: calc($filter-height * .3);
 
-$nav-height: 50px;
+$nav-height: 40px;
 
 $top-article-z-index: $active-article-z-index;
 
