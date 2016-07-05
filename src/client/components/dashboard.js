@@ -132,7 +132,7 @@ class Dashboard extends React.Component {
         <div className="dashboard-container">
           <ActiveArticle
             article={this.props.ActiveArticle.activeArticle}
-            readers={this.props.ActiveArticle.activeArticleReaders}
+            readers={this.props.activeArticleReaders}
             speedReading={this.props.ActiveArticle.speedReading}
             closeActiveArticle={this.closeActiveArticle}
             startSpeedReading={this.startSpeedReading}
@@ -201,6 +201,7 @@ Dashboard.propTypes = {
   User: React.PropTypes.object.isRequired,
   Nav: React.PropTypes.object.isRequired,
   StreamArticles: React.PropTypes.object.isRequired,
+  activeArticleReaders: React.PropTypes.number,
 };
 
 Dashboard.childContextTypes = {

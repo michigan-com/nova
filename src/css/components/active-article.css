@@ -23,11 +23,19 @@ body.photo-loading {
   }
 
   &.portrait {
-    padding-top: 60vh;
+    padding-top: calc(60vh - 80px);
+
+    .image-wrapper {
+      height: calc(60vh + 5vh);
+    }
   }
 
   &.landscape {
-    padding-top: 35vh;
+    padding-top: calc(35vh - 80px);
+
+    .image-wrapper {
+      height: calc(35vh + 5vh);
+    }
   }
 
   &.photo-loaded {
