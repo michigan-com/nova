@@ -16,7 +16,7 @@ export function csrfProtection(app) {
   if (shouldCsrf) {
     return csrf({ cookie: true });
   } else {
-    return function (req, res, next) {
+    return (req, res, next) => {
       next();
     };
   }

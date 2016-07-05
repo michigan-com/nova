@@ -91,9 +91,9 @@ export default class Dashboard extends React.Component {
 
   checkScroll = () => {
     const articles = this.props.StreamArticles.articles;
-    if (!articles.length) return;
-
     const list = findDOMNode(this.articleList);
+    if (!articles.length || !list) return;
+
     const percentScrolled = window.scrollY / list.clientHeight;
     const articleIndex = Math.round(articles.length * percentScrolled);
     this.setTimeFrame(articles[articleIndex]);

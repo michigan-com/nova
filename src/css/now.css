@@ -102,7 +102,8 @@ body {
 
   .signup-prompt {
     text-align: center;
-    width: 100%;
+    width: 95%;
+    margin: 0 auto;
 
     .signup-button {
       width: 200px;

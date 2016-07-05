@@ -90,7 +90,7 @@ export default class PhoneNumberInput extends React.Component {
     return (
       <div className="form-content">
         <input
-          type="text"
+          type="tel"
           className={inputClass}
           name="phoneNumber"
           value={this.props.Signup.phoneNumber}

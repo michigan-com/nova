@@ -15,7 +15,7 @@
   }
 }
 
-input[type=text] {
+input[type=text], input[type=tel] {
   width: 75%;
   margin: 15px auto;
   display: block;
@@ -57,7 +57,7 @@ input[type=submit] {
 }
 
 .code-input-form {
-  input[type=text] {
+  input[type=tel] {
     width: 50%;
     text-align: center;
   }

@@ -63,8 +63,8 @@ export default class UserNav extends React.Component {
 
 UserNav.navOptions = [TOP_ARTICLES, STREAM_ARTICLES];
 UserNav.navOptionDisplayNames = {
-  TOP_ARTICLES: 'Top',
-  STREAM_ARTICLES: 'Stream',
+  TOP_ARTICLES: 'Now',
+  STREAM_ARTICLES: 'Recent',
 };
 
 UserNav.propTypes = {

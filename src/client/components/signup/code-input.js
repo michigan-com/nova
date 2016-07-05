@@ -106,7 +106,7 @@ export default class CodeInput extends React.Component {
           onSubmit={this.submitForm}
         >
           <input
-            type="text"
+            type="tel"
             className={inputClass}
             name="code"
             value={this.props.Signup.code}
