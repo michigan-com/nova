@@ -10,7 +10,6 @@ body.photo-loading {
 .active-article-container {
   width: 100%;
   margin: 0 auto;
-  padding-top: calc(var(--active-article-top-padding) - 80px);
   z-index: $active-article-z-index;
   align-items: center;
   color: black;
@@ -21,6 +20,14 @@ body.photo-loading {
 
   @media (max-width: $screen-sm) {
     width: 100%;
+  }
+
+  &.portrait {
+    padding-top: 60vh;
+  }
+
+  &.landscape {
+    padding-top: 35vh;
   }
 
   &.photo-loaded {
@@ -63,7 +70,6 @@ body.photo-loading {
     right:0;
     overflow: hidden;
     background-color: #b99796;
-    height: calc(var(--active-article-top-padding) + 5vh);
     width: 100%;
   }
   .article-image {
