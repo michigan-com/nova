@@ -13,6 +13,14 @@
   h2 {
     text-align: center;
   }
+
+  * {
+    color: white;
+  }
+
+  label {
+    color: white !important;
+  }
 }
 
 input[type=text], input[type=tel] {
@@ -45,6 +53,7 @@ input[type=submit] {
   display: block;
   margin: 0 auto;
   cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, .5);
   transition: background-color 200ms linear;
 
   @media (max-width: $screen-sm) {
@@ -64,7 +73,7 @@ input[type=submit] {
 }
 
 .error-messages {
-  color: $red;
+  color: $red !important;
   font-size: 12px;
   margin-top: 10px;
   margin-bottom: 20px;

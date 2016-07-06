@@ -76,13 +76,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  // // Save what articles are currently drawn
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (!prevState.activeArticleClose && this.state.activeArticleClose) {
-  //     document.body.scrollTop = this.lastScrollTop;
-  //   }
-  // }
-
   /**
    *  Determins if we need to show a input box for phone numbers. If on desktop,
    *  show the input. Else, don't show input
