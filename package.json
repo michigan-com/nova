@@ -5,7 +5,7 @@
   "scripts": {
     "test": "mocha",
     "build:dev": "npm run build:server; npm run build:js; npm run build:css",
-    "build:js:min": "globify -g uglifyify \"src/client/*.js\" --outfile=public/js",
+    "build:js:min": "NODE_ENV=production globify -g uglifyify \"src/client/*.js\" --outfile=public/js",
     "build:css:min": "echo \"console.log('CSS DOES NOT MINIFY YET (figure me out)!')\" | node & npm run build:css",
     "build:min": "npm run build:server; npm run build:js:min; npm run build:css:min",
     "build:js": "globify -d \"src/client/*.js\" --outfile=public/js",
