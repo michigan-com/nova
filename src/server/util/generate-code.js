@@ -3,7 +3,7 @@
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
  */
-function generateRandomNumber(min, max) {
+export function generateRandomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
 

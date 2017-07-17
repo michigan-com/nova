@@ -27,8 +27,8 @@ let loadingBlurbs = [
   'Speed reader revving up...',
   'Greasing the speed reader...',
   'Shaving demands on your attention...',
-  'Compressing time requirements...'
-]
+  'Compressing time requirements...',
+];
 
 class NowDashboard extends React.Component {
   constructor(props) {
@@ -50,8 +50,8 @@ class NowDashboard extends React.Component {
       articlesLoading: true,
       windowSize: window.innerWidth > 992 ? this.windowMid : this.windowSmall,
       showInfo: false,
-      activeArticleClose: false
-    }
+      activeArticleClose: false,
+    };
   }
 
   /**
@@ -70,11 +70,11 @@ class NowDashboard extends React.Component {
 
     if (this.prevWindowWidth <= this.windowMid &&
         currentWidth > this.windowMid) {
-      this.setState({ windowSize: this.windowSmall })
+      this.setState({ windowSize: this.windowSmall });
     }
     else if (this.prevWindowWidth > this.windowMid &&
         currentWidth <= this.windowMid) {
-      this.setState({ windowSize: this.windowMid })
+      this.setState({ windowSize: this.windowMid });
     }
     this.prevWindowWidth = currentWidth;
   }
@@ -88,9 +88,8 @@ class NowDashboard extends React.Component {
     }
 
     // So we don't lose our place in the list
-    //if ((nextProps.activeArticle && !this.props.activeArticle)) {
-    if(nextProps.articleLoading && !this.props.articleLoading) {
-
+    // if ((nextProps.activeArticle && !this.props.activeArticle)) {
+    if (nextProps.articleLoading && !this.props.articleLoading) {
       this.lastScrollTop = document.body.scrollTop;
       document.body.scrollTop = 0;
     }
@@ -136,10 +135,10 @@ class NowDashboard extends React.Component {
       let className = 'loading-image-container';
       if (this.state.fadeOutLoading) className += ' fade-out';
       return (
-        <div className={ className }>
-          <LoadingImage blurbs={ loadingBlurbs } key='articles-loading'/>
+        <div className={className}>
+          <LoadingImage blurbs={loadingBlurbs} key="articles-loading" />
         </div>
-      )
+      );
     }
 
     let topArticles = [];
@@ -150,34 +149,34 @@ class NowDashboard extends React.Component {
       if (rank === 3) {
         if (this.onDesktop && this.props.showInput && !this.props.dismissInput) {
           topArticles.push(
-            <PhoneInput rank={ rank } expandInput={ this.props.expandInput } key='phone-input-tile'/>
-          )
+            <PhoneInput rank={rank} expandInput={this.props.expandInput} key="phone-input-tile" />
+          );
 
           if (this.props.expandInput) rank += 2;
           else rank += 1;
-
         } else {
           topArticles.push(
-            <InfoTile type='inline' rank={ rank } infoText={ this.props.infoText } key={ 'info-tile-1' }/>
-          )
+            <InfoTile type="inline" rank={rank} infoText={this.props.infoText} key={'info-tile-1'} />
+          );
           rank += 1;
         }
       }
 
       topArticles.push(
-        <TopArticle article={ article }
-            rank={ rank }
-            windowSize={ this.state.windowSize }
-            clicked={ this.props.clickedArticles.has(article.article_id) }
-            key={ `article-${article.url}` }/>
-      )
+        <TopArticle article={article}
+          rank={rank}
+          windowSize={this.state.windowSize}
+          clicked={this.props.clickedArticles.has(article.article_id)}
+          key={`article-${article.url}`}
+        />
+      );
 
       rank += 1;
     }
 
     // Have to draw in the same order every time, so sort by article ID before rendering
     // Rank positioning is done within <TopArticle/> Component
-    topArticles.sort((a,b) => {
+    topArticles.sort((a, b) => {
       // These if statements are for info tiles
       if (!b.props.article && !a.props.article) {
         return b.props.rank - a.props.rank;
@@ -188,7 +187,7 @@ class NowDashboard extends React.Component {
       else if (!a.props.article) {
         return -1;
       }
-      return b.props.article.article_id - a.props.article.article_id
+      return b.props.article.article_id - a.props.article.article_id;
     });
 
     return topArticles;
@@ -198,20 +197,21 @@ class NowDashboard extends React.Component {
     let dashboardContents = null;
     if (this.props.articleLoading) {
       dashboardContents = (
-        <div className='dashboard-container'>
+        <div className="dashboard-container">
         </div>
-      )
+      );
     } else if (this.props.activeArticle != null) {
-        dashboardContents = (
-          <div className='dashboard-container'>
-            <ActiveArticle article={ this.props.activeArticle }
-                  readers={ this.props.activeArticleReaders }
-                  speedReading={ this.props.speedReading }
-                  closeActiveArticle={ this.closeActiveArticle }
-                  startSpeedReading={ this.startSpeedReading }
-                  stopSpeedReading={ this.stopSpeedReading }/>
+      dashboardContents = (
+          <div className="dashboard-container">
+            <ActiveArticle article={this.props.activeArticle}
+              readers={this.props.activeArticleReaders}
+              speedReading={this.props.speedReading}
+              closeActiveArticle={this.closeActiveArticle}
+              startSpeedReading={this.startSpeedReading}
+              stopSpeedReading={this.stopSpeedReading}
+            />
           </div>
-        )
+        );
     } else {
       let topArticles = this.renderArticles();
       let style = {};
@@ -222,35 +222,27 @@ class NowDashboard extends React.Component {
       let topArticlesContainerClass = 'top-articles-container';
       if (this.state.activeArticleClose) topArticlesContainerClass += ' active-article-close';
       dashboardContents = (
-        <div className={ dashboardContainerClass }>
-          <Header readers={ this.props.readers } appName={ appName }/>
-          <div className='definition-container'>
-            <div className='definitions'>
-              <div className='readers-container'><div className='readers'>readers</div></div>
-              <div className='articles'>article</div>
+        <div className={dashboardContainerClass}>
+          <Header readers={this.props.readers} appName={appName} />
+          <div className="definition-container">
+            <div className="definitions">
+              <div className="readers-container"><div className="readers">readers</div></div>
+              <div className="articles">article</div>
             </div>
           </div>
-          <div className={ topArticlesContainerClass } style={ style }>
-            { topArticles }
+          <div className={topArticlesContainerClass} style={style}>
+            {topArticles}
           </div>
-          <SectionFilters sections={ this.props.sections } activeSectionIndex={ this.props.activeSectionIndex }/>
+          <SectionFilters sections={this.props.sections} activeSectionIndex={this.props.activeSectionIndex} />
         </div>
-      )
+      );
     }
 
     return dashboardContents;
   }
 }
 
-function initDashboard() {
-  // Draw the inital dashboard with no articles
-  drawDashboard();
-
-  // Draw the dashboard when the articles update
-  Store.subscribe(() => { drawDashboard(Store.getState()); });
-}
-
-function drawDashboard(state=DEFAULT_STATE) {
+function drawDashboard(state = DEFAULT_STATE) {
   let activeArticleReaders = 0;
   if (state.ActiveArticle.activeArticle != null) {
     let activeArticle = state.ActiveArticle.activeArticle;
@@ -266,29 +258,36 @@ function drawDashboard(state=DEFAULT_STATE) {
   ReactDOM.render(
     <NowDashboard
       // Article list
-      topArticles={ state.ArticleList.topArticles }
-      readers={ state.ArticleList.totalReaders }
-      clickedArticles={ state.ArticleList.clickedArticles }
-      sections={ state.ArticleList.sections }
-      showInfo={ state.ArticleList.showInfo }
+      topArticles={state.ArticleList.topArticles}
+      readers={state.ArticleList.totalReaders}
+      clickedArticles={state.ArticleList.clickedArticles}
+      sections={state.ArticleList.sections}
+      showInfo={state.ArticleList.showInfo}
 
       // Active Article
-      activeArticle={ state.ActiveArticle.activeArticle }
-      speedReading={ state.ActiveArticle.speedReading }
-      activeArticleReaders={ activeArticleReaders }
-      articleLoading={ state.ActiveArticle.articleLoading }
+      activeArticle={state.ActiveArticle.activeArticle}
+      speedReading={state.ActiveArticle.speedReading}
+      activeArticleReaders={activeArticleReaders}
+      articleLoading={state.ActiveArticle.articleLoading}
 
       // Info Stuff
-      infoText={ state.ArticleList.infoBlurbs[state.ArticleList.blurbIndex] }
+      infoText={state.ArticleList.infoBlurbs[state.ArticleList.blurbIndex]}
 
       // Phone number input
-      showInput={ state.PhoneNumber.showInput }
-      dismissInput={ state.PhoneNumber.dismissInput }
-      expandInput={ state.PhoneNumber.expandInput }
+      showInput={state.PhoneNumber.showInput}
+      dismissInput={state.PhoneNumber.dismissInput}
+      expandInput={state.PhoneNumber.expandInput}
 
-      key='now-dashboard'/>,
+      key="now-dashboard"
+    />,
     document.getElementById('now')
-  )
+  );
 }
 
-module.exports = { initDashboard }
+export function initDashboard() {
+  // Draw the inital dashboard with no articles
+  drawDashboard();
+
+  // Draw the dashboard when the articles update
+  Store.subscribe(() => { drawDashboard(Store.getState()); });
+}
