@@ -12,7 +12,7 @@ $context-menu-height: calc($controls-height * .8);
   align-items: center;
   height: $context-menu-height;
   z-index: calc($active-article-z-index + 2);
-  background-color: #f2f2f2;
+  background-color: #faf9f8;
   box-shadow: 0px -2px 6px 0px rgba(0,0,0,0.20);
   cursor: pointer;
 
