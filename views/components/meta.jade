@@ -1,15 +1,23 @@
 meta(charset="utf-8")
 meta(http-equiv="X-UA-Compatible", content="IE=edge")
 meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=no")
-//meta(name="apple-mobile-web-app-capable" content="yes")
-//meta(name="mobile-web-app-capable" content="yes")
+meta(name="apple-mobile-web-app-capable" content="yes")
+meta(name="mobile-web-app-capable" content="yes")
 
-meta(name="theme-color", content="#f8c929")
-link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800', rel='stylesheet', type='text/css')
-link(href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic', rel='stylesheet', type='text/css')
-link(href='/img/#{brandIcon}/app-icon.png', rel='apple-touch-icon')
-link(href='/img/#{brandIcon}/app-icon-120x120.png', rel='apple-touch-icon', sizes='120x120')
-link(href='/img/#{brandIcon}/app-icon-180x180.png', rel='apple-touch-icon', sizes='180x180')
+meta(name='apple-mobile-web-app-title', content='The Pulse')
+meta(name='application-name', content='The Pulse')
+meta(name='theme-color', content='#ffffff')
+link(href='https://fonts.googleapis.com/css?family=Neuton:400,700|Open+Sans+Condensed:700|Roboto+Mono:300i,700', rel='stylesheet', type='text/css')
+
+link(rel='apple-touch-icon', sizes='180x180', href='/img/#{brandIcon}/apple-touch-icon.png')
+link(rel='icon', type='image/png', sizes='32x32', href='/img/#{brandIcon}/favicon-32x32.png')
+link(rel='icon', type='image/png', sizes='16x16', href='/img/#{brandIcon}/favicon-16x16.png')
+link(rel='manifest', href='/nova/public/manifest.json')
+link(rel='mask-icon', href='/nova/public/safari-pinned-tab.svg', color='#e14e48')
+link(rel='shortcut icon', href='/nova/public/favicon.ico')
+
+
+meta(name='msapplication-config', content='/nova/public/browserconfig.xml')
 
 
 if metaTags

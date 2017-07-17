@@ -76,7 +76,7 @@
         font-size: 22px;
         line-height: calc(22px * 1.4);
         font-weight: 600;
-        font-family: 'Open Sans';
+        font-family: 'Open Sans Condensed';
       }
 
       .list p {
@@ -132,7 +132,7 @@
     text-transform: uppercase;
     color: white;
     font-weight: bold;
-    font-family: 'Open Sans';
+    font-family: 'Open Sans Condensed';
     font-weight: 800;
     width: 50%;
     font-size: 26px;
@@ -156,7 +156,7 @@
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    font-family: 'Open Sans';
+    font-family: 'Open Sans Condensed';
     font-weight: normal;
     text-transform: uppercase;
     text-transform: center;
@@ -197,7 +197,7 @@
       color: black;
       text-align: center;
       cursor: pointer;
-      font-family: 'Lora';
+      font-family: 'Neuton';
     }
   }
 
