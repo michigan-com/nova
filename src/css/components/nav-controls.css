@@ -42,7 +42,7 @@ $context-menu-height: calc($controls-height * .8);
 .back-button-container {
   position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: 25px;
   height: 50px;
   padding: 5px 10px;
   z-index: calc($active-article-z-index + 2);
@@ -61,6 +61,7 @@ $context-menu-height: calc($controls-height * .8);
     padding: .5em;
     text-align: center;
     cursor: pointer;
+    text-transform: uppercase;
 
     .fa {
       padding-right: .2em;

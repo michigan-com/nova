@@ -74,8 +74,8 @@ $definition-height: 35px;
   }
 
   &.clicked {
-    .headline {
-      font-weight: normal;
+    .headline, .readers {
+      font-weight: 300;
     }
   }
 }
@@ -123,7 +123,7 @@ $definition-height: 35px;
     align-items: center;
     width: 100%;
     font-family: 'Open Sans Condensed';
-    font-weight: 300;
+    font-weight: bold;
     font-size: 20px;
 
     @media (min-width: $screen-md) {
