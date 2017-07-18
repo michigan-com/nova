@@ -67,6 +67,9 @@ $definition-height: 35px;
   cursor: pointer;
   transition: height 250ms linear, top 250ms linear;
   transition-delay: 500ms;
+  background-color: rgba(250, 249, 248, 0.50);
+
+
 
   * {
     opacity: 1;
@@ -74,6 +77,7 @@ $definition-height: 35px;
   }
 
   &.clicked {
+    background-color: white;
     /*opacity: 0.6;*/
     .headline {
       color: grey;
@@ -138,7 +142,7 @@ $definition-height: 35px;
   font-family: 'Open Sans Condensed';
   font-weight: 600;
   height: $article-height;
-  color: black;
+  color: #483C3C;
   font-weight: bold;
   width: 80%;
   padding: 0px 20px;
