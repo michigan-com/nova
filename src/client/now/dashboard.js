@@ -14,7 +14,7 @@ import Header from '../common/components/header';
 import SectionFilters from './components/filters';
 import PhoneInput from './components/phone-number-input';
 
-import { appName } from '../../../config';
+import { appName, brandIcon } from '../../../config';
 
 let loadingBlurbs = [
   'Bots are summarizing...',
@@ -223,7 +223,7 @@ class NowDashboard extends React.Component {
       if (this.state.activeArticleClose) topArticlesContainerClass += ' active-article-close';
       dashboardContents = (
         <div className={dashboardContainerClass}>
-          <Header readers={this.props.readers} appName={appName} />
+          <Header readers={this.props.readers} appName={appName} brandIcon={brandIcon} />
           <div className="definition-container">
             <div className="definitions">
               <div className="readers-container"><div className="readers">readers</div></div>
