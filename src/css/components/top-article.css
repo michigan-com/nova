@@ -74,8 +74,9 @@ $definition-height: 35px;
   }
 
   &.clicked {
-    .headline, .readers {
-      font-weight: 300;
+    /*opacity: 0.6;*/
+    .headline {
+      color: grey;
     }
   }
 }
