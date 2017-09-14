@@ -137,8 +137,15 @@ $definition-height: 35px;
   }
 }
 
-.headline, .text-container {
+.headline {
+  font-size: 16px;
+}
+
+.text-container {
   font-size: 14px;
+}
+
+.headline, .text-container {
   font-family: 'Open Sans Condensed';
   font-weight: 600;
   height: $article-height;

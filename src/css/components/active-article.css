@@ -241,7 +241,7 @@ body.photo-loading {
         .sentence {
           font-size: $summary-font-size;
           font-family: Neuton-Regular;
-          font-size: 24px;
+          font-size: 20px;
           color: #483C3C;
           letter-spacing: 0;
           line-height: calc($summary-font-size * 1.9);
