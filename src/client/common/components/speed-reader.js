@@ -104,18 +104,20 @@ export default class SpeedReader extends React.Component {
   componentWillUnmount() { this.deinit(); }
 
   scrollIntoView(lastScrollTop = null, autoplay = false) {
-    let body = document.body;
-    let currentScrollTop = body.scrollTop;
+    let currentScrollTop = window.scrollY;
 
     // this means the user is trying to scroll up, so just let them already
-    if (currentScrollTop < lastScrollTop - 15) return;
+    // if (currentScrollTop < lastScrollTop - 15) return;
+
+    let multiplier = window.innerWidth < 400 ? 0.13 : 0.075;
+    let threshold = window.innerHeight * 0.1;
 
     let scrollTopGoal = document.body.clientHeight - window.innerHeight;
     let remaining = scrollTopGoal - currentScrollTop;
-    let step = 15;
-    step = remaining < step ? remaining : step;
+    let step = remaining < threshold ? threshold : remaining * multiplier;
+    // step = remaining < step ? remaining : step;
 
-    if (step === 0) {
+    if (remaining === 0) {
       if (!autoplay) return;
 
       let state = { playing: true };
@@ -126,12 +128,12 @@ export default class SpeedReader extends React.Component {
 
       setTimeout((() => {
         this.setState(state);
-      }).bind(this), 650);
+      }).bind(this), 250);
       return;
     }
 
-    let newScrollTop = body.scrollTop + step;
-    body.scrollTop = newScrollTop;
+    let newScrollTop = window.scrollY + step;
+    window.scrollTo(window.scrollX, newScrollTop);
     setTimeout(((newScrollTop) => {
       return (() => {
         this.scrollIntoView(newScrollTop, autoplay);
@@ -169,7 +171,7 @@ export default class SpeedReader extends React.Component {
 
   togglePlay = () => {
     if (!this.state.gotStarted) {
-      this.scrollIntoView(document.body.scrollTop, true);
+      this.scrollIntoView(window.scrollY, true);
       return;
     }
 
@@ -389,8 +391,9 @@ export default class SpeedReader extends React.Component {
         <div className="keep-scrolling">
           <img className="speed-rabbit" src={`/img/${brandIcon}/speed-reader-image.svg`} />
           <div className="text-box">Keep scrolling to speed read this article in <span ref="total-time"></span></div>
+          <span>                                                                                    {window.innerWidth} </span>
           <div className="arrow-container">
-            <img src="/img/chevron-down-white.svg" onClick={(() => { this.scrollIntoView(document.body.scrollTop); }).bind(this)} />
+            <img src="/img/chevron-down-white.svg" onClick={(() => { this.scrollIntoView(window.scrollY); }).bind(this)} />
           </div>
         </div>
         <div className={speedReaderClass} ref="speed-reader">
