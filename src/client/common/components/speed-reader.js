@@ -391,7 +391,6 @@ export default class SpeedReader extends React.Component {
         <div className="keep-scrolling">
           <img className="speed-rabbit" src={`/img/${brandIcon}/speed-reader-image.svg`} />
           <div className="text-box">Keep scrolling to speed read this article in <span ref="total-time"></span></div>
-          <span>                                                                                    {window.innerWidth} </span>
           <div className="arrow-container">
             <img src="/img/chevron-down-white.svg" onClick={(() => { this.scrollIntoView(window.scrollY); }).bind(this)} />
           </div>
